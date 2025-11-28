@@ -1,0 +1,149 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { LayoutDashboard, Package, Users, Settings, LogOut, TrendingUp, Contact, ClipboardList, Menu, X, Landmark } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import OnboardingTour from '../components/OnboardingTour';
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+    const router = useRouter();
+    const [isAuthorized, setIsAuthorized] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    useEffect(() => {
+        const checkAuth = () => {
+            try {
+                const session = localStorage.getItem('admin_session');
+                if (!session) {
+                    router.replace('/admin/login');
+                    // Keep isLoading true so the spinner stays until navigation completes
+                } else {
+                    setIsAuthorized(true);
+                    setIsLoading(false);
+                }
+            } catch (e) {
+                console.error("Auth check failed", e);
+                router.replace('/admin/login');
+            }
+        };
+        
+        // Small delay to prevent hydration mismatch if localstorage is instant
+        // and to ensure the spinner is seen if checking takes time
+        checkAuth();
+    }, [router]);
+
+    // Close sidebar on route change (mobile)
+    useEffect(() => {
+        setIsSidebarOpen(false);
+    }, [pathname]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('admin_session');
+        router.push('/');
+    };
+
+    if (isLoading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-stone-50 dark:bg-stone-950">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-stone-900 dark:border-white"></div>
+            </div>
+        );
+    }
+
+    if (!isAuthorized) return null;
+
+    const navItems = [
+        { name: 'Overview', href: '/admin/dashboard', icon: LayoutDashboard },
+        { name: 'Daily Operations', href: '/admin/dashboard/operations', icon: ClipboardList },
+        { name: 'Financials', href: '/admin/dashboard/financials', icon: Landmark },
+        { name: 'CRM', href: '/admin/dashboard/crm', icon: Contact },
+        { name: 'Inventory & Bundles', href: '/admin/dashboard/inventory', icon: Package },
+        { name: 'Marketplace & Fees', href: '/admin/dashboard/marketplace', icon: Users },
+        { name: 'Marketing & SEO', href: '/admin/dashboard/marketing', icon: TrendingUp },
+        { name: 'Platform Settings', href: '/admin/dashboard/settings', icon: Settings },
+    ];
+
+    return (
+        <div className="flex min-h-screen bg-stone-50 dark:bg-stone-950">
+            <OnboardingTour />
+            {/* Mobile Header */}
+            <div className="fixed top-0 left-0 right-0 z-30 flex h-16 items-center justify-between border-b border-stone-200 bg-white px-4 dark:border-stone-800 dark:bg-stone-900 md:hidden">
+                <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-stone-600 dark:text-stone-300">
+                    <Menu className="h-6 w-6" />
+                </button>
+                <span className="font-serif text-lg font-bold tracking-widest text-stone-900 dark:text-white">HUDEMAS</span>
+                <div className="w-10" /> {/* Spacer for center alignment */}
+            </div>
+
+            {/* Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm md:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+
+            {/* Sidebar */}
+            <aside 
+                className={`fixed inset-y-0 left-0 z-40 w-64 transform border-r border-stone-200 bg-white transition-transform duration-300 ease-in-out dark:border-stone-800 dark:bg-stone-900 overflow-y-auto
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+            >
+                <div className="flex h-20 items-center justify-between px-6 border-b border-stone-100 dark:border-stone-800">
+                    <h1 className="font-serif text-xl font-bold tracking-widest text-stone-900 dark:text-white">
+                        HUDEMAS
+                    </h1>
+                    <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-stone-500">
+                        <X className="h-5 w-5" />
+                    </button>
+                </div>
+                <nav className="mt-6 px-4 space-y-1">
+                    {navItems.map((item) => {
+                        const isActive = pathname === item.href;
+                        const Icon = item.icon;
+                        return (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className={`flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition-colors ${
+                                    isActive
+                                        ? 'bg-stone-100 text-stone-900 dark:bg-stone-800 dark:text-white'
+                                        : 'text-stone-500 hover:bg-stone-50 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-white'
+                                }`}
+                            >
+                                <Icon className="h-5 w-5" />
+                                {item.name}
+                            </Link>
+                        );
+                    })}
+                </nav>
+                        <div className="absolute bottom-16 w-full px-4">
+                            <Link 
+                                href="https://msepwdbzrzqotapgesnd.supabase.co" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/10"
+                            >
+                                <span className="h-5 w-5 flex items-center justify-center font-bold">NOR</span>
+                                Supabase Project
+                            </Link>
+                        </div>
+                        <div className="absolute bottom-4 w-full px-4">
+                            <button
+                                onClick={handleLogout}
+                                className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/10"
+                            >
+                                <LogOut className="h-5 w-5" />
+                                Logout
+                            </button>
+                        </div>            </aside>
+
+            {/* Main Content */}
+            <main className="flex-1 p-4 pt-20 md:p-8 md:ml-64 transition-all duration-300">
+                {children}
+            </main>
+        </div>
+    );
+}
