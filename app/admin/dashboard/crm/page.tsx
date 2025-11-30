@@ -89,22 +89,27 @@ export default function CRMPage() {
             // Process orders
             if (ordersToProcess.length > 0) {
                 ordersToProcess.forEach((order: any) => {
-                    const email = order.user_email;
+                    // Extract email from customer_details (JSONB) or fallback to user_email (if legacy)
+                    const email = order.customer_details?.email || order.user_email;
                     if (!email) return;
 
                     const existing = customerMap.get(email);
                     const details = customerDetailsMap.get(email);
+                    const orderDetails = order.customer_details || {};
 
                     // Use details from DB if available, otherwise fallback to order data
-                    const name = details?.name || (order.shipping_address?.firstName
-                        ? `${order.shipping_address.firstName} ${order.shipping_address.lastName}`
-                        : 'Guest');
-                    const phone = details?.phone || order.shipping_address?.phone;
-                    const companyName = details?.company_name || order.company_name;
+                    const firstName = orderDetails.firstName || orderDetails.first_name || '';
+                    const lastName = orderDetails.lastName || orderDetails.last_name || '';
+                    const fullName = firstName && lastName ? `${firstName} ${lastName}` : (firstName || 'Guest');
+
+                    const name = details?.name || fullName;
+                    const phone = details?.phone || orderDetails.phone;
+                    const companyName = details?.company_name || orderDetails.companyName || orderDetails.company_name;
                     const notes = details?.notes || '';
+                    const type = details?.type || orderDetails.customerType || 'individual';
 
                     if (existing) {
-                        existing.totalSpent += order.total_amount;
+                        existing.totalSpent += order.total; // Migration uses 'total', not 'total_amount'
                         existing.orderCount += 1;
                         if (new Date(order.created_at) > new Date(existing.lastOrderDate)) {
                             existing.lastOrderDate = order.created_at;
@@ -114,9 +119,9 @@ export default function CRMPage() {
                             id: email,
                             email,
                             name,
-                            type: order.customer_type || 'individual',
+                            type: type === 'company' ? 'company' : 'individual',
                             companyName,
-                            totalSpent: order.total_amount,
+                            totalSpent: order.total, // Migration uses 'total'
                             orderCount: 1,
                             lastOrderDate: order.created_at,
                             phone,
