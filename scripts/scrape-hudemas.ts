@@ -24,34 +24,38 @@ interface Product {
     category: string;
     description?: string;
     dimensions?: string;
+    product_type: 'kit' | 'accessory' | 'finished';
 }
 
 const CATEGORIES = [
-    { name: 'Goblenuri', url: 'https://www.hudemas.ro/goblenuri' },
-    { name: 'Accesorii', url: 'https://www.hudemas.ro/goblenuri/gherghefuri-panza-lupe-ace' },
-    // Add more if needed
+    { name: 'Goblenuri', url: 'https://www.hudemas.ro/goblenuri', type: 'kit' },
+    { name: 'Accesorii', url: 'https://www.hudemas.ro/goblenuri/gherghefuri-panza-lupe-ace', type: 'accessory' },
+    { name: 'Rame', url: 'https://www.hudemas.ro/rame', type: 'accessory' }
 ];
 
-async function scrapeCategory(categoryName: string, categoryUrl: string): Promise<Product[]> {
+async function scrapeCategory(categoryName: string, categoryUrl: string, productType: 'kit' | 'accessory' | 'finished'): Promise<Product[]> {
     console.log(`Scraping category: ${categoryName} (${categoryUrl})`);
     const products: Product[] = [];
     let page = 1;
     let hasNextPage = true;
 
     while (hasNextPage) {
-        const url = `${categoryUrl}`;            // Pagination logic: hudemas.ro uses /goblenuri/OFFSET (e.g. /60, /120)
-        // Base URL for category might be https://www.hudemas.ro/goblenuri
-        // So page 1: https://www.hudemas.ro/goblenuri
-        // Page 2: https://www.hudemas.ro/goblenuri/60
-        // Page 3: https://www.hudemas.ro/goblenuri/120
-
-        // However, for "Accesorii", the URL is https://www.hudemas.ro/goblenuri/gherghefuri-panza-lupe-ace
-        // Does it support /60 suffix?
-        // Let's assume standard pattern: URL + '/' + ((page-1)*60)
-        // Except page 1 which is just URL.
+        // Pagination logic
+        // For /goblenuri it works with /60, /120
+        // For /rame it might be similar or different.
+        // Let's assume standard pattern for now.
 
         const offset = (page - 1) * 60;
-        const pageUrl = page === 1 ? url : `${url}/${offset}`;
+        let pageUrl = categoryUrl;
+
+        if (page > 1) {
+            // Check if url already has query params or not
+            if (categoryUrl.includes('?')) {
+                pageUrl = `${categoryUrl}&page=${page}`; // Some sites use query params
+            } else {
+                pageUrl = `${categoryUrl}/${offset}`;
+            }
+        }
 
         console.log(`  Fetching page ${page} (${pageUrl})...`);
 
@@ -76,7 +80,14 @@ async function scrapeCategory(categoryName: string, categoryUrl: string): Promis
                 const el = $(element);
                 const href = el.attr('href');
 
-                if (href && href.includes('/goblen/') && !href.includes('/goblenuri')) {
+                // Heuristic for product links
+                const isProductLink = href && (
+                    (href.includes('/goblen/') && !href.includes('/goblenuri')) ||
+                    (href.includes('/rame/') && !href.includes('/rame')) ||
+                    (href.includes('/accesorii/') && !href.includes('/accesorii'))
+                );
+
+                if (isProductLink) {
                     const text = el.text().trim();
                     const priceMatch = text.match(/(\d+([.,]\d+)?)\s*Lei/i);
 
@@ -97,7 +108,8 @@ async function scrapeCategory(categoryName: string, categoryUrl: string): Promis
                                 price,
                                 url: fullUrl,
                                 image: img ? (img.startsWith('http') ? img : `${BASE_URL}${img}`) : '',
-                                category: categoryName
+                                category: categoryName,
+                                product_type: productType
                             });
                             newItemsOnPage++;
                         }
@@ -118,7 +130,12 @@ async function scrapeCategory(categoryName: string, categoryUrl: string): Promis
             if (page > 200) hasNextPage = false;
 
         } catch (error: any) {
-            console.error(`  Error fetching page ${page}:`, error.message);
+            // If 404, likely end of pagination
+            if (error.response && error.response.status === 404) {
+                console.log('  Reached end of pages (404).');
+            } else {
+                console.error(`  Error fetching page ${page}:`, error.message);
+            }
             hasNextPage = false;
         }
     }
@@ -130,7 +147,7 @@ async function main() {
     const allProducts: Product[] = [];
 
     for (const cat of CATEGORIES) {
-        const products = await scrapeCategory(cat.name, cat.url);
+        const products = await scrapeCategory(cat.name, cat.url, cat.type as 'kit' | 'accessory' | 'finished');
         allProducts.push(...products);
     }
 

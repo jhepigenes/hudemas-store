@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product } from '../types/product';
+import { Product } from '../types/index';
 
 export interface CartItem extends Product {
     quantity: number;
@@ -45,32 +45,47 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     const addItem = (product: Product) => {
         setItems((prev) => {
-            const existing = prev.find((item) => item.name === product.name);
+            // Try to find by ID first if available, otherwise by name
+            const existing = prev.find((item) => {
+                if (product.id && item.id) {
+                    return item.id === product.id;
+                }
+                return item.name === product.name;
+            });
+
             if (existing) {
-                return prev.map((item) =>
-                    item.name === product.name
+                return prev.map((item) => {
+                    const isMatch = (product.id && item.id)
+                        ? item.id === product.id
+                        : item.name === product.name;
+
+                    return isMatch
                         ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                );
+                        : item;
+                });
             }
             return [...prev, { ...product, quantity: 1 }];
         });
         setIsCartOpen(true);
     };
 
-    const removeItem = (productName: string) => {
-        setItems((prev) => prev.filter((item) => item.name !== productName));
+    const removeItem = (identifier: string) => {
+        setItems((prev) => prev.filter((item) => {
+            if (item.id) return item.id !== identifier;
+            return item.name !== identifier;
+        }));
     };
 
-    const updateQuantity = (productName: string, quantity: number) => {
+    const updateQuantity = (identifier: string, quantity: number) => {
         if (quantity < 1) {
-            removeItem(productName);
+            removeItem(identifier);
             return;
         }
         setItems((prev) =>
-            prev.map((item) =>
-                item.name === productName ? { ...item, quantity } : item
-            )
+            prev.map((item) => {
+                const isMatch = item.id ? item.id === identifier : item.name === identifier;
+                return isMatch ? { ...item, quantity } : item;
+            })
         );
     };
 
@@ -79,7 +94,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
     const subtotal = items.reduce((acc, item) => {
-        const price = parseFloat(item.price.replace(',', '.'));
+        const price = typeof item.price === 'string' ? parseFloat(item.price.replace(',', '.')) : item.price;
         return acc + price * item.quantity;
     }, 0);
 

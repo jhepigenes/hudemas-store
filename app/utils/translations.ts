@@ -37,6 +37,34 @@ export const translations = {
             success: "Success",
             error: "Error"
         },
+        shop: {
+            discover: "Discover our collection of premium Gobelin kits and accessories.",
+            all: "All",
+            kits: "Kits",
+            accessories: "Accessories",
+            searchPlaceholder: "Search products...",
+            loadMore: "Load More",
+            remaining: "remaining",
+            noProducts: "No products found matching your criteria.",
+            categories: {
+                all: "All",
+                fruits: "Fruits",
+                flowers: "Flowers",
+                landscapes: "Landscapes",
+                religious: "Religious",
+                stillLife: "Still Life",
+                animals: "Animals",
+                kids: "For Kids",
+                modern: "Modern",
+                marine: "Marine",
+                characters: "Characters",
+                painters: "Famous Painters",
+                zodiac: "Zodiac",
+                patterns: "Patterns (2-4 colors)",
+                allegories: "Allegories",
+                accessories: "Accessories"
+            }
+        },
         product: {
             authenticity: "Authenticity",
             handcrafted: "Handcrafted Original",
@@ -86,6 +114,30 @@ export const translations = {
             terms: "Terms of Service",
             contact: "Contact Us"
         },
+        profile: {
+            title: "My Profile",
+            welcome: "Welcome back,",
+            signOut: "Sign Out",
+            history: "Order History",
+            myListings: "My Listings",
+            newListing: "New Listing",
+            noOrders: "No orders yet.",
+            startShopping: "Start Shopping",
+            noListings: "You haven't listed any artwork yet.",
+            sellArt: "Sell Your Art"
+        },
+        marketplaceLanding: {
+            title: "The Masterpiece Marketplace",
+            subtitle: "A curated collection of finished Hudemas tapestries. Buy a piece of history, or sell your own completed masterpiece.",
+            buyTitle: "Acquire Art",
+            buyText: "Discover exquisite, hand-stitched tapestries ready to adorn your home. Each piece is a unique labor of love.",
+            browseBtn: "Browse Collection",
+            sellTitle: "Sell Your Masterpiece",
+            sellText: "Turn your passion into profit. List your finished Hudemas tapestries and connect with collectors worldwide.",
+            startBtn: "Start Selling",
+            latest: "Latest Arrivals",
+            stitchedBy: "Stitched by"
+        },
         about: {
             legacyTitle: "A Legacy Woven in Time",
             legacyText: "From a small family workshop to a curator of fine textile art. This is the story of Hudemas.",
@@ -125,6 +177,40 @@ export const translations = {
             submitReview: "Submit for Review",
             successTitle: "Submission Received",
             successText: "Thank you. Our curation team will review your submission."
+        },
+        admin: {
+            dashboard: "Dashboard",
+            marketplace: {
+                title: "Marketplace Approvals",
+                subtitle: "Review and approve artist submissions.",
+                pending: "Pending",
+                approve: "Approve",
+                reject: "Reject",
+                view: "View Listing",
+                empty: "No pending listings found."
+            },
+            operations: {
+                title: "Daily Operations",
+                subtitle: "Prepare shipments, print invoices, and manage logistics.",
+                labels: "Labels",
+                invoices: "Invoices",
+                export: "Export Accounting",
+                markShipped: "Mark as Shipped",
+                viewOrder: "View Order Details"
+            },
+            marketing: {
+                title: "SEO & Marketing",
+                subtitle: "Optimize your visibility and manage ad campaigns.",
+                seoTitle: "Global Metadata",
+                pageTitle: "Default Page Title",
+                metaDescription: "Meta Description",
+                save: "Save Changes",
+                saved: "Saved!",
+                saving: "Saving...",
+                campaigns: "Ad Campaigns",
+                campaignsSubtitle: "Connect Facebook Ads or Google Ads to boost sales.",
+                connect: "Connect Account"
+            }
         }
     },
     ro: {
@@ -164,6 +250,34 @@ export const translations = {
             noResults: "Niciun rezultat găsit.",
             success: "Succes",
             error: "Eroare"
+        },
+        shop: {
+            discover: "Descoperă colecția noastră de kituri și accesorii Goblen premium.",
+            all: "Toate",
+            kits: "Kituri",
+            accessories: "Accesorii",
+            searchPlaceholder: "Caută produse...",
+            loadMore: "Încarcă Mai Multe",
+            remaining: "rămase",
+            noProducts: "Nu s-au găsit produse conform criteriilor.",
+            categories: {
+                all: "Toate",
+                fruits: "Fructe",
+                flowers: "Flori",
+                landscapes: "Peisaje",
+                religious: "Religioase",
+                stillLife: "Natură moartă",
+                animals: "Animale",
+                kids: "Pentru copii",
+                modern: "Moderne",
+                marine: "Marine",
+                characters: "Personaje",
+                painters: "Pictori celebri",
+                zodiac: "Zodii",
+                patterns: "Modele 2-4 culori",
+                allegories: "Alegorii",
+                accessories: "Accesorii"
+            }
         },
         product: {
             authenticity: "Autenticitate",
@@ -214,6 +328,30 @@ export const translations = {
             terms: "Termeni și Condiții",
             contact: "Contact"
         },
+        profile: {
+            title: "Profilul Meu",
+            welcome: "Bine ai revenit,",
+            signOut: "Deconectare",
+            history: "Istoric Comenzi",
+            myListings: "Anunțurile Mele",
+            newListing: "Listare Nouă",
+            noOrders: "Nicio comandă încă.",
+            startShopping: "Începe Cumpărăturile",
+            noListings: "Nu ai listat nicio operă de artă încă.",
+            sellArt: "Vinde Artă"
+        },
+        marketplaceLanding: {
+            title: "Piața Capodoperelor",
+            subtitle: "O colecție curatoriată de tapiserii Hudemas finalizate. Cumpără o bucată de istorie sau vinde propria ta capodoperă terminată.",
+            buyTitle: "Achiziționează Artă",
+            buyText: "Descoperă tapiserii rafinate, cusute manual, gata să îți decoreze casa. Fiecare piesă este o muncă unică de iubire.",
+            browseBtn: "Răsfoiește Colecția",
+            sellTitle: "Vinde-ți Capodopera",
+            sellText: "Transformă-ți pasiunea în profit. Listează tapiseriile tale Hudemas finalizate și conectează-te cu colecționari din întreaga lume.",
+            startBtn: "Începe să Vinzi",
+            latest: "Ultimele Sosiri",
+            stitchedBy: "Cusut de"
+        },
         about: {
             legacyTitle: "O Moștenire Țesută în Timp",
             legacyText: "De la un mic atelier de familie la un curator de artă textilă fină. Aceasta este povestea Hudemas.",
@@ -253,6 +391,43 @@ export const translations = {
             submitReview: "Trimite spre Revizuire",
             successTitle: "Trimitere Recepționată",
             successText: "Vă mulțumim. Echipa noastră de curatori va revizui trimiterea dumneavoastră."
+        },
+        admin: {
+            dashboard: "Panou de Control",
+            marketplace: {
+                title: "Aprobări Marketplace",
+                subtitle: "Revizuiește și aprobă înscrierile artiștilor.",
+                pending: "În Așteptare",
+                approve: "Aprobă",
+                reject: "Respinge",
+                view: "Vezi Listarea",
+                empty: "Nicio listare în așteptare.",
+                confirmReject: "Sigur doriți să respingeți această listare?",
+                platformFees: "Comisioane Platformă",
+                pendingPayouts: "Plăți în Așteptare"
+            },
+            operations: {
+                title: "Operațiuni Zilnice",
+                subtitle: "Pregătește livrări, printează facturi și gestionează logistica.",
+                labels: "Etichete",
+                invoices: "Facturi",
+                export: "Export Contabilitate",
+                markShipped: "Marchează ca Expediat",
+                viewOrder: "Vezi Detalii Comandă"
+            },
+            marketing: {
+                title: "SEO & Marketing",
+                subtitle: "Optimizează vizibilitatea și gestionează campaniile publicitare.",
+                seoTitle: "Metadate Globale",
+                pageTitle: "Titlu Pagină Implicit",
+                metaDescription: "Descriere Meta",
+                save: "Salvează Modificările",
+                saved: "Salvat!",
+                saving: "Se salvează...",
+                campaigns: "Campanii Publicitare",
+                campaignsSubtitle: "Conectează Facebook Ads sau Google Ads pentru a crește vânzările.",
+                connect: "Conectează Cont"
+            }
         }
     }
 };

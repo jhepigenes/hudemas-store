@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import productsData from './products.json';
-import { Product } from './types/product';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase';
+import { Product } from './types/index';
 import ProductCard from './components/ProductCard';
 import Hero from './components/Hero';
 import StorySection from './components/StorySection';
@@ -10,26 +10,56 @@ import Marquee from './components/Marquee';
 import SearchAndFilter from './components/SearchAndFilter';
 import FeaturedMasterpiece from './components/FeaturedMasterpiece';
 
-// Cast the imported JSON to the Product type
-const products: Product[] = productsData as Product[];
-
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('marketplace_listings')
+          .select('*')
+          .in('product_type', ['kit']) // Only kits for homepage? Or both? Let's show kits mainly.
+          .eq('status', 'active')
+          .limit(50); // Limit for homepage
+
+        if (error) throw error;
+
+        const mappedProducts: Product[] = (data || []).map((item: any) => ({
+          id: item.id,
+          name: item.title,
+          image: item.image_url,
+          price: item.price,
+          currency: item.currency,
+          product_type: item.product_type,
+          status: item.status,
+          description: item.description
+        }));
+
+        setProducts(mappedProducts);
+      } catch (error) {
+        console.error('Error fetching homepage products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   // Filter Logic
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // Mock Category Logic based on keywords since JSON doesn't have categories
+    // Category Logic
     let matchesCategory = true;
     if (selectedCategory !== 'All') {
-      const name = product.name.toLowerCase();
-      if (selectedCategory === 'Nature') matchesCategory = name.includes('peisaj') || name.includes('vara') || name.includes('iarna') || name.includes('munte');
-      else if (selectedCategory === 'Religious') matchesCategory = name.includes('maria') || name.includes('hrist') || name.includes('madonna') || name.includes('ingeras') || name.includes('ruga');
-      else if (selectedCategory === 'Portraits') matchesCategory = name.includes('feti') || name.includes('doamna') || name.includes('tigan') || name.includes('cap');
-      else if (selectedCategory === 'Flowers') matchesCategory = name.includes('flori') || name.includes('maci') || name.includes('liliac') || name.includes('vaza');
-      else if (selectedCategory === 'Abstract') matchesCategory = !name.includes('peisaj') && !name.includes('maria'); // Fallback
+      // Check description for category
+      matchesCategory = (product.description && product.description.includes(`Category: ${selectedCategory}`)) || false;
     }
 
     return matchesSearch && matchesCategory;
@@ -60,23 +90,44 @@ export default function Home() {
               setSelectedCategory={setSelectedCategory}
             />
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((product, index) => (
-                  <ProductCard key={`${product.name}-${index}`} product={product} index={index} />
-                ))
-              ) : (
-                <div className="col-span-full py-20 text-center text-stone-500">
-                  <p className="font-serif text-xl">No masterpieces found.</p>
-                  <button
-                    onClick={() => { setSearchTerm(''); setSelectedCategory('All'); }}
-                    className="mt-4 text-sm underline"
-                  >
-                    Clear Filters
-                  </button>
-                </div>
-              )}
-            </div>
+            {loading ? (
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="aspect-[4/5] animate-pulse rounded-2xl bg-stone-200 dark:bg-stone-800" />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {filteredProducts.length > 0 ? (
+                  <>
+                    {filteredProducts.slice(0, 12).map((product, index) => (
+                      <ProductCard key={`${product.id}-${index}`} product={product} index={index} />
+                    ))}
+                  </>
+                ) : (
+                  <div className="col-span-full py-20 text-center text-stone-500">
+                    <p className="font-serif text-xl">No masterpieces found.</p>
+                    <button
+                      onClick={() => { setSearchTerm(''); setSelectedCategory('All'); }}
+                      className="mt-4 text-sm underline"
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {filteredProducts.length > 12 && (
+              <div className="mt-16 text-center">
+                <a
+                  href="/shop"
+                  className="inline-block rounded-full bg-stone-900 px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
+                >
+                  View All Collection
+                </a>
+              </div>
+            )}
           </div>
         </section>
       </main>

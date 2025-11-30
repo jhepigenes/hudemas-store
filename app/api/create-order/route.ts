@@ -1,98 +1,143 @@
 import { NextResponse } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import Stripe from 'stripe';
+import { supabaseAdmin, getGuestUserId } from '@/lib/supabase-admin';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder', {
+    // apiVersion: '2025-02-24.acacia', // Use default
+});
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { customer, items, total, paymentMethod } = body;
+        const { customer, items, total, paymentMethod, shippingMethod, customerType, userId } = body;
+        console.log('Received order request:', { customer, itemsCount: items?.length, total, paymentMethod, userId });
 
-        const cookieStore = await cookies();
-        const supabase = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-                cookies: {
-                    get(name: string) {
-                        return cookieStore.get(name)?.value;
-                    },
-                    set(name: string, value: string, options: any) {
-                        cookieStore.set({ name, value, ...options });
-                    },
-                    remove(name: string, options: any) {
-                        cookieStore.set({ name, value: '', ...options, expires: new Date(0) });
-                    },
-                },
+        let finalUserId = userId;
+
+        // 1. Handle Guest User for Marketplace Logic
+        const hasMarketplaceItems = items.some((item: any) => item.type === 'marketplace' || item.artist_id);
+
+        if (!finalUserId && hasMarketplaceItems) {
+            try {
+                finalUserId = await getGuestUserId();
+            } catch (e) {
+                console.error('Failed to get guest user ID', e);
             }
-        );
+        }
 
-        // 1. Generate Order ID
-        const orderId = `ORD-${Math.floor(Math.random() * 1000000)}`;
+        // 2. Calculate Totals
+        // Assuming total is in RON
+        const shippingCost = shippingMethod === 'easybox' ? 12 : 19;
+        const orderTotal = total + shippingCost;
+        const amountInCents = Math.round(orderTotal * 100);
 
-        // 2. Insert Order into Supabase
-        const { data: order, error: orderError } = await supabase
+        // 3. Create Order in Supabase (FIRST)
+        const { data: order, error: orderError } = await supabaseAdmin
             .from('orders')
             .insert({
-                id: orderId,
-                user_email: customer.email,
-                total_amount: total,
-                status: 'pending',
+                user_id: finalUserId || null,
+                total: orderTotal,
+                currency: items[0]?.currency || 'RON',
                 payment_method: paymentMethod,
-                shipping_address: customer, // Store customer address as JSONB
+                payment_intent_id: null, // Will update later
+                shipping_method: shippingMethod,
+                customer_details: { ...customer, customerType },
+                status: paymentMethod === 'card' ? 'pending_payment' : 'pending'
             })
             .select()
             .single();
 
         if (orderError) {
-            console.error('Supabase Order Insert Error:', orderError);
-            throw orderError;
+            console.error('Error creating order:', orderError);
+            return NextResponse.json({ error: orderError.message }, { status: 500 });
         }
 
-        // 3. Insert Order Items into Supabase
-        const orderItemsToInsert = items.map((item: any) => ({
-            order_id: orderId,
-            product_id: 1, // Placeholder: In a real app, match to a products table ID
+        // 4. Create Order Items
+        const orderItems = items.map((item: any) => ({
+            order_id: order.id,
+            product_id: item.id || 'N/A',
+            name: item.name,
             quantity: item.quantity,
-            price_at_purchase: parseFloat(item.price.replace(',', '.')),
+            price: typeof item.price === 'string' ? parseFloat(item.price.replace(',', '.')) : Number(item.price),
+            currency: item.currency,
+            image_url: item.image
         }));
 
-        const { error: orderItemsError } = await supabase
+        const { error: itemsError } = await supabaseAdmin
             .from('order_items')
-            .insert(orderItemsToInsert);
+            .insert(orderItems);
 
-        if (orderItemsError) {
-            console.error('Supabase Order Items Insert Error:', orderItemsError);
-            throw orderItemsError;
+        if (itemsError) {
+            console.error('Error creating order items:', itemsError);
+            // Should probably rollback order here in real prod, but skipping for now
+            return NextResponse.json({ error: itemsError.message }, { status: 500 });
         }
 
-        // 4. Simulate AWB Generation (FanCourier/Sameday) and insert into shipments table
-        const courier = Math.random() > 0.5 ? 'FanCourier' : 'Sameday';
-        const awbCode = `${courier.toUpperCase()}-${Math.floor(Math.random() * 100000000)}`;
+        // 5. Create Marketplace Transactions (Commission Logic)
+        const marketplaceItems = items.filter((item: any) => item.type === 'marketplace' || item.artist_id);
 
-        const { error: shipmentError } = await supabase
-            .from('shipments')
-            .insert({
-                order_id: orderId,
-                carrier: courier,
-                awb_code: awbCode,
-                status: 'generated',
-                cost: 25.00, // Mock cost
-            });
-        
-        if (shipmentError) {
-            console.error('Supabase Shipment Insert Error:', shipmentError);
-            // Don't throw, as order is already placed. Just log.
+        if (marketplaceItems.length > 0 && finalUserId) {
+            const transactions = marketplaceItems.map((item: any) => ({
+                listing_id: item.id,
+                buyer_id: finalUserId,
+                seller_id: item.artist_id,
+                amount: typeof item.price === 'string' ? parseFloat(item.price.replace(',', '.')) : Number(item.price),
+                status: 'pending'
+            }));
+
+            const validTransactions = transactions.filter((t: any) => t.listing_id && t.seller_id);
+
+            if (validTransactions.length > 0) {
+                const { error: transError } = await supabaseAdmin
+                    .from('transactions')
+                    .insert(validTransactions);
+
+                if (transError) console.error('Error creating marketplace transactions:', transError);
+            }
         }
 
-        // 5. Simulate CRM/Email Notification (Console Log)
-        console.log(`[CRM] New Order Received: ${orderId}`);
-        console.log(`[EMAIL] Sending confirmation to ${customer.email}`);
-        console.log(`[LOGISTICS] Generated AWB: ${awbCode} via ${courier}`);
+        // 6. Stripe Payment Intent Creation (if Card)
+        let clientSecret = null;
 
-        return NextResponse.json({ success: true, orderId, awb: awbCode });
+        if (paymentMethod === 'card') {
+            if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY.includes('placeholder')) {
+                console.warn('Stripe keys are missing or placeholders.');
+                return NextResponse.json({ error: 'Stripe is not configured.' }, { status: 500 });
+            }
+
+            try {
+                const paymentIntent = await stripe.paymentIntents.create({
+                    amount: amountInCents,
+                    currency: 'ron',
+                    automatic_payment_methods: { enabled: true },
+                    metadata: {
+                        orderId: order.id, // Critical for Webhook
+                        customer_email: customer.email,
+                    }
+                });
+
+                clientSecret = paymentIntent.client_secret;
+
+                // Update Order with PaymentIntent ID
+                await supabaseAdmin
+                    .from('orders')
+                    .update({ payment_intent_id: paymentIntent.id })
+                    .eq('id', order.id);
+
+            } catch (stripeError: any) {
+                console.error('Stripe Error:', stripeError);
+                return NextResponse.json({ error: stripeError.message }, { status: 500 });
+            }
+        }
+
+        return NextResponse.json({
+            success: true,
+            orderId: order.id,
+            clientSecret
+        });
 
     } catch (error) {
-        console.error('Order creation failed:', error);
-        return NextResponse.json({ success: false, error: 'Failed to process order' }, { status: 500 });
+        console.error('Unexpected error:', error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

@@ -17,8 +17,26 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Hudemas - The Art of Gobelin",
-  description: "A legacy of artistry in every stitch.",
+  title: {
+    default: "Hudemas - The Art of Gobelin",
+    template: "%s | Hudemas"
+  },
+  description: "A legacy of artistry in every stitch. Discover premium Gobelin kits, authentic Romanian tapestries, and a community of passionate needlepoint artists.",
+  keywords: ["gobelin", "tapestry", "needlepoint", "romania", "art", "handcrafted", "kit", "embroidery"],
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://hudemas-store.vercel.app',
+    siteName: 'Hudemas',
+    images: [
+      {
+        url: '/stitched_gobelin_sample_1_1764415137741.png', // Use our local asset
+        width: 1200,
+        height: 630,
+        alt: 'Hudemas Gobelin Art',
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

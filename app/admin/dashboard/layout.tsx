@@ -14,24 +14,35 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
-        const checkAuth = () => {
+        const checkAuth = async () => {
             try {
-                const session = localStorage.getItem('admin_session');
-                if (!session) {
-                    router.replace('/admin/login');
-                    // Keep isLoading true so the spinner stays until navigation completes
-                } else {
-                    setIsAuthorized(true);
-                    setIsLoading(false);
+                const { createClient } = await import('@/lib/supabase');
+                const supabase = createClient();
+                const { data: { session }, error } = await supabase.auth.getSession();
+
+                if (error || !session) {
+                    // Double check if we have a user
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (!user) {
+                        router.replace('/admin/login');
+                        return;
+                    }
                 }
+
+                // Optional: Check for admin role in profile if needed, 
+                // but RLS will handle data access security.
+                // For UI access, just being logged in is enough for now, 
+                // or we can fetch profile.
+
+                setIsAuthorized(true);
+                setIsLoading(false);
+
             } catch (e) {
                 console.error("Auth check failed", e);
                 router.replace('/admin/login');
             }
         };
-        
-        // Small delay to prevent hydration mismatch if localstorage is instant
-        // and to ensure the spinner is seen if checking takes time
+
         checkAuth();
     }, [router]);
 
@@ -40,8 +51,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         setIsSidebarOpen(false);
     }, [pathname]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('admin_session');
+    const handleLogout = async () => {
+        const { createClient } = await import('@/lib/supabase');
+        const supabase = createClient();
+        await supabase.auth.signOut();
         router.push('/');
     };
 
@@ -80,14 +93,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* Sidebar Overlay */}
             {isSidebarOpen && (
-                <div 
+                <div
                     className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm md:hidden"
                     onClick={() => setIsSidebarOpen(false)}
                 />
             )}
 
             {/* Sidebar */}
-            <aside 
+            <aside
                 className={`fixed inset-y-0 left-0 z-40 w-64 transform border-r border-stone-200 bg-white transition-transform duration-300 ease-in-out dark:border-stone-800 dark:bg-stone-900 overflow-y-auto
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
             >
@@ -107,11 +120,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition-colors ${
-                                    isActive
+                                className={`flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition-colors ${isActive
                                         ? 'bg-stone-100 text-stone-900 dark:bg-stone-800 dark:text-white'
                                         : 'text-stone-500 hover:bg-stone-50 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-white'
-                                }`}
+                                    }`}
                             >
                                 <Icon className="h-5 w-5" />
                                 {item.name}
@@ -119,26 +131,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         );
                     })}
                 </nav>
-                        <div className="absolute bottom-16 w-full px-4">
-                            <Link 
-                                href="https://msepwdbzrzqotapgesnd.supabase.co" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/10"
-                            >
-                                <span className="h-5 w-5 flex items-center justify-center font-bold">NOR</span>
-                                Supabase Project
-                            </Link>
-                        </div>
-                        <div className="absolute bottom-4 w-full px-4">
-                            <button
-                                onClick={handleLogout}
-                                className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/10"
-                            >
-                                <LogOut className="h-5 w-5" />
-                                Logout
-                            </button>
-                        </div>            </aside>
+                <div className="absolute bottom-16 w-full px-4">
+                    <Link
+                        href="https://msepwdbzrzqotapgesnd.supabase.co"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/10"
+                    >
+                        <span className="h-5 w-5 flex items-center justify-center font-bold">NOR</span>
+                        Supabase Project
+                    </Link>
+                </div>
+                <div className="absolute bottom-4 w-full px-4">
+                    <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/10"
+                    >
+                        <LogOut className="h-5 w-5" />
+                        Logout
+                    </button>
+                </div>            </aside>
 
             {/* Main Content */}
             <main className="flex-1 p-4 pt-20 md:p-8 md:ml-64 transition-all duration-300">

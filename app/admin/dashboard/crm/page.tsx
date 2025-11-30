@@ -35,8 +35,18 @@ export default function CRMPage() {
             setLoading(true);
 
             let ordersToProcess: any[] = [];
+            let customerDetailsMap = new Map<string, any>();
 
             try {
+                // Fetch customer details first
+                const { data: details } = await supabase
+                    .from('customer_details')
+                    .select('*');
+
+                if (details) {
+                    details.forEach((d: any) => customerDetailsMap.set(d.email, d));
+                }
+
                 const timeoutPromise = new Promise((_, reject) =>
                     setTimeout(() => reject(new Error('Timeout')), 2000)
                 );
@@ -51,7 +61,10 @@ export default function CRMPage() {
                 if (realOrders && realOrders.length > 0) {
                     ordersToProcess = realOrders;
                 } else {
-                    throw new Error("No real data or empty");
+                    // If no orders, we might still have customer details manually added?
+                    // For now, we primarily drive from orders, but we could add standalone customers.
+                    // Let's stick to orders driving the list for now.
+                    if (customerDetailsMap.size === 0) throw new Error("No real data or empty");
                 }
             } catch (error) {
                 console.log("CRM: Using mock data (Fallback active)", error);
@@ -61,7 +74,7 @@ export default function CRMPage() {
                     user_email: m.customer_type === 'company' ? `contact@${m.company_details?.name.replace(/\s+/g, '').toLowerCase()}.com` : `${m.customer_name.replace(/\s+/g, '.').toLowerCase()}@example.com`,
                     total_amount: m.total,
                     created_at: m.date,
-                    customer_type: i % 5 === 0 ? 'company' : 'individual', // Mock some companies
+                    customer_type: i % 5 === 0 ? 'company' : 'individual',
                     company_name: i % 5 === 0 ? `Art Gallery ${i}` : undefined,
                     shipping_address: {
                         firstName: m.customer_name.split(' ')[0],
@@ -71,18 +84,24 @@ export default function CRMPage() {
                 }));
             }
 
-            if (ordersToProcess.length > 0) {
-                const customerMap = new Map<string, Customer>();
+            const customerMap = new Map<string, Customer>();
 
+            // Process orders
+            if (ordersToProcess.length > 0) {
                 ordersToProcess.forEach((order: any) => {
                     const email = order.user_email;
                     if (!email) return;
 
                     const existing = customerMap.get(email);
-                    const name = order.shipping_address?.firstName
+                    const details = customerDetailsMap.get(email);
+
+                    // Use details from DB if available, otherwise fallback to order data
+                    const name = details?.name || (order.shipping_address?.firstName
                         ? `${order.shipping_address.firstName} ${order.shipping_address.lastName}`
-                        : 'Guest';
-                    const phone = order.shipping_address?.phone;
+                        : 'Guest');
+                    const phone = details?.phone || order.shipping_address?.phone;
+                    const companyName = details?.company_name || order.company_name;
+                    const notes = details?.notes || '';
 
                     if (existing) {
                         existing.totalSpent += order.total_amount;
@@ -92,22 +111,25 @@ export default function CRMPage() {
                         }
                     } else {
                         customerMap.set(email, {
-                            id: email, // using email as ID for now
+                            id: email,
                             email,
                             name,
                             type: order.customer_type || 'individual',
-                            companyName: order.company_name,
+                            companyName,
                             totalSpent: order.total_amount,
                             orderCount: 1,
                             lastOrderDate: order.created_at,
                             phone,
-                            notes: ''
+                            notes
                         });
                     }
                 });
-
-                setCustomers(Array.from(customerMap.values()));
             }
+
+            // Also add customers that might exist in details but have no orders (if we supported that)
+            // For now, let's just stick to order-based customers + details overlay.
+
+            setCustomers(Array.from(customerMap.values()));
             setLoading(false);
         };
 
@@ -121,14 +143,38 @@ export default function CRMPage() {
             c.companyName?.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
-    const handleSaveCustomer = (updated: Customer) => {
-        setCustomers(prev => prev.map(c => c.email === updated.email ? updated : c));
-        setIsEditing(false);
-        setSelectedCustomer(null);
+    const handleSaveCustomer = async (updated: Customer) => {
+        try {
+            const { error } = await supabase
+                .from('customer_details')
+                .upsert({
+                    email: updated.email,
+                    name: updated.name,
+                    phone: updated.phone,
+                    company_name: updated.companyName,
+                    notes: updated.notes,
+                    updated_at: new Date().toISOString()
+                });
+
+            if (error) throw error;
+
+            setCustomers(prev => prev.map(c => c.email === updated.email ? updated : c));
+            setIsEditing(false);
+            setSelectedCustomer(null);
+        } catch (err) {
+            console.error('Error saving customer details:', err);
+            alert('Failed to save changes.');
+        }
+    };
+
+    const handleSendEmail = (email: string, subject: string = '', body: string = '') => {
+        const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.open(mailtoLink, '_blank');
     };
 
     return (
         <div className="space-y-8 relative">
+            {/* ... Header and Filters ... */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 className="font-serif text-2xl font-medium text-stone-900 dark:text-white">Customer Relationships</h2>
@@ -193,7 +239,12 @@ export default function CRMPage() {
                                         </td>
                                         <td className="px-6 py-4 text-stone-600 dark:text-stone-400">
                                             <div className="flex flex-col gap-1">
-                                                <span className="flex items-center gap-2"><Mail className="h-3 w-3" /> {customer.email}</span>
+                                                <button
+                                                    onClick={() => handleSendEmail(customer.email)}
+                                                    className="flex items-center gap-2 hover:text-stone-900 dark:hover:text-white transition-colors"
+                                                >
+                                                    <Mail className="h-3 w-3" /> {customer.email}
+                                                </button>
                                                 {customer.phone && <span className="flex items-center gap-2"><Phone className="h-3 w-3" /> {customer.phone}</span>}
                                             </div>
                                         </td>
@@ -346,7 +397,10 @@ export default function CRMPage() {
                                 </div>
                             </div>
                             <div className="p-6 border-t border-stone-100 dark:border-stone-800 bg-stone-50 dark:bg-stone-800/50">
-                                <button className="w-full py-2 rounded-lg border border-stone-300 bg-white text-stone-700 hover:bg-stone-50 dark:bg-stone-800 dark:border-stone-700 dark:text-stone-300 dark:hover:bg-stone-700 transition-colors">
+                                <button
+                                    onClick={() => handleSendEmail(selectedCustomer.email, 'Regarding your order')}
+                                    className="w-full py-2 rounded-lg border border-stone-300 bg-white text-stone-700 hover:bg-stone-50 dark:bg-stone-800 dark:border-stone-700 dark:text-stone-300 dark:hover:bg-stone-700 transition-colors"
+                                >
                                     Compose New Email
                                 </button>
                             </div>

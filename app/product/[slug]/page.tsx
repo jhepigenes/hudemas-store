@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import productsData from '../../products.json';
-import { Product } from '../../types/product';
+import { Product } from '../../types/index';
 import { slugify } from '../../utils/slug';
 import ProductActions from './ProductActions';
 import RelatedProducts from '../../components/RelatedProducts';

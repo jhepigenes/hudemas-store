@@ -30,7 +30,7 @@ export default function DashboardOverview() {
             setLoading(true);
             try {
                 // Try fetching real data
-                const { data: revenueResult, error: revenueError } = await supabase.from('orders').select('total_amount');
+                const { data: revenueResult, error: revenueError } = await supabase.from('orders').select('total');
                 const { count: activeOrdersCount, error: ordersError } = await supabase.from('orders').select('*', { count: 'exact' }).in('status', ['pending', 'processing']);
                 const { count: approvedSellersCount, error: sellersError } = await supabase.from('artists').select('*', { count: 'exact' }).eq('status', 'approved');
                 const { data: ordersData, error: recentOrdersError } = await supabase.from('orders').select('*').order('created_at', { ascending: false }).limit(5);
@@ -38,12 +38,21 @@ export default function DashboardOverview() {
                 const hasRealData = !revenueError && !ordersError && !sellersError && !recentOrdersError && ordersData && ordersData.length > 0;
 
                 if (hasRealData) {
-                    const sum = revenueResult ? revenueResult.reduce((acc: number, order: { total_amount: number }) => acc + order.total_amount, 0) : 0;
+                    const sum = revenueResult ? revenueResult.reduce((acc: number, order: { total: number }) => acc + order.total, 0) : 0;
                     setTotalRevenue(sum);
                     setActiveOrders(activeOrdersCount);
                     setMarketplaceSellers(approvedSellersCount);
                     // Map real orders to display format
-                    setRecentOrders(ordersData.map((o: any) => ({ ...o, items: 1, user_email: o.user_email || 'real_user@example.com' })));
+                    setRecentOrders(ordersData.map((o: any) => {
+                        const customerName = o.customer_details ? `${o.customer_details.firstName} ${o.customer_details.lastName}` : 'Unknown';
+                        const customerEmail = o.customer_details?.email || o.user_email || 'Guest';
+                        return {
+                            ...o,
+                            items: 1, // We could count items from order_items table if we fetched them
+                            user_email: customerName !== 'Unknown' ? `${customerName} (${customerEmail})` : customerEmail,
+                            total_amount: o.total
+                        };
+                    }));
 
                     // Use mock chart data for now as we don't have historical aggregation on the client easily
                     setRevenueData(generateRevenueData());
@@ -159,8 +168,8 @@ export default function DashboardOverview() {
                                         <td className="px-6 py-4 text-stone-600 dark:text-stone-400">{order.total_amount.toFixed(2)} RON</td>
                                         <td className="px-6 py-4">
                                             <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ${order.status === 'completed' ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-400/10 dark:text-green-400' :
-                                                    order.status === 'pending' ? 'bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:bg-yellow-400/10 dark:text-yellow-500' :
-                                                        'bg-stone-100 text-stone-600 ring-stone-500/10 dark:bg-stone-800 dark:text-stone-400'
+                                                order.status === 'pending' ? 'bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:bg-yellow-400/10 dark:text-yellow-500' :
+                                                    'bg-stone-100 text-stone-600 ring-stone-500/10 dark:bg-stone-800 dark:text-stone-400'
                                                 }`}>
                                                 {order.status}
                                             </span>

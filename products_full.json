@@ -1,0 +1,4634 @@
+[
+  {
+    "title": "Cireșe",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-347-fructe-839.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Măr cu cireșe",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-348-fructe-247.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Mure și măr",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-349-fructe-911.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Strugure cu prune",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-350-fructe-116.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Strugure cu pară",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-351-fructe-709.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Strugure",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-352-fructe-117.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Strugure cu măr",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-353-fructe-584.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Gutuie cu strugure",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-354-fructe-543.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Gutuie cu strugure",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-355-fructe-177.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Strugure cu pară",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-356-fructe-232.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Strugure",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-357-fructe-857.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Strugure",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-527-strugure-557.jpg",
+    "category": "Fructe",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vază cu flori",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-023-vaza-cu-flori-526.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-029-flori-893.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-030-flori-198.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-031-flori-701.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Coș cu maci mov",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-035-cos-cu-maci-mov-458.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Coș cu maci roșii",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-036-cos-cu-maci-rosii-492.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-042-flori-954.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-043-flori-662.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-044-flori-266.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori de câmp",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-053-flori-de-camp-558.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Liliac",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-054-liliac-503.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maci de câmp",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-055-maci-de-camp-605.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floarea soarelui",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-056-floarea-soarelui-650.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vază cu anemone",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-072-vaza-cu-anemone-374.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iris",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-078-iris-354.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori de câmp",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-088-flori-de-camp-919.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-147-flori-919.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-148-flori-691.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1481-flori-933.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-149-flori-171.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-150-flori-575.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1501-flori-173.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-151-flori-345.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1511-flori-589.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-152-flori-812.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1521-flori-673.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-157-flori-121.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-158-flori-155.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1581-flori-779.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-159-flori-304.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1591-flori-269.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-186-flori-639.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1861-flori-343.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-225-flori-844.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-2251-flori-848.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-226-flori-223.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-2261-flori-455.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iris",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-227-iris-476.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iris",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-2271-iris-717.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-228-flori-737.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-2281-flori-401.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-256-flori-751.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-2561-flori-443.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-257-flori-161.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-2571-flori-334.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flori",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-258-flori-843.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floare",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-302-floare-687.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floare",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-303-floare-389.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Trandafir",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-304-trandafir-657.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floare",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-305-floare-970.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floare",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-306-floare-929.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floare",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-307-floare-584.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floare",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-308-floare-601.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floare",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-309-floare-216.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Orhidee",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-310-orhidee-401.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Orhidee",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-311-orhidee-417.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floarea soarelui",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-312-floarea-soarelui-604.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floarea soarelui",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-313-floarea-soarelui-837.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Trandafir",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-314-trandafir-839.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Floare",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-315-floare-908.jpg",
+    "category": "Flori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj de munte",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-017-peisaj-de-munte-884.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primăvara",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-019-primavara-500.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vara",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-020-vara-129.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Toamna",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-021-toamna-452.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iarna",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-022-iarna-645.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Popas la câmp",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-025-popas-la-camp-269.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primăvara",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-037-primavara-992.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vara",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-038-vara-312.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Toamna",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-039-toamna-609.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iarna",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-040-iarna-166.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Răsărit",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-060-rasarit-706.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "La vânătoare",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-064-la-vanatoare-472.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj cu oi",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-066-peisaj-cu-oi-240.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sania cu câini",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-068-sania-cu-caini-226.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Farul",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-070-farul-378.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "În pădure",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-075-in-padure-390.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Urmărit de dușmani",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-087-urmarit-de-dusmani-372.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj elvețian cu lac",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-090-peisaj-elvetian-cu-lac-833.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primăvara",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-103-primavara-910.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj de toamnă",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-115-peisaj-de-toamna-461.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj de iarnă",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-117-peisaj-de-iarna-331.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lebede",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-119-lebede-690.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Mica Lagună",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-126-mica-laguna-902.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "La mare",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-127-la-mare-928.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Stradă cu plopi",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-128-strada-cu-plopi-144.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj la malul mării",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-130-peisaj-la-malul-marii-553.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cabană în Alpi",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-131-cabana-in-alpi-263.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primăvara",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-137-primavara-282.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vara",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-138-vara-407.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Toamna",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-139-toamna-244.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iarna",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-140-iarna-456.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj de munte",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-153-peisaj-de-munte-862.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iarna",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-164-iarna-747.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj cu moară",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-165-peisaj-cu-moara-577.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vara",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-166-vara-167.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Feerie de iarnă",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-173-feerie-de-iarna-236.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Mostar",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-176-mostar-101.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primăvara",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-177-primavara-155.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vara",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-178-vara-893.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Toamna",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-179-toamna-558.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iarna",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-180-iarna-107.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Inaugurarea Pelișorului",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-182-inaugurarea-pelisorului-951.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-195-peisaj-857.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-196-peisaj-794.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-197-peisaj-844.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pelegrini întârziaţi",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-206-pelegrini-intarziati-249.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj cu moară de vânt",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-212-peisaj-cu-moara-de-vant-286.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Mesteceni aurii",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-216-mesteceni-aurii-941.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iarna",
+    "price": 165.84,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-221-iarna-209.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-223-peisaj-480.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "La vânătoare",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-224-la-vanatoare-673.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "La fântână",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-229-la-fantana-656.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-231-peisaj-667.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-232-peisaj-276.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-233-peisaj-542.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-234-peisaj-189.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-235-peisaj-348.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Apus",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-246-apus-697.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Apus",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-247-apus-419.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Apus",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-248-apus-888.jpg",
+    "category": "Peisaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maria",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-011-maria-153.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Hrist",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-012-hrist-663.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Madonna",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-013-madonna-308.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Ruga",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-014-ruga-163.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Ruga",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-0141-ruga-146.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maria cu pruncul",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-041-maria-cu-pruncul-624.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Blândul păstor",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-104-blandul-pastor-939.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Isus la ușa ta",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-105-isus-la-usa-ta-542.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Isus și femeia samariteancă",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-108-isus-si-femeia-samariteanca-116.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Samariteanul milostiv",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-111-samariteanul-milostiv-380.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Întoarcerea fiului risipitor",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-112-intoarcerea-fiului-risipitor-728.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maria",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-120-maria-852.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Rugăciune",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-121-rugaciune-292.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Golgota",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-123-golgota-966.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Ghetsimani",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-124-ghetsimani-379.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sfântul Anton de Padova",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-129-sfantul-anton-de-padova-534.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sfântul Gheorghe și balaurul",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-132-sfantul-gheorghe-si-balaurul-759.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Îngerul păzitor",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-135-ingerul-pazitor-954.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Adorația magilor",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-136-adoratia-magilor-288.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Hrist",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-141-hrist-616.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maria",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-142-maria-792.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sfânta familie",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-143-sfanta-familie-181.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pavel în temniță",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-144-pavel-in-temnita-851.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Ocrotitorul copiilor",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-145-ocrotitorul-copiilor-753.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fecioara",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-167-fecioara-180.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "În grădina",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-174-in-gradina-341.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Rugăciunea din Ghetsimani",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-181-rugaciunea-din-ghetsimani-603.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Inocența",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-183-inocenta-673.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Predica",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-199-predica-528.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Blândul păstor",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-200-blandul-pastor-169.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fecioara",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-201-fecioara-201.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maria",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-254-maria-618.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Hrist",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-375-hrist-354.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Hrist",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-382-hrist-995.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Rugăciunea din Ghetsimani",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-383-rugaciunea-din-ghetsimani-698.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Hrist",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-384-hrist-179.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Isus la ușa ta",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-385-isus-la-usa-ta-228.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Păstorul cel bun",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-386-pastorul-cel-bun-295.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Calvarul",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-387-calvarul-147.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Învierea",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-388-invierea-732.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maria cu pruncul",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-393-maria-cu-pruncul-706.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maria",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-394-maria-652.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Puterea credinței",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-406-puterea-credintei-657.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iubire și credință",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-407-iubire-si-credinta-850.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sf. Constantin și Elena",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-419-sf-constantin-si-elena-306.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sfânta Treime",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-420-sfanta-treime-778.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sfânta Lucia",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-421-sfanta-lucia-283.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Revelație divină",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-428-revelatie-divina-223.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Padre Pio",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-448-padre-pio-248.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maica Tereza",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-449-maica-tereza-651.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sf. Parascheva",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-453-sf-parascheva-964.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sf. Nectarie",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-454-sf-nectarie-267.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sf. Nectarie",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-455-sf-nectarie-648.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sf. Paraschiva",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-456-sf-paraschiva-864.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sf. Spiridon",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-458-sf-spiridon-186.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maria",
+    "price": 165.84,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-467-maria-726.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Hrist",
+    "price": 165.84,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-468-hrist-611.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sf. Nicolae",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-469-sf-nicolae-687.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sf. Mihail și Gavril",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-470-sf-mihail-si-gavril-454.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Hrist",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-495-hrist-596.jpg",
+    "category": "Religioase",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-048-natura-moarta-571.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-081-natura-moarta-944.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Coș cu piersici",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-114-cos-cu-piersici-879.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă cu fructe și pasăre",
+    "price": 165.84,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-211-natura-moarta-cu-fructe-si-pasare-916.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-252-natura-moarta-960.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-253-natura-moarta-295.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-259-natura-moarta-466.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-260-natura-moarta-809.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-261-natura-moarta-562.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-262-natura-moarta-906.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-263-natura-moarta-878.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-264-natura-moarta-880.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-265-natura-moarta-678.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-266-natura-moarta-872.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-267-natura-moarta-905.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-268-natura-moarta-259.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-269-natura-moarta-293.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-270-natura-moarta-633.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-450-natura-moarta-884.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-451-natura-moarta-719.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 76.98,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-529-natura-moarta-109.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natura moarta",
+    "price": 76.98,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-530-natura-moarta-514.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă 1",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-662-natura-moarta-1-391.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă 2",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-663-natura-moarta-2-500.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă 3",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-664-natura-moarta-3-496.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă 4",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-665-natura-moarta-4-523.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vază cu flori",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-671-vaza-cu-flori-532.jpg",
+    "category": "Natură moartă",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lebede",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-001-lebede-255.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Adevărații prieteni",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-018-adevarati-prieteni-779.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "După vânătoare",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-062-dupa-vanatoare-966.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lassie",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-067-lassie-190.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Delfini",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-069-delfini-222.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cai",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-073-cai-122.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cai sălbatici",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-185-cai-salbatici-672.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Papagali",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-187-papagali-157.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lebede",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-188-lebede-950.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lebede pe lac",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-190-lebede-pe-lac-394.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lebede",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-236-lebede-966.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cocoș de munte",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-238-cocos-de-munte-936.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Boxer",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-282-boxer-208.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Saint Bernard",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-283-saint-bernard-975.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Husky",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-284-husky-648.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Câine lup",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-285-caine-lup-592.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Coker",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-286-coker-890.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Husky",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-287-husky-846.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pisicuță",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-292-pisicuta-189.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cățeluș",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-293-catelus-601.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Prietenii",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-300-prietenii-436.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Prietenii",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-301-prietenii-777.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Tigru",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-318-tigru-236.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pantera",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-319-pantera-269.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vultur",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-320-vultur-706.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Leu",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-321-leu-463.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Tigru",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-322-tigru-727.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cerb",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-324-cerb-305.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cal",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-325-cal-989.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cal",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-326-cal-824.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cal",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-327-cal-781.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cal",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-328-cal-244.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vis de pisică",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-426-vis-de-pisica-965.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vis de pisică",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-427-vis-de-pisica-956.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pisicuță",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-429-pisicuta-769.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Buburuza",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-430-buburuza-577.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pisicuță cu melc",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-431-pisicuta-cu-melc-346.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lup",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-432-lup-726.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cățelul din poștă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-433-catelul-din-posta-486.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Prieteni buni",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-434-prieteni-buni-211.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pechinezi",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-435-pechinezi-486.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pisicuțe la fereastră",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-436-pisicute-la-fereastra-720.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "West terrieri gata de joacă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-437-west-terrieri-gata-de-joaca-705.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lebede",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-438-lebede-234.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lebede",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-439-lebede-716.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Puma",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-440-puma-168.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Puma",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-441-puma-790.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fluturi",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-492-fluturi-426.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fluturi",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-493-fluturi-864.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fluture",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-494-fluture-921.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cațeluși cu botină",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-586-catelusi-cu-botina-427.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "În ploaie",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-587-in-ploaie-407.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Căluț cu pisică",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-588-calut-cu-pisica-537.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lebede",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-712-lebede-519.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lebede",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-713-lebede-575.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cuibul",
+    "price": 76.98,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-736-cuibul-126.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Bufniţă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1210-bufnita-823.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Bufniţă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1211-bufnita-585.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Bufniţă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1212-bufnita-589.jpg",
+    "category": "Animale",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Mickey",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-045-mickey-308.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Ștrumf",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-046-strumf-419.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Donald cu bască albastră",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-047-donald-390.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Îngeraș",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-050-ingeras-778.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Îngeraș",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-051-ingeras-518.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pitic",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-094-pitic-233.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Mickey",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-095-mickey-906.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Minnie",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-096-minnie-419.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Dalmațian",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-097-dalmatian-714.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Dalmațian",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-098-dalmatian-647.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Dalmațian",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-099-dalmatian-985.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Dalmațian",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-100-dalmatian-275.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Somn ușor",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-118-somn-usor-719.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Îngeraș",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-250-ingeras-570.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Îngeraș",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-251-ingeras-731.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primul sărut",
+    "price": 165.84,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-272-primul-sarut-669.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pisicuță",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-288-pisicuta-661.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pisicuță",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-289-pisicuta-880.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pisicuţă",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-290-pisicuta-480.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fetița clown",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-294-fetita-clown-555.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Băiat clown",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-295-baiat-clown-319.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fetiță",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-296-fetita-457.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Băiat",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-297-baiat-610.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Drumul spre Ierusalim",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-358-drumul-spre-ierusalim-486.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Adorația",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-359-adoratia-986.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Rugăciune",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-360-rugaciune-140.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Rugăciune",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-361-rugaciune-614.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Rugăciunea de seară",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-584-ruga1-216.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Rugăciunea de seară",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-585-ruga2-957.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Winnie",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1001-winnie-748.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Porcuşor",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1002-porcusor-516.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iepuraș",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1003-iepuras-415.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Tigru",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1004-tigru-262.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Măgăruș",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1005-magarus-893.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Girafă",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1006-girafa-214.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Struț",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1007-strut-527.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Elefant roz",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1008-elefant-roz-229.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vacă fotbalistă",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1009-vaca-fotbalista-614.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pisică",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1010-pisica-697.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Văcuță",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1011-vacuta-546.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Văcuță",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1012-vacuta-398.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Văcuța balerină",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1013-vaca-balerina-782.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vaca dansatoare",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1014-vaca-dansatoare-834.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vaca somnoroasă",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1015-vaca-somnoroasa-421.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vulpița",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1016-vulpita-826.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cațeluș",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1017-catelus-660.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Micul prinț",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1018-micul-print-935.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Prințesa lebădă",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1019-printesa-lebada-717.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Bubble bebe",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1030-bubble-bebe-714.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Bubble bebe",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1031-bubble-bebe-986.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Garfield",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1032-garfield-114.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Garfield",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1033-garfield-226.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Garfield",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1034-garfield-814.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Garfield",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1035-garfield-266.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Kity",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1036-kity-601.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Kity",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1037-kity-390.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Moș Crăciun",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1038-mos-craciun-705.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Tweety",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1039-tweety-588.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Minnie",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1040-minnie-809.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Ducesa",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1041-ducesa-327.jpg",
+    "category": "Pentru copii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Geisha",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-329-geisha-722.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Geisha",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-330-geisha-907.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primăvară japoneză",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-395-primavara-japoneza-558.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Tokyo bar",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-399-tokyo-bar-140.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Tokyo bar",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-400-tokyo-bar-150.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Poveste din deșert",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-401-poveste-din-desert-624.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Poveste din deșert",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-402-poveste-din-desert-963.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Poveste din deșert",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-403-poveste-din-desert-586.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Poveste din deșert",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-404-poveste-din-desert-309.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vis arab",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-405-vis-arab-414.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cântec japonez",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-412-cantec-japonez-235.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Noapte japoneză",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-413-noapte-japoneza-423.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Frumoasa geishă",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-414-frumoasa-geisha-861.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Toaleta prințesei",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-415-toaleta-printesei-359.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pălăria neagră",
+    "price": 81,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-606-palaria-neagra-169.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pălăria neagră",
+    "price": 81,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-607-palaria-neagra-440.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pălăria neagră",
+    "price": 81,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-608-palaria-neagra-105.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pălăria neagră",
+    "price": 81,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-609-palaria-neagra-303.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Londra",
+    "price": 81,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-611-londra-635.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "New York",
+    "price": 81,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-612-new-york-114.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Paris",
+    "price": 81,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-613-paris-804.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Madrid",
+    "price": 81,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-614-madrid-234.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pălăria Neagră",
+    "price": 76.98,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-741-palaria-neagra-566.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pălăria Neagră",
+    "price": 76.98,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-742-palaria-neagra-938.jpg",
+    "category": "Moderne",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vapor",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-281-vapor-231.jpg",
+    "category": "Marine",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vapoare în marea Asow",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-335-marina-asow-409.jpg",
+    "category": "Marine",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lovitura de tun",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-336-lovitura-de-tun-410.jpg",
+    "category": "Marine",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Micuța balerină",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-003-balerina-371.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Țigan cu pipă",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-005-tigan-cu-pipa-487.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Țigancă",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-006-tiganca-603.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fetița cu flori",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-010-fetita-cu-flori-279.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Nicu",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-015-nicu-672.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Oana",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-016-oana-205.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Doamna în mov",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-024-doamna-in-mov-483.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Rosita",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-034-rosita-369.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Mia",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-052-mia-468.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Micuța pianistă",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-085-micuta-pianista-347.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Arlechin",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-091-arlechin-952.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "La revedere",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-092-la-revedere-120.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vară fierbinte",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-093-vara-fierbinte-654.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Mariana",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-102-mariana-936.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Micuții păstori",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-116-micutii-pastori-164.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Tineri îndrăgostiți",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-133-tineri-indragostiti-114.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Alaska",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-191-alaska-651.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Dansatoare",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-203-dansatoare-569.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Visare",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-214-visare-531.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Romeo",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-215-romeo-582.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Micuța păstoriță",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-217-micuta-pastorita-371.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Torcătoarea",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-230-torcatoarea-351.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Flautistul",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-237-flautistul-663.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Prietenie",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-243-prietenie-787.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Prietenie",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-245-prietenie-558.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Coșarul",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-271-cosarul-326.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Tutankamon",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-277-tutankamon-835.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Nefertiti",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-278-nefertiti-709.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Parisienne",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-381-parisienne-359.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Melancolie",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-416-melancolie-406.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primul sărut",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-422-primul-sarut-847.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Trandafirul prieteniei",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-423-trandafirul-prieteniei-501.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pădurea fermecată",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-461-padurea-fermecata-353.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Leagănul din pădure",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-466-leaganul-din-padure-451.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Anna",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-562-anna-603.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Jucătorii de cărți",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-590-jucatorii-de-carti-667.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "La gura sobei",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-598-la-gura-sobei-977.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Femeia cu magnolii",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-653-femeia-cu-magnolii-143.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vara",
+    "price": 165.84,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-657-vara-374.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Toaleta rozelor",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-676-toaleta-rozelor-882.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vis în roz",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-677-vis-in-roz-524.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Melancolie",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-678-lumina-dragostei-556.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lumina dragostei",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-679-lumina-dragostei-967.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fructul oprit",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-680-fructul-oprit-331.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Audrey",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-707-audrey-679.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Palaria neagră",
+    "price": 81,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-743-palaria-neagra-430.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pălăria neagră",
+    "price": 81,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-744-palaria-neagra-346.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primavara",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-748-primavara-397.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vara",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-749-vara-682.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Toamna",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-750-toamna-319.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Iarna",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-751-iarna-759.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Ballerina",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-752-ballerina-817.jpg",
+    "category": "Personaje",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Domnișoara",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-007-domnisoara-471.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Doamna care citește",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-008-doamna-care-citeste-250.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Car cu boi",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-026-car-cu-boi-970.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lecția de pian",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-032-lectia-de-pian-761.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "La studiu",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-033-la-studiu-952.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cap de fetiță",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-049-cap-de-fetita-751.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Repaus la țărmul mării",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-058-repaus-la-tarmul-marii-673.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Car cu boi",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-059-car-cu-boi-649.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Struguri cu mere",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-061-struguri-cu-mere-287.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fata pe stâncă",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-063-fata-pe-stanca-894.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Husarul",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-065-husarul-623.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Refugiu la țară",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-071-refugiu-la-tara-839.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lady Victoria",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-074-lady-victoria-128.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pescarul",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-076-pescarul-625.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Podețul din parc",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-077-podetul-din-parc-906.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Far la malul mării",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-079-far-la-malul-marii-594.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fetiță curățând vase",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-080-fetita-curatand-vase-616.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fetiță curățând vase",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-0801-fetita-curatand-vase-832.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 132.6,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-082-natura-moarta-387.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 130.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-0821-natura-moarta-373.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-083-natura-moarta-572.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-084-natura-moarta-447.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Portret de băiat",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-086-portret-de-baiat-425.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Odihnă în grădină",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-101-odihna-in-gradina-425.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Natură moartă",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-106-natura-moarta-634.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj elvețian",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-107-peisaj-elvetian-512.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Țărancă din Muscel",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-109-taranca-din-muscel-222.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Napoleon în exil",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-110-napoleon-in-exil-560.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vagabondul",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-113-vagabondul-374.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Hora de la Aninoasa",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-122-hora-de-la-aninoasa-675.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cina cea de taină",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-125-cina-cea-de-taina-488.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Tineri îndrăgostiți",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-134-tineri-indragostiti-546.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maci de câmp",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-146-maci-de-camp-160.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Maci de câmp",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1461-maci-de-camp-402.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pelerinajul dragostei",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-154-pelerinajul-dragostei-672.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Festival florentin",
+    "price": 276.29,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-155-festival-florentin-284.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Grădina dragostei",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-156-gradina-dragostei-737.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Peisaj de iarnă",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-162-peisaj-de-iarna-996.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primăvara",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-168-primavara-675.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Păstorița",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-169-pastorita-116.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Ciobănaș",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-170-ciobanas-741.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pe gânduri",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-171-pe-ganduri-522.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Ciobănaș",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-172-ciobanas-655.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Petru eliberat de înger",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-175-petru-eliberat-de-inger-779.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Țigancă",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-192-tiganca-996.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Țărancă torcând",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-193-taranca-torcand-280.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cascadă",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-194-cascada-938.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Serenada",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-198-serenada-246.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Trubadur pe malul râului",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-202-trubadur-pe-malul-raului-188.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vapoare în marea Asow",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-204-marina-asow-423.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Lovitura de tun",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-205-marina-799.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Feerie",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-207-feerie-431.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primăvara",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-208-primavara-411.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Farul",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-209-farul-588.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pescarul din pădure",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-210-pescarul-din-padure-132.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Idila păstorilor",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-213-idila-pastorilor-881.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Grădina cu lac",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-218-gradina-cu-lac-741.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Scrisoarea",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-219-scrisoarea-686.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Primăvara",
+    "price": 175.73,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-220-primavara-277.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Capela",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-222-capela-748.jpg",
+    "category": "Pictori celebri",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Aquarius",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-362-aquarius-499.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Pisces",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-363-pisces-756.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Aries",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-364-aries-543.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Taurus",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-365-taurus-560.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Gemini",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-366-gemini-963.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cancer",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-367-cancer-695.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Leo",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-368-leo-111.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Virgo",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-369-virgo-676.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Libra",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-370-libra-138.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Scorpio",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-371-scorpio-510.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Sagittarius",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-372-sagittarius-878.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Capricorn",
+    "price": 21.56,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-373-capricorn-634.jpg",
+    "category": "Zodii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cocostârc",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-027-cocostarc-714.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Cerb",
+    "price": 74.75,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-028-cerb-275.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Palmieri",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1020-palmieri-291.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Apus liniștit",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1021-apus-linistit-251.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Declarație",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1022-declaratie-979.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Ceartă",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1023-cearta-779.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Marylin",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1024-marylin-261.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Balet",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1025-balet-673.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Balet",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1026-balet-181.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Balet",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1027-balet-269.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Balet",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1028-balet-836.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Balet",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1029-balet-222.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Arhangheli",
+    "price": 38.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1173-arhangheli-360.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Regina toamnei",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1174-regina-toamnei-189.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Regina primăverii",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1175-regina-primaverii-144.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Regina verii",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1225-regina-verii-819.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Regina iernii",
+    "price": 56.23,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-1226-regina-iernii-602.jpg",
+    "category": "Modele 2-4 culori",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vis exotic",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-002-fata-marii-875.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Arlechin",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-004-arlechin-217.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Căluț",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-009-calut-962.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Dansul lebedelor",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-057-dansul-lebedelor-135.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Alegorie cu Pegas",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-089-alegorie-cu-pegas-349.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Arlechin",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-160-arlechin-460.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Arlechin",
+    "price": 60.26,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-161-arlechin-672.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Alegorie",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-163-alegorie-148.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Vis sălbatic",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-184-vis-salbatic-868.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Alegorie",
+    "price": 91.08,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-189-alegorie-108.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Femeia din cale",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-424-femeia-din-cale-482.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Metamorfoza mării",
+    "price": 196.03,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-462-metamorfoza-marii-286.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Fantezie din flori",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-520-fantezie-din-flori-735.jpg",
+    "category": "Alegorii",
+    "product_type": "kit",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef fix din lemn de tei",
+    "price": 63.98,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-hf-11-gherghef-fix-din-lemn-de-tei-161.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Foarfeca ornament 12cm",
+    "price": 45.98,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-f04-foarfeca-ornament-971.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "FOARFECA Păun mare 12 CM",
+    "price": 38.72,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-hds-f02-foarfeca-12-cm-284.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "FOARFECA Păun mica 10 CM",
+    "price": 33.88,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-hds-f01-foarfeca-10-cm-415.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef fix din lemn de tei",
+    "price": 33.88,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-hf32-gherghef-fix-din-lemn-de-tei-235.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Zweigart Ecru 54",
+    "price": 120.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ez-etamina-zweigart-ecru-54-317.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina White 52",
+    "price": 129.47,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea18-etamina-white-52-905.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Ecru 52",
+    "price": 129.47,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea17-etamina-ecru-52-789.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina White 40",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea16-etamina-white-902.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Ecru 40",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea15-etamina-ecru-456.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Ivory 40",
+    "price": 109.22,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea14-etamina-ivory-126.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Light Yellow 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea13-etamina-light-yellow-654.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Yellow 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea12-etamina-yellow-194.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Chocolat 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea11-etamina-chocolat-309.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Red 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea10-etamina-red-381.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Dark Green",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea9-etamina-dark-green-333.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Black 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea8-etamina-black-873.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Navy Blue 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea7-etamina-navy-blue-665.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Ciel 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea6-etamina-ciel-515.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Salmon 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea5-etamina-salmon-443.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Baby Liliac 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea4-etamina-baby-liliac-228.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Liliac 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea3-etamina-liliac-860.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Baby Pink 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea2-etamina-baby-pink-962.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Etamina Pink 40",
+    "price": 98.7,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ea1-etamina-pink-784.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Banda Aida 10cm Negru",
+    "price": 13.31,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ba10n-banda-aida-10cm-negru-991.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Banda Aida 5cm Negru",
+    "price": 12.1,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ba5n-banda-aida-5cm-negru-659.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Banda Aida 10 cm Beige",
+    "price": 13.31,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ba10b-banda-aida-10-mm-beige-238.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Banda Aida 5 cm Beige",
+    "price": 12.1,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ba5b-banda-aida-5-mm-beige-371.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Banda Aida 10cm Ecru",
+    "price": 13.31,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ba10e-banda-aida-10mm-ecru-648.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Banda Aida 5cm Ecru",
+    "price": 12.1,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ba5e-banda-aida-5mm-ecru-612.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Banda Aida 10cm Alba",
+    "price": 13.31,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ba10a1-banda-aida-10mm-978.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Banda Aida 5cm Alba",
+    "price": 12.1,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ba5a1-banda-aida-5mm-576.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Banda Aida 10cm Rosie",
+    "price": 13.31,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ba10r-banda-aida-10mm-773.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Banda Aida 5cm Rosie",
+    "price": 12.1,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-ba5r-banda-aida-5mm-810.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Lemn Cu Șurub 28 cm",
+    "price": 44.77,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gls7-gherghef-lemn-cu-surub-28-cm-364.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Lemn Cu Șurub 25 cm",
+    "price": 40.15,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gls6-gherghef-lemn-cu-surub-25-cm-734.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Lemn Cu Șurub 22 cm",
+    "price": 36.36,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gls5-gherghef-lemn-cu-surub-22-cm-769.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Lemn Cu Șurub 19 cm",
+    "price": 32.9,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gls4-gherghef-lemn-cu-surub-19-cm-964.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Lemn Cu Șurub 16 cm",
+    "price": 31.46,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gls3-gherghef-lemn-cu-surub-16-cm-796.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Lemn Cu Șurub 10 cm",
+    "price": 25.97,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gls1-gherghef-lemn-cu-surub-10-cm-992.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Lemn Tip Rama 19 cm",
+    "price": 29.04,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-glr3-gherghef-lemn-tip-rama-19-cm-330.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Lemn Tip Rama 13 cm",
+    "price": 24.2,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-glr2-gherghef-lemn-tip-rama-13-cm-132.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Lemn Tip Rama 10 cm",
+    "price": 21.78,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-glr1-gherghef-lemn-tip-rama-927.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Lemn Simplu 25 cm",
+    "price": 21.78,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gs3-gherghef-lemn-simplu-25-cm-980.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Patrat 15.5 cm",
+    "price": 37.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptrp-gherghef-plastic-tip-rama-patrat-16-cm-400.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Oval Albastru",
+    "price": 35.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptroa-gherghef-plastic-tip-rama-oval-crem-892.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Oval Bej",
+    "price": 35.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptrob-gherghef-plastic-tip-rama-oval-bej-989.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Oval Crem",
+    "price": 35.09,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptroc1-gherghef-plastic-tip-rama-oval-crem-966.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Rotund 23 cm",
+    "price": 38.72,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptrr5-gherghef-plastic-tip-rama-rotund-22-cm-569.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Rotund 19 cm",
+    "price": 37.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptrr4-gherghef-plastic-tip-rama-rotund-19-cm-545.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Rotund 15.2 cm",
+    "price": 36.3,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptrr3-gherghef-plastic-tip-rama-rotund-16-cm-886.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Rotund 11.8 cm",
+    "price": 32.9,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptrr2-gherghef-plastic-tip-rama-rotund-13-cm-551.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Rotund 8 cm",
+    "price": 30.25,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptrr1-gherghef-plastic-tip-rama-rotund-10-cm-796.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Oval 25.5 cm",
+    "price": 38.72,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptro5-gherghef-plastic-tip-rama-oval-22-cm-610.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Oval 21.5 cm",
+    "price": 37.51,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptro4-gherghef-plastic-tip-rama-oval-19-cm-540.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Oval 17.5 cm",
+    "price": 36.3,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptro3-gherghef-plastic-tip-rama-oval-16-cm-850.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Oval 13.7 cm",
+    "price": 32.9,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptro2-gherghef-plastic-tip-rama-oval-13-cm-507.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef Plastic Tip Rama Oval 8.7 cm",
+    "price": 30.25,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-gptro1-gherghef-plastic-tip-rama-oval-10-cm-668.JPG",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef fix din lemn de tei",
+    "price": 49.61,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-hf-82-gherghef-fix-din-lemn-de-tei-178.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  },
+  {
+    "title": "Gherghef fix din lemn de tei",
+    "price": 33.88,
+    "image": "https://www.hudemas.ro/assets/images/products/small/goblen-hudemas-hf-32-gherghef-fix-din-lemn-de-tei-498.jpg",
+    "category": "Accesorii",
+    "product_type": "accessory",
+    "currency": "RON"
+  }
+]

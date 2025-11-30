@@ -1,14 +1,17 @@
 'use client';
 
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+export const dynamic = 'force-dynamic';
+
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useLanguage } from '@/app/context/LanguageContext';
+import InstagramFeed from '@/app/components/InstagramFeed';
 
 export default function About() {
+    const { t } = useLanguage();
+
     return (
         <div className="min-h-screen bg-stone-50 selection:bg-stone-900 selection:text-white">
-            <Navbar />
 
             <main className="pt-32">
                 {/* Hero Section */}
@@ -20,7 +23,7 @@ export default function About() {
                             transition={{ duration: 0.8 }}
                             className="font-serif text-5xl text-stone-900 md:text-7xl"
                         >
-                            A Legacy <span className="italic text-stone-500">Woven</span> in Time
+                            {t.about.legacyTitle}
                         </motion.h1>
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -29,8 +32,7 @@ export default function About() {
                             className="mt-8 text-xl font-light leading-relaxed text-stone-600"
                         >
                             <p>
-                                From a small family workshop to a curator of fine textile art.
-                                This is the story of Hudemas.
+                                {t.about.legacyText}
                             </p>
                         </motion.div>
                     </div>
@@ -45,19 +47,19 @@ export default function About() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.8 }}
                         >
-                            <h2 className="mb-6 font-serif text-3xl text-stone-900 md:text-4xl">The Origins</h2>
+                            <h2 className="mb-6 font-serif text-3xl text-stone-900 md:text-4xl">{t.about.originsTitle}</h2>
                             <div className="space-y-6 font-sans text-lg text-stone-600">
                                 <p>
-                                    The Hudemas story begins in <strong>Timisoara, Romania</strong>, with a profound passion for the visual arts. Though officially established in 1993, our journey in manufacturing gobelins dates back to <strong>1985</strong>.
+                                    {t.about.originsText1}
                                 </p>
                                 <p>
-                                    Founded on the principles of classical artistic training, our family business started not just as a workshop, but as a dedication to beauty. We envisioned a way to bring the grandeur of museum masterpieces into the intimacy of the home through the medium of the Gobelin.
+                                    {t.about.originsText2}
                                 </p>
                             </div>
                         </motion.div>
-                        <div className="relative aspect-square overflow-hidden rounded-2xl bg-stone-200">
-                            <Image 
-                                src="https://images.unsplash.com/photo-1605218427368-35b476940a0e?q=80&w=1000&auto=format&fit=crop"
+                        <div className="relative h-[400px] overflow-hidden rounded-2xl md:h-full">
+                            <Image
+                                src="/images/hudemas_origins_1985.png"
                                 alt="The Hudema Workshop"
                                 fill
                                 className="object-cover"
@@ -76,8 +78,8 @@ export default function About() {
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:items-center">
                             <div className="order-2 lg:order-1 relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-800 border border-stone-700">
-                                <Image 
-                                    src="https://images.unsplash.com/photo-1574625054254-80c1c6d3ceb0?q=80&w=1000&auto=format&fit=crop"
+                                <Image
+                                    src="/images/hudemas_family_tradition.png"
                                     alt="Hands sewing a masterpiece"
                                     fill
                                     className="object-cover opacity-80"
@@ -95,16 +97,16 @@ export default function About() {
                                 transition={{ duration: 0.8 }}
                                 className="order-1 lg:order-2"
                             >
-                                <h2 className="mb-6 font-serif text-3xl text-white md:text-4xl">A Family Affair</h2>
+                                <h2 className="mb-6 font-serif text-3xl text-white md:text-4xl">{t.about.familyTitle}</h2>
                                 <div className="space-y-6 font-sans text-lg text-stone-300">
                                     <p>
-                                        Art runs in our veins. It is a language spoken fluently at our dinner table.
+                                        {t.about.familyText1}
                                     </p>
                                     <p>
-                                        What began as one man's vision has naturally evolved into a shared family vocation. Today, Hudemas represents a collective dedication to the craft, where experience and new perspectives blend seamlessly.
+                                        {t.about.familyText2}
                                     </p>
                                     <p>
-                                        We work together with a singular purpose: to ensure that every kit we produce honors the tradition of the Gobelin while embracing the future. It is not just a business; it is our heritage, shared with you.
+                                        {t.about.familyText3}
                                     </p>
                                 </div>
                             </motion.div>
@@ -114,17 +116,15 @@ export default function About() {
 
                 {/* The Craft */}
                 <section className="mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 lg:px-8">
-                    <h2 className="mb-8 font-serif text-3xl text-stone-900 md:text-4xl">The Art of Patience</h2>
+                    <h2 className="mb-8 font-serif text-3xl text-stone-900 md:text-4xl">{t.about.craftTitle}</h2>
                     <p className="mx-auto max-w-2xl text-lg text-stone-600">
-                        In a world of instant gratification, we champion the slow, meditative art of the Gobelin.
-                        Each kit is a promise—a journey of thousands of stitches that culminates in a personal masterpiece.
-                        We provide the finest threads and the most precise charts, but the magic... the magic comes from your hands.
+                        {t.about.craftText}
                     </p>
                     <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
                         {[
-                            { title: 'Precision', desc: 'Computer-generated charts for flawless accuracy.' },
-                            { title: 'Quality', desc: 'Premium threads that maintain their vibrancy for decades.' },
-                            { title: 'Heritage', desc: 'Designs inspired by the world\'s greatest art movements.' }
+                            { title: t.about.precision, desc: t.about.precisionDesc },
+                            { title: t.about.quality, desc: t.about.qualityDesc },
+                            { title: t.about.heritage, desc: t.about.heritageDesc }
                         ].map((item, i) => (
                             <div key={i} className="rounded-xl border border-stone-200 p-6">
                                 <h3 className="mb-2 font-serif text-xl text-stone-900">{item.title}</h3>
@@ -133,9 +133,10 @@ export default function About() {
                         ))}
                     </div>
                 </section>
-            </main>
 
-            <Footer />
-        </div>
+                {/* Instagram Feed */}
+                <InstagramFeed />
+            </main>
+        </div >
     );
 }

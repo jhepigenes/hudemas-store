@@ -10,8 +10,8 @@ const __dirname = path.dirname(__filename);
 // Load env vars
 dotenv.config({ path: path.resolve(__dirname, '../.env.local') });
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 if (!supabaseUrl || !supabaseServiceKey) {
     console.error('Missing Supabase credentials');
@@ -71,7 +71,6 @@ async function syncProducts() {
             .single();
 
         // If not found by source_url, try to find by title (legacy migration)
-        // Only if source_url is NULL in DB (to avoid matching already migrated ones)
         if (!existing) {
             const { data: legacy } = await supabase
                 .from('marketplace_listings')
@@ -79,13 +78,14 @@ async function syncProducts() {
                 .eq('title', product.title)
                 .eq('user_id', adminUserId)
                 .is('source_url', null)
-                .maybeSingle(); // Use maybeSingle to avoid error if multiple (though we want to pick one)
+                .maybeSingle();
 
             if (legacy) {
                 existing = legacy;
-                // console.log(`Found legacy product for migration: ${product.title}`);
             }
         }
+
+        const productType = product.product_type || 'kit';
 
         if (existing) {
             // Update existing product
@@ -96,7 +96,9 @@ async function syncProducts() {
                     image_url: imageUrl,
                     category: product.category || 'Goblenuri',
                     description: product.description || `Goblen: ${product.title}`,
-                    source_url: product.url // Ensure source_url is set
+                    source_url: product.url,
+                    product_type: productType,
+                    stock: 10 // Default stock for now
                 })
                 .eq('id', existing.id);
 
@@ -118,13 +120,15 @@ async function syncProducts() {
                 image_url: imageUrl,
                 user_id: adminUserId,
                 category: product.category || 'Goblenuri',
-                source_url: product.url
+                source_url: product.url,
+                product_type: productType,
+                stock: 10
             });
 
         if (error) {
             console.error(`Error inserting product ${product.title}:`, error.message);
         } else {
-            console.log(`Synced product: ${product.title}`);
+            console.log(`Synced product: ${product.title} (${productType})`);
             syncedCount++;
         }
     }

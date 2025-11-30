@@ -57,7 +57,7 @@ create table if not exists transactions (
   id uuid default gen_random_uuid() primary key,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   listing_id uuid references marketplace_listings not null,
-  buyer_id uuid references auth.users not null,
+  buyer_id uuid references auth.users,
   seller_id uuid references auth.users not null,
   amount decimal(10, 2) not null,
   status text default 'pending' check (status in ('pending', 'completed', 'cancelled'))

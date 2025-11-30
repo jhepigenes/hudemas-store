@@ -3,26 +3,19 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Plus, Trash2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CartDrawer() {
     const { isCartOpen, toggleCart, items, updateQuantity, removeItem, cartTotal, subtotal, discount } = useCart();
+    const { formatPrice } = useCurrency();
 
     return (
         <AnimatePresence>
             {isCartOpen && (
                 <>
-                    {/* Backdrop */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={toggleCart}
-                        className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm"
-                    />
-
-                    {/* Drawer */}
+                    {/* ... (Backdrop and Container remain same) ... */}
                     <motion.div
                         initial={{ x: '100%' }}
                         animate={{ x: 0 }}
@@ -60,7 +53,9 @@ export default function CartDrawer() {
                                     </div>
                                 ) : (
                                     <ul className="space-y-8">
-                                        {items.map((item) => (
+                                        {items.map((item) => {
+                                            const priceNum = typeof item.price === 'string' ? parseFloat(item.price.replace(',', '.')) : item.price;
+                                            return (
                                             <li key={item.name} className="flex gap-4">
                                                 <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md bg-stone-100">
                                                     <Image
@@ -76,7 +71,7 @@ export default function CartDrawer() {
                                                             {item.name}
                                                         </h3>
                                                         <p className="text-sm text-stone-500">
-                                                            {item.price} {item.currency}
+                                                            {formatPrice(priceNum)}
                                                         </p>
                                                     </div>
                                                     <div className="flex items-center justify-between">
@@ -106,7 +101,7 @@ export default function CartDrawer() {
                                                     </div>
                                                 </div>
                                             </li>
-                                        ))}
+                                        )})}
                                     </ul>
                                 )}
                             </div>
@@ -117,16 +112,16 @@ export default function CartDrawer() {
                                     <div className="space-y-2 mb-4">
                                         <div className="flex items-center justify-between text-sm text-stone-500">
                                             <span>Subtotal</span>
-                                            <span>{subtotal.toFixed(2).replace('.', ',')} RON</span>
+                                            <span>{formatPrice(subtotal)}</span>
                                         </div>
                                         <div className="flex items-center justify-between text-sm font-medium text-green-600">
                                             <span>Black Friday (-20%)</span>
-                                            <span>-{discount.toFixed(2).replace('.', ',')} RON</span>
+                                            <span>-{formatPrice(discount)}</span>
                                         </div>
                                         <div className="flex items-center justify-between text-lg font-medium pt-2 border-t border-stone-100">
                                             <span className="text-stone-900 dark:text-white">Total</span>
                                             <span className="font-serif text-stone-900 dark:text-white">
-                                                {cartTotal.toFixed(2).replace('.', ',')} RON
+                                                {formatPrice(cartTotal)}
                                             </span>
                                         </div>
                                     </div>

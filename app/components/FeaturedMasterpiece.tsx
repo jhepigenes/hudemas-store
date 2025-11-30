@@ -36,7 +36,7 @@ export default function FeaturedMasterpiece() {
                         </p>
                         <div className="flex flex-col gap-4 sm:flex-row">
                             <Link
-                                href="/product/peisaj-iarna"
+                                href="/product/iarna"
                                 className="group relative overflow-hidden rounded-full bg-stone-900 dark:bg-stone-50 px-8 py-4 text-white dark:text-stone-900 transition-all hover:bg-stone-800 dark:hover:bg-stone-200"
                             >
                                 <span className="relative z-10 font-medium tracking-wide">View Details</span>

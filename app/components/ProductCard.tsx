@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { Product } from '../types/product';
+import { Product } from '../types/index';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 import { slugify } from '../utils/slug';
 import { MouseEvent } from 'react';
 import SafeImage from './SafeImage';
@@ -13,6 +14,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, index }: ProductCardProps) {
     const { addItem } = useCart();
+    const { formatPrice } = useCurrency();
     const slug = slugify(product.name);
 
     const mouseX = useMotionValue(0);
@@ -53,7 +55,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
                         Sale
                     </span>
                 </div>
-                <Link href={`/product/${slug}`}>
+                <Link href={`/product/${slug}`} className="block relative h-full w-full">
                     <SafeImage
                         src={product.image}
                         alt={product.name}
@@ -84,20 +86,20 @@ export default function ProductCard({ product, index }: ProductCardProps) {
                     {(() => {
                         const cleanPrice = product.price ? String(product.price).replace(',', '.') : '0';
                         const numericPrice = parseFloat(cleanPrice);
-                        
+
                         if (isNaN(numericPrice)) {
-                             return <span className="font-medium text-stone-900 dark:text-stone-50">{product.price} {product.currency}</span>;
+                            return <span className="font-medium text-stone-900 dark:text-stone-50">{product.price} {product.currency}</span>;
                         }
 
-                        const discountedPrice = (numericPrice * 0.8).toFixed(2).replace('.', ',');
-                        
+                        const discountedPrice = numericPrice * 0.8;
+
                         return (
                             <>
                                 <span className="text-stone-400 dark:text-stone-500 line-through">
-                                    {product.price} {product.currency}
+                                    {formatPrice(numericPrice)}
                                 </span>
                                 <span className="font-medium text-red-600 dark:text-red-400">
-                                    {discountedPrice} {product.currency}
+                                    {formatPrice(discountedPrice)}
                                 </span>
                             </>
                         );

@@ -7,6 +7,7 @@ export interface MockOrder {
   company_details?: {
     name: string;
     vatId: string;
+    regNo?: string;
   };
   total: number;
   status: 'pending' | 'processing' | 'completed' | 'cancelled';
@@ -14,6 +15,11 @@ export interface MockOrder {
   items: number;
   shipping_method: 'FanCourier Standard' | 'FanCourier Express' | 'Sameday EasyBox' | 'Pickup';
   shipping_cost: number;
+  email: string;
+  phone: string;
+  address: string;
+  payment_method: string;
+  payment_status: string;
 }
 
 export const generateMockOrders = (count: number = 10): MockOrder[] => {
@@ -32,14 +38,20 @@ export const generateMockOrders = (count: number = 10): MockOrder[] => {
       customer_type: isCompany ? 'company' : 'private',
       company_details: isCompany ? {
         name: faker.company.name(),
-        vatId: `RO${faker.number.int({ min: 1000000, max: 9999999 })}`
+        vatId: `RO${faker.number.int({ min: 1000000, max: 9999999 })}`,
+        regNo: `J40/${faker.number.int({ min: 100, max: 999 })}/${faker.date.past().getFullYear()}`
       } : undefined,
       total: parseFloat(faker.commerce.price({ min: 100, max: 5000 })),
       status: faker.helpers.arrayElement(['pending', 'processing', 'completed', 'cancelled']),
       date: faker.date.recent({ days: 2 }).toISOString().split('T')[0], // Recent orders for "Daily" view
       items: faker.number.int({ min: 1, max: 5 }),
       shipping_method: shippingMethod.name as any,
-      shipping_cost: shippingMethod.cost
+      shipping_cost: shippingMethod.cost,
+      email: faker.internet.email(),
+      phone: faker.phone.number(),
+      address: faker.location.streetAddress(true),
+      payment_method: faker.helpers.arrayElement(['Card Online', 'Ramburs', 'Bank Transfer']),
+      payment_status: faker.helpers.arrayElement(['paid', 'pending', 'failed'])
     };
   });
 };

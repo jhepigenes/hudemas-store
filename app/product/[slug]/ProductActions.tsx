@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { ShoppingBag, Check } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
-import { Product } from '../../types/product';
+import { useCurrency } from '../../context/CurrencyContext';
+import { Product } from '../../types/index';
 
 interface ProductActionsProps {
     product: Product;
@@ -11,11 +12,14 @@ interface ProductActionsProps {
 
 export default function ProductActions({ product }: ProductActionsProps) {
     const { addItem, toggleCart } = useCart();
+    const { formatPrice } = useCurrency();
     const [withThreads, setWithThreads] = useState(false);
     const [selectedSize, setSelectedSize] = useState('Standard (40x50cm)');
 
-    // Parse base price (handle "91,08" format)
-    const basePrice = parseFloat(product.price.replace(',', '.'));
+    // Parse base price (handle "91,08" format or number)
+    const basePrice = typeof product.price === 'string' 
+        ? parseFloat(product.price.replace(',', '.')) 
+        : product.price;
     const threadsCost = 45.00; // Example fixed cost for threads
     const totalPrice = withThreads ? basePrice + threadsCost : basePrice;
 
@@ -34,11 +38,11 @@ export default function ProductActions({ product }: ProductActionsProps) {
             {/* Price Display */}
             <div className="border-b border-stone-200 pb-6 dark:border-stone-800">
                 <p className="text-3xl font-light text-stone-900 dark:text-white">
-                    {totalPrice.toFixed(2).replace('.', ',')} {product.currency}
+                    {formatPrice(totalPrice)}
                 </p>
                 {withThreads && (
                     <p className="text-sm text-stone-500 mt-1">
-                        Includes complete set of threads (+{threadsCost} RON)
+                        Includes complete set of threads (+{formatPrice(threadsCost)})
                     </p>
                 )}
             </div>
@@ -51,22 +55,20 @@ export default function ProductActions({ product }: ProductActionsProps) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <button
                             onClick={() => setWithThreads(false)}
-                            className={`relative flex items-center justify-center rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
-                                !withThreads 
-                                    ? 'border-stone-900 ring-1 ring-stone-900 bg-stone-50 text-stone-900 dark:border-white dark:ring-white dark:bg-stone-800 dark:text-white' 
-                                    : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-400 dark:hover:bg-stone-800'
-                            }`}
+                            className={`relative flex items-center justify-center rounded-lg border px-4 py-3 text-sm font-medium transition-all ${!withThreads
+                                ? 'border-stone-900 ring-1 ring-stone-900 bg-stone-50 text-stone-900 dark:border-white dark:ring-white dark:bg-stone-800 dark:text-white'
+                                : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-400 dark:hover:bg-stone-800'
+                                }`}
                         >
                             Printed Canvas Only
                             {!withThreads && <div className="absolute top-0 right-0 -mt-2 -mr-2 rounded-full bg-stone-900 p-1 text-white dark:bg-white dark:text-stone-900"><Check className="h-3 w-3" /></div>}
                         </button>
                         <button
                             onClick={() => setWithThreads(true)}
-                            className={`relative flex items-center justify-center rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
-                                withThreads 
-                                    ? 'border-stone-900 ring-1 ring-stone-900 bg-stone-50 text-stone-900 dark:border-white dark:ring-white dark:bg-stone-800 dark:text-white' 
-                                    : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-400 dark:hover:bg-stone-800'
-                            }`}
+                            className={`relative flex items-center justify-center rounded-lg border px-4 py-3 text-sm font-medium transition-all ${withThreads
+                                ? 'border-stone-900 ring-1 ring-stone-900 bg-stone-50 text-stone-900 dark:border-white dark:ring-white dark:bg-stone-800 dark:text-white'
+                                : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-400 dark:hover:bg-stone-800'
+                                }`}
                         >
                             Complete Kit (+Threads)
                             {withThreads && <div className="absolute top-0 right-0 -mt-2 -mr-2 rounded-full bg-stone-900 p-1 text-white dark:bg-white dark:text-stone-900"><Check className="h-3 w-3" /></div>}
@@ -82,11 +84,10 @@ export default function ProductActions({ product }: ProductActionsProps) {
                             <button
                                 key={size}
                                 onClick={() => setSelectedSize(size)}
-                                className={`px-4 py-2 rounded-md text-sm font-medium border transition-colors ${
-                                    selectedSize === size
-                                        ? 'bg-stone-900 text-white border-stone-900 dark:bg-white dark:text-stone-900'
-                                        : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-50 dark:bg-stone-900 dark:text-stone-400 dark:border-stone-700 dark:hover:bg-stone-800'
-                                }`}
+                                className={`px-4 py-2 rounded-md text-sm font-medium border transition-colors ${selectedSize === size
+                                    ? 'bg-stone-900 text-white border-stone-900 dark:bg-white dark:text-stone-900'
+                                    : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-50 dark:bg-stone-900 dark:text-stone-400 dark:border-stone-700 dark:hover:bg-stone-800'
+                                    }`}
                             >
                                 {size}
                             </button>

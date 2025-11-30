@@ -7,6 +7,7 @@ import CartDrawer from "./components/CartDrawer";
 import CustomCursor from "./components/CustomCursor";
 import NoiseOverlay from "./components/NoiseOverlay";
 import { LanguageProvider } from "./context/LanguageContext";
+import { CurrencyProvider } from "./context/CurrencyContext";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -14,12 +15,14 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <LanguageProvider>
-      {!isAdmin && <Header />}
-      {children}
-      {!isAdmin && <Footer />}
-      {!isAdmin && <CustomCursor />}
-      <NoiseOverlay />
-      {!isAdmin && <CartDrawer />}
+      <CurrencyProvider>
+        {!isAdmin && <Header />}
+        {children}
+        {!isAdmin && <Footer />}
+        {!isAdmin && <CustomCursor />}
+        <NoiseOverlay />
+        {!isAdmin && <CartDrawer />}
+      </CurrencyProvider>
     </LanguageProvider>
   );
 }

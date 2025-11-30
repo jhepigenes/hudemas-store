@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Product } from '../types/product';
+import { Product } from '../types/index';
 import { slugify } from '../utils/slug';
 
 interface RelatedProductsProps {

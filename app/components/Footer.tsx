@@ -71,7 +71,7 @@ export default function Footer() {
                 </div>
 
                 <div className="mt-16 border-t border-white/10 pt-8 text-center text-xs">
-                    <p>&copy; {new Date().getFullYear()} Hudemas. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} Hudemas. All rights reserved. v2.0</p>
                 </div>
             </div>
         </footer>

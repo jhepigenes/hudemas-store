@@ -48,7 +48,7 @@ export default function SellPage() {
         };
         checkUser();
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event: string, session: any) => {
             if (event === 'SIGNED_IN' && session) {
                 setIsLoggedIn(true);
                 setFormData(prev => ({
@@ -151,12 +151,16 @@ export default function SellPage() {
             const { error: listingError } = await supabase
                 .from('marketplace_listings')
                 .insert({
+                    user_id: user.id,
                     artist_id: user.id,
                     title: formData.artTitle,
                     price: parseFloat(formData.price),
                     description: formData.description,
                     image_url: publicUrl,
-                    status: 'pending_approval'
+                    status: 'pending',
+                    product_type: 'finished',
+                    stock: 1,
+                    currency: 'RON'
                 });
 
             if (listingError) throw listingError;
@@ -206,13 +210,13 @@ export default function SellPage() {
                     </p>
                     <div className="space-y-3">
                         <Link
-                            href="/login?returnUrl=/marketplace/sell"
+                            href="/login?returnUrl=/sell"
                             className="block w-full rounded-full bg-stone-900 py-3 text-white font-medium hover:bg-stone-800 dark:bg-white dark:text-stone-900 transition-colors"
                         >
                             {t.sell.login}
                         </Link>
                         <Link
-                            href="/signup?returnUrl=/marketplace/sell"
+                            href="/signup?returnUrl=/sell"
                             className="block w-full rounded-full border border-stone-200 py-3 text-stone-900 font-medium hover:bg-stone-50 dark:border-stone-700 dark:text-white dark:hover:bg-stone-800 transition-colors"
                         >
                             {t.sell.createAccount}
@@ -280,7 +284,7 @@ export default function SellPage() {
                                             <input
                                                 type="text"
                                                 placeholder="e.g. Maria Popescu"
-                                                className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-3 text-stone-900 focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white"
+                                                className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-3 text-stone-900 focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white dark:placeholder:text-stone-500"
                                                 value={formData.artistName}
                                                 onChange={e => setFormData({ ...formData, artistName: e.target.value })}
                                             />
@@ -290,7 +294,7 @@ export default function SellPage() {
                                             <input
                                                 type="email"
                                                 placeholder="email@example.com"
-                                                className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-3 text-stone-900 focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white"
+                                                className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-3 text-stone-900 focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white dark:placeholder:text-stone-500"
                                                 value={formData.email}
                                                 onChange={e => setFormData({ ...formData, email: e.target.value })}
                                             />
@@ -319,7 +323,7 @@ export default function SellPage() {
                                             <input
                                                 type="text"
                                                 placeholder="e.g. Winter Sunset"
-                                                className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-3 text-stone-900 focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white"
+                                                className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-3 text-stone-900 focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white dark:placeholder:text-stone-500"
                                                 value={formData.artTitle}
                                                 onChange={e => setFormData({ ...formData, artTitle: e.target.value })}
                                             />
@@ -331,7 +335,7 @@ export default function SellPage() {
                                                 <input
                                                     type="number"
                                                     placeholder="0.00"
-                                                    className="w-full rounded-lg border-stone-200 bg-stone-50 pl-14 pr-4 py-3 text-stone-900 focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white"
+                                                    className="w-full rounded-lg border-stone-200 bg-stone-50 pl-14 pr-4 py-3 text-stone-900 focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white dark:placeholder:text-stone-500"
                                                     value={formData.price}
                                                     onChange={e => setFormData({ ...formData, price: e.target.value })}
                                                 />
@@ -342,7 +346,7 @@ export default function SellPage() {
                                             <textarea
                                                 rows={4}
                                                 placeholder="..."
-                                                className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-3 text-stone-900 focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white"
+                                                className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-3 text-stone-900 focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white dark:placeholder:text-stone-500"
                                                 value={formData.description}
                                                 onChange={e => setFormData({ ...formData, description: e.target.value })}
                                             />

@@ -9,7 +9,7 @@ interface SearchAndFilterProps {
     setSelectedCategory: (category: string) => void;
 }
 
-const CATEGORIES = ['All', 'Nature', 'Religious', 'Portraits', 'Flowers', 'Abstract'];
+const CATEGORIES = ['All', 'Nature', 'Religious', 'Portraits', 'Flowers', 'Abstract', 'Accessories', 'Frames'];
 
 export default function SearchAndFilter({
     searchTerm,
@@ -38,8 +38,8 @@ export default function SearchAndFilter({
                         key={category}
                         onClick={() => setSelectedCategory(category)}
                         className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all ${selectedCategory === category
-                                ? 'bg-stone-900 text-white shadow-md'
-                                : 'bg-white text-stone-600 hover:bg-stone-100'
+                            ? 'bg-stone-900 text-white shadow-md'
+                            : 'bg-white text-stone-600 hover:bg-stone-100'
                             }`}
                     >
                         {category}

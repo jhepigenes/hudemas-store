@@ -5,8 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRef } from 'react';
 import { ArrowDown } from 'lucide-react';
+import { useLanguage } from '@/app/context/LanguageContext';
 
 export default function Hero() {
+    const { t } = useLanguage();
     const ref = useRef(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -54,7 +56,7 @@ export default function Hero() {
                         className="relative h-full w-full"
                     >
                         <Image
-                            src="https://images.unsplash.com/photo-1612013257623-4e3a7c8777e9?q=80&w=2667&auto=format&fit=crop"
+                            src="https://images.unsplash.com/photo-1624526267942-ab0ff8a3e972?q=80&w=2667&auto=format&fit=crop"
                             alt="Hudemas Gobelin Art"
                             fill
                             className="object-cover brightness-[0.6]"
@@ -73,20 +75,18 @@ export default function Hero() {
                     animate="visible"
                 >
                     <motion.h1 variants={itemVariants} className="font-serif text-5xl font-medium tracking-tight text-white sm:text-7xl md:text-8xl">
-                        Weaving History
+                        {t.hero.title1}
                     </motion.h1>
                     <motion.h1 variants={itemVariants} className="font-serif text-5xl font-medium italic tracking-tight text-stone-200 sm:text-7xl md:text-8xl mt-2">
-                        Into Art
+                        {t.hero.title2}
                     </motion.h1>
-                    
+
                     <motion.div variants={itemVariants} className="mt-8 flex justify-center">
-                         <div className="h-px w-24 bg-white/50" />
+                        <div className="h-px w-24 bg-white/50" />
                     </motion.div>
 
                     <motion.p variants={itemVariants} className="mx-auto mt-8 max-w-2xl text-lg font-light text-stone-300 sm:text-xl leading-relaxed">
-                        Discover the timeless elegance of handcrafted Gobelins.
-                        <br className="hidden sm:block" />
-                        A family tradition of precision, passion, and patience.
+                        {t.hero.subtitle}
                     </motion.p>
 
                     <motion.div variants={itemVariants} className="mt-12 flex flex-col sm:flex-row justify-center gap-6">
@@ -94,13 +94,13 @@ export default function Hero() {
                             href="#collection"
                             className="group relative overflow-hidden rounded-full bg-white px-10 py-4 text-sm font-medium tracking-widest text-stone-900 transition-all hover:bg-stone-200"
                         >
-                            <span className="relative z-10 uppercase">Explore Collection</span>
+                            <span className="relative z-10 uppercase">{t.hero.explore}</span>
                         </Link>
                         <Link
                             href="/about"
                             className="group rounded-full border border-white/30 bg-white/5 px-10 py-4 text-sm font-medium tracking-widest text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/50"
                         >
-                            <span className="uppercase">Our Story</span>
+                            <span className="uppercase">{t.hero.story}</span>
                         </Link>
                     </motion.div>
                 </motion.div>
@@ -114,7 +114,7 @@ export default function Hero() {
                 transition={{ delay: 1.5, duration: 1 }}
                 className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60"
             >
-                <span className="text-[10px] uppercase tracking-widest">Scroll</span>
+                <span className="text-[10px] uppercase tracking-widest">{t.hero.scroll}</span>
                 <motion.div
                     animate={{ y: [0, 8, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
