@@ -35,7 +35,7 @@ async function updateFeedback() {
     let feedbackList = JSON.parse(text);
     let updatedCount = 0;
 
-    feedbackList = feedbackList.map(item => {
+    feedbackList = feedbackList.map((item: any) => {
         if (TARGET_IDS.includes(item.id)) {
             updatedCount++;
             return { ...item, status: 'ready_for_review' };
