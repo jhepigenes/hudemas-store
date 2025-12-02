@@ -1,9 +1,14 @@
 {
-  "version": "v2025.12.02-8b67800",
-  "lastUpdated": "2025-12-02T08:01:05.207Z",
-  "commit": "8b67800",
-  "note": "Feature: Add Grid Density toggle to Shop, Clickable Dashboard Stats, and Email History in CRM",
+  "version": "v2025.12.02-f8674a2",
+  "lastUpdated": "2025-12-02T08:11:17.934Z",
+  "commit": "f8674a2",
+  "note": "Fix: Increase z-index of Feedback Modal and improve styling",
   "history": [
+    {
+      "hash": "f8674a2",
+      "date": "2025-12-02T09:04:38+01:00",
+      "message": "Fix: Increase z-index of Feedback Modal and improve styling"
+    },
     {
       "hash": "8b67800",
       "date": "2025-12-02T08:54:27+01:00",
@@ -48,11 +53,6 @@
       "hash": "11770cb",
       "date": "2025-11-30T11:35:37+01:00",
       "message": "Fix CRM data display logic and add verification scripts"
-    },
-    {
-      "hash": "2de7560",
-      "date": "2025-11-30T11:23:19+01:00",
-      "message": "Refine About page images and integrate Instagram feed"
     }
   ]
 }

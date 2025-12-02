@@ -284,7 +284,10 @@ export default function FeedbackPage() {
                                                 <div className="absolute left-[11px] top-6 w-2 h-2 rounded-full bg-stone-300 dark:bg-stone-700 ring-4 ring-white dark:ring-stone-900 group-hover:bg-stone-900 dark:group-hover:bg-white transition-colors" />
                                                 <div className="flex-shrink-0 w-24 pl-6">
                                                     <p className="text-xs font-mono text-stone-500">{item.hash}</p>
-                                                    <p className="text-[10px] text-stone-400 mt-0.5">{new Date(item.date).toLocaleDateString()}</p>
+                                                    <p className="text-[10px] text-stone-400 mt-0.5">
+                                                        {new Date(item.date).toLocaleDateString()}
+                                                        <span className="block opacity-75">{new Date(item.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                                    </p>
                                                 </div>
                                                 <div className="flex-1">
                                                     <p className="text-sm text-stone-700 dark:text-stone-300 line-clamp-2 leading-relaxed">{item.message}</p>
