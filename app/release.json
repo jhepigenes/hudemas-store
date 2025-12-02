@@ -1,9 +1,14 @@
 {
-  "version": "v2025.12.02-9302351",
-  "lastUpdated": "2025-12-02T07:49:54.834Z",
-  "commit": "9302351",
-  "note": "Feature: Add release history from git log to feedback page modal",
+  "version": "v2025.12.02-8b67800",
+  "lastUpdated": "2025-12-02T08:01:05.207Z",
+  "commit": "8b67800",
+  "note": "Feature: Add Grid Density toggle to Shop, Clickable Dashboard Stats, and Email History in CRM",
   "history": [
+    {
+      "hash": "8b67800",
+      "date": "2025-12-02T08:54:27+01:00",
+      "message": "Feature: Add Grid Density toggle to Shop, Clickable Dashboard Stats, and Email History in CRM"
+    },
     {
       "hash": "9302351",
       "date": "2025-12-02T08:30:32+01:00",
@@ -48,11 +53,6 @@
       "hash": "2de7560",
       "date": "2025-11-30T11:23:19+01:00",
       "message": "Refine About page images and integrate Instagram feed"
-    },
-    {
-      "hash": "13bc0a3",
-      "date": "2025-11-28T22:39:00+01:00",
-      "message": "Fix RLS policies, restore OAuth buttons, and complete Admin Panel"
     }
   ]
 }

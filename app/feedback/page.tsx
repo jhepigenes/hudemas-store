@@ -244,14 +244,14 @@ export default function FeedbackPage() {
 
                 {/* Release Details Modal */}
                 {showReleaseDetails && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowReleaseDetails(false)}>
-                        <div className="bg-white dark:bg-stone-900 rounded-2xl shadow-xl max-w-2xl w-full p-6 border border-stone-200 dark:border-stone-800 max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setShowReleaseDetails(false)}>
+                        <div className="bg-white dark:bg-stone-900 rounded-2xl shadow-2xl max-w-2xl w-full p-6 border border-stone-200 dark:border-stone-800 max-h-[80vh] flex flex-col animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
                             <div className="flex justify-between items-start mb-4 flex-shrink-0">
                                 <h3 className="text-xl font-serif font-medium text-stone-900 dark:text-white">Release Information</h3>
-                                <button onClick={() => setShowReleaseDetails(false)} className="text-stone-400 hover:text-stone-900 dark:hover:text-white"><X className="h-5 w-5" /></button>
+                                <button onClick={() => setShowReleaseDetails(false)} className="text-stone-400 hover:text-stone-900 dark:hover:text-white p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"><X className="h-5 w-5" /></button>
                             </div>
                             
-                            <div className="space-y-6 overflow-y-auto pr-2 flex-1">
+                            <div className="space-y-6 overflow-y-auto pr-2 flex-1 scrollbar-thin scrollbar-thumb-stone-200 dark:scrollbar-thumb-stone-700 scrollbar-track-transparent">
                                 {/* Current Version */}
                                 <div className="bg-stone-50 dark:bg-stone-800/50 p-4 rounded-xl border border-stone-100 dark:border-stone-800">
                                     <div className="flex justify-between items-start mb-2">
@@ -266,7 +266,7 @@ export default function FeedbackPage() {
                                     </div>
                                     <div className="mt-3">
                                         <p className="text-xs text-stone-500 uppercase tracking-wide mb-1">Latest Change</p>
-                                        <p className="text-sm text-stone-800 dark:text-stone-200 bg-white dark:bg-stone-900 p-3 rounded-lg border border-stone-200 dark:border-stone-800">
+                                        <p className="text-sm text-stone-800 dark:text-stone-200 bg-white dark:bg-stone-900 p-3 rounded-lg border border-stone-200 dark:border-stone-800 font-medium">
                                             {releaseInfo.note}
                                         </p>
                                     </div>
@@ -275,27 +275,29 @@ export default function FeedbackPage() {
                                 {/* History List */}
                                 <div>
                                     <h4 className="text-sm font-medium text-stone-900 dark:text-white mb-3 flex items-center gap-2">
-                                        <Activity className="h-4 w-4" /> Release History
+                                        <Activity className="h-4 w-4 text-stone-500" /> Release History
                                     </h4>
-                                    <div className="space-y-3">
+                                    <div className="space-y-2 relative">
+                                        <div className="absolute left-[15px] top-2 bottom-2 w-px bg-stone-200 dark:bg-stone-800" />
                                         {(releaseInfo as any).history?.map((item: any, i: number) => (
-                                            <div key={i} className="flex gap-4 p-3 rounded-lg hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors border border-transparent hover:border-stone-100 dark:hover:border-stone-800">
-                                                <div className="flex-shrink-0 w-24">
+                                            <div key={i} className="relative flex gap-4 p-3 rounded-lg hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors border border-transparent hover:border-stone-100 dark:hover:border-stone-800 group">
+                                                <div className="absolute left-[11px] top-6 w-2 h-2 rounded-full bg-stone-300 dark:bg-stone-700 ring-4 ring-white dark:ring-stone-900 group-hover:bg-stone-900 dark:group-hover:bg-white transition-colors" />
+                                                <div className="flex-shrink-0 w-24 pl-6">
                                                     <p className="text-xs font-mono text-stone-500">{item.hash}</p>
-                                                    <p className="text-[10px] text-stone-400 mt-1">{new Date(item.date).toLocaleDateString()}</p>
+                                                    <p className="text-[10px] text-stone-400 mt-0.5">{new Date(item.date).toLocaleDateString()}</p>
                                                 </div>
                                                 <div className="flex-1">
-                                                    <p className="text-sm text-stone-700 dark:text-stone-300 line-clamp-2">{item.message}</p>
+                                                    <p className="text-sm text-stone-700 dark:text-stone-300 line-clamp-2 leading-relaxed">{item.message}</p>
                                                 </div>
                                             </div>
                                         ))}
-                                        {!(releaseInfo as any).history && <p className="text-sm text-stone-500 italic">No history available.</p>}
+                                        {!(releaseInfo as any).history && <p className="text-sm text-stone-500 italic pl-6">No history available.</p>}
                                     </div>
                                 </div>
                             </div>
 
                             <div className="mt-6 flex justify-end pt-4 border-t border-stone-100 dark:border-stone-800 flex-shrink-0">
-                                <button onClick={() => setShowReleaseDetails(false)} className="px-4 py-2 bg-stone-900 text-white rounded-lg text-sm hover:bg-stone-800 transition-colors">Close</button>
+                                <button onClick={() => setShowReleaseDetails(false)} className="px-6 py-2 bg-stone-900 text-white rounded-lg text-sm font-medium hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200 transition-colors shadow-sm">Close</button>
                             </div>
                         </div>
                     </div>
