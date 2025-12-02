@@ -1,11 +1,11 @@
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase'; // Normal client to verify session
+import { createClient } from '@/lib/supabase-server';
 import { supabaseAdmin } from '@/lib/supabase-admin'; // Admin client to update
 
 export async function PUT(request: Request) {
     try {
-        const supabase = createClient();
+        const supabase = await createClient();
         const { data: { session } } = await supabase.auth.getSession();
 
         if (!session) {

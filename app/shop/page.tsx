@@ -14,9 +14,9 @@ export default function ShopPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [category, setCategory] = useState('all');
-    const [visibleCount, setVisibleCount] = useState(24);
+    const [visibleCount, setVisibleCount] = useState(48);
     const [searchQuery, setSearchQuery] = useState('');
-    const [gridCols, setGridCols] = useState<3 | 4>(3);
+    const [gridCols, setGridCols] = useState<3 | 4>(4);
     const { t } = useLanguage();
     const { formatPrice } = useCurrency();
     const supabase = createClient();

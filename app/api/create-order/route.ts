@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { supabaseAdmin, getGuestUserId } from '@/lib/supabase-admin';
+import { resend } from '@/lib/resend';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder', {
     // apiVersion: '2025-02-24.acacia', // Use default
@@ -96,7 +97,48 @@ export async function POST(request: Request) {
             }
         }
 
-        // 6. Stripe Payment Intent Creation (if Card)
+        // 6. Send Confirmation Email (Async, don't block)
+        (async () => {
+            try {
+                const subject = `Order Confirmation #${order.id.slice(0, 8)}`;
+                const htmlBody = `
+                        <div style="font-family: sans-serif; color: #333;">
+                            <h1>Thank you for your order!</h1>
+                            <p>We have received your order <strong>#${order.id.slice(0, 8)}</strong>.</p>
+                            <p>Total: <strong>${orderTotal.toFixed(2)} RON</strong></p>
+                            <p>Payment Method: ${paymentMethod === 'card' ? 'Card (Pending)' : 'Cash on Delivery'}</p>
+                            <br/>
+                            <h3>Items:</h3>
+                            <ul>
+                                ${orderItems.map((item: any) => `<li>${item.quantity}x ${item.name}</li>`).join('')}
+                            </ul>
+                            <br/>
+                            <p>We will notify you when your order ships.</p>
+                        </div>
+                    `;
+
+                await resend.emails.send({
+                    from: 'Hudemas Orders <orders@hudemas.ro>',
+                    to: [customer.email],
+                    subject: subject,
+                    html: htmlBody
+                });
+
+                // Log to DB
+                await supabaseAdmin.from('sent_emails').insert({
+                    recipient_email: customer.email,
+                    subject: subject,
+                    body: 'Order Confirmation (HTML)', // Storing full HTML might be heavy, maybe just summary
+                    status: 'sent',
+                    metadata: { order_id: order.id, type: 'confirmation' }
+                });
+
+            } catch (emailError) {
+                console.error('Failed to send confirmation email:', emailError);
+            }
+        })();
+
+        // 7. Stripe Payment Intent Creation (if Card)
         let clientSecret = null;
 
         if (paymentMethod === 'card') {
@@ -130,15 +172,13 @@ export async function POST(request: Request) {
             }
         }
 
-        // 7. Handle Coupon Usage
+        // 8. Handle Coupon Usage
         if (couponCode) {
             const { error: couponError } = await supabaseAdmin.rpc('increment_coupon_usage', { coupon_code: couponCode });
             
             // Fallback if RPC doesn't exist (try direct update)
             if (couponError) {
                 console.warn('RPC increment_coupon_usage failed, trying direct update', couponError);
-                // Fetch first to get current count? No, simple increment query is hard with supabase-js without RPC.
-                // We will read then update.
                 const { data: coupon } = await supabaseAdmin.from('coupons').select('id, used_count').eq('code', couponCode).single();
                 if (coupon) {
                     await supabaseAdmin.from('coupons').update({ used_count: (coupon.used_count || 0) + 1 }).eq('id', coupon.id);

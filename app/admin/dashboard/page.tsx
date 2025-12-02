@@ -91,6 +91,7 @@ export default function DashboardOverview() {
     }, []);
 
     const stats = [
+        { name: 'Total Revenue', value: totalRevenue !== null ? `${totalRevenue.toFixed(2)} RON` : 'Loading...', change: 'Total Lifetime', icon: DollarSign, link: '/admin/dashboard/financials' },
         { name: 'Weekly Orders', value: activeOrders !== null ? `${activeOrders}` : 'Loading...', change: '+12% vs last week', icon: ShoppingBag, link: '/admin/dashboard/operations?filter=active' },
         { name: 'Pending Shipments', value: activeOrders !== null ? `${activeOrders}` : 'Loading...', change: 'Needs attention', icon: Printer, link: '/admin/dashboard/operations?status=pending' },
         { name: 'Marketplace Sellers', value: marketplaceSellers !== null ? `${marketplaceSellers}` : 'Loading...', change: '+2 this week', icon: Users, link: '/admin/dashboard/marketplace' },
@@ -98,6 +99,31 @@ export default function DashboardOverview() {
 
     const handlePrintLabel = (orderId: string) => {
         alert(`Generating AWB for ${orderId} via FanCourier API... (Mock)\n\nIn production, this would download the PDF label.`);
+    };
+
+    const handleUpdateStatus = async (orderId: string, status: string) => {
+        try {
+            const { error } = await supabase
+                .from('orders')
+                .update({ status })
+                .eq('id', orderId);
+
+            if (error) throw error;
+
+            // Update local state
+            setRecentOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: status as any } : o));
+            
+            // Also update selected order if open
+            if (selectedOrder && selectedOrder.id === orderId) {
+                setSelectedOrder(prev => prev ? { ...prev, status: status as any } : null);
+            }
+
+            // Refresh stats slightly delayed or just decrement pending count locally? 
+            // For simplicity, just local update is fine for now.
+        } catch (error) {
+            console.error('Error updating status:', error);
+            alert('Failed to update status');
+        }
     };
 
     if (loading) {
@@ -110,149 +136,69 @@ export default function DashboardOverview() {
 
     return (
         <div className="space-y-8">
-            <div>
-                <h2 className="font-serif text-2xl font-medium text-stone-900 dark:text-white">Overview</h2>
-                <p className="text-stone-500">Welcome back. Here's what's happening today.</p>
-            </div>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-                {stats.map((stat) => {
-                    const Icon = stat.icon;
-                    return (
-                        <Link key={stat.name} href={stat.link} className="block group">
-                            <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900 transition-all duration-200 hover:shadow-md hover:border-stone-300 dark:hover:border-stone-700">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-sm font-medium text-stone-500 group-hover:text-stone-900 dark:group-hover:text-stone-300 transition-colors">{stat.name}</p>
-                                        <p className="mt-2 text-3xl font-semibold text-stone-900 dark:text-white">{stat.value}</p>
-                                    </div>
-                                    <div className="rounded-full bg-stone-100 p-3 dark:bg-stone-800 group-hover:bg-stone-200 dark:group-hover:bg-stone-700 transition-colors">
-                                        <Icon className="h-6 w-6 text-stone-900 dark:text-white" />
-                                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {stats.map((item) => (
+                    <Link href={item.link} key={item.name} className="block group">
+                        <div className="bg-white dark:bg-stone-900 p-6 rounded-xl shadow-sm border border-stone-200 dark:border-stone-800 group-hover:shadow-md group-hover:border-stone-300 dark:group-hover:border-stone-700 transition-all h-full">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="p-2 bg-stone-100 dark:bg-stone-800 rounded-lg group-hover:bg-stone-200 dark:group-hover:bg-stone-700 transition-colors">
+                                    <item.icon className="h-6 w-6 text-stone-900 dark:text-white" />
                                 </div>
-                                <div className="mt-4 flex items-center text-sm text-green-600">
-                                    <ArrowUpRight className="mr-1 h-4 w-4" />
-                                    {stat.change}
-                                </div>
+                                <span className="text-xs font-medium text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded-full">
+                                    {item.change}
+                                </span>
                             </div>
-                        </Link>
-                    );
-                })}
+                            <h3 className="text-sm font-medium text-stone-500 dark:text-stone-400">{item.name}</h3>
+                            <p className="text-2xl font-serif font-bold text-stone-900 dark:text-white mt-1">{item.value}</p>
+                        </div>
+                    </Link>
+                ))}
             </div>
 
-            {/* Analytics & Shipping Section */}
-            <div className="grid grid-cols-1 gap-6">
-                <ShippingManager />
-            </div>
-
-            {/* Recent Orders Table */}
-            <div className="rounded-xl border border-stone-200 bg-white shadow-sm dark:border-stone-800 dark:bg-stone-900">
-                <div className="border-b border-stone-200 px-6 py-4 dark:border-stone-800">
-                    <h3 className="font-medium text-stone-900 dark:text-white">Recent Orders</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 space-y-8">
+                    <AnalyticsChart data={revenueData} />
+                    <ShippingManager />
                 </div>
-                
-                {/* Mobile View (Cards) */}
-                <div className="md:hidden divide-y divide-stone-200 dark:divide-stone-800">
-                    {recentOrders.length > 0 ? (
-                        recentOrders.map((order) => (
-                            <div key={order.id} className="p-4 space-y-3 cursor-pointer hover:bg-stone-50 dark:hover:bg-stone-800/50" onClick={() => setSelectedOrder(order)}>
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <span className="font-medium text-stone-900 dark:text-white block">#{order.id.slice(0, 8)}</span>
-                                        <span className="text-xs text-stone-500">{new Date(order.created_at).toLocaleDateString()}</span>
-                                    </div>
-                                    <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ${
-                                        order.status === 'completed' ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-400/10 dark:text-green-400' :
-                                        order.status === 'pending' ? 'bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:bg-yellow-400/10 dark:text-yellow-500' :
-                                        'bg-stone-100 text-stone-600 ring-stone-500/10 dark:bg-stone-800 dark:text-stone-400'
-                                    }`}>
-                                        {order.status}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between items-center text-sm">
-                                    <div className="text-stone-600 dark:text-stone-400">
-                                        <p>{order.user_email || 'N/A'}</p>
-                                        <p>{order.items?.length || 0} Items</p>
-                                    </div>
-                                    <p className="font-medium text-stone-900 dark:text-white">{order.total.toFixed(2)} RON</p>
-                                </div>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        generateAWB(order);
-                                    }}
-                                    className="w-full mt-2 inline-flex justify-center items-center gap-2 rounded-md bg-stone-100 px-3 py-2 text-xs font-medium text-stone-900 hover:bg-stone-200 dark:bg-stone-800 dark:text-white dark:hover:bg-stone-700"
+                <div className="space-y-8">
+                     <div className="bg-white dark:bg-stone-900 p-6 rounded-xl shadow-sm border border-stone-200 dark:border-stone-800">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="font-serif text-lg text-stone-900 dark:text-white">Recent Orders</h3>
+                            <Link href="/admin/dashboard/operations" className="text-sm text-stone-500 hover:text-stone-900 dark:hover:text-white flex items-center gap-1">
+                                View All <ArrowUpRight className="h-4 w-4" />
+                            </Link>
+                        </div>
+                        <div className="space-y-4">
+                            {recentOrders.map((order) => (
+                                <div 
+                                    key={order.id} 
+                                    onClick={() => setSelectedOrder(order)}
+                                    className="flex items-center justify-between p-3 hover:bg-stone-50 dark:hover:bg-stone-800/50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-stone-100 dark:hover:border-stone-800"
                                 >
-                                    <Printer className="h-3 w-3" /> Print AWB
-                                </button>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="p-8 text-center text-stone-500">No recent orders.</div>
-                    )}
-                </div>
-
-                {/* Desktop View (Table) */}
-                <div className="hidden md:block overflow-x-auto">
-                    <table className="w-full text-left text-sm">
-                        <thead className="bg-stone-50 text-stone-500 dark:bg-stone-800 dark:text-stone-400">
-                            <tr>
-                                <th className="px-6 py-3 font-medium">Order ID</th>
-                                <th className="px-6 py-3 font-medium">Customer</th>
-                                <th className="px-6 py-3 font-medium">Items</th>
-                                <th className="px-6 py-3 font-medium">Total</th>
-                                <th className="px-6 py-3 font-medium">Status</th>
-                                <th className="px-6 py-3 font-medium">Date</th>
-                                <th className="px-6 py-3 font-medium text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-stone-200 dark:divide-stone-800">
-                            {recentOrders.length > 0 ? (
-                                recentOrders.map((order) => (
-                                    <tr key={order.id} className="hover:bg-stone-50 dark:hover:bg-stone-800/50 cursor-pointer" onClick={() => setSelectedOrder(order)}>
-                                        <td className="px-6 py-4 font-medium text-stone-900 dark:text-white hover:underline text-blue-600">
-                                            {order.id.slice(0, 8)}...
-                                        </td>
-                                        <td className="px-6 py-4 text-stone-600 dark:text-stone-400">{order.user_email || 'N/A'}</td>
-                                        <td className="px-6 py-4 text-stone-600 dark:text-stone-400">{order.items?.length || 0}</td>
-                                        <td className="px-6 py-4 text-stone-600 dark:text-stone-400">{order.total.toFixed(2)} RON</td>
-                                        <td className="px-6 py-4">
-                                            <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ${order.status === 'completed' ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-400/10 dark:text-green-400' :
-                                                order.status === 'pending' ? 'bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:bg-yellow-400/10 dark:text-yellow-500' :
-                                                    'bg-stone-100 text-stone-600 ring-stone-500/10 dark:bg-stone-800 dark:text-stone-400'
-                                                }`}>
-                                                {order.status}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-stone-500">{new Date(order.created_at).toLocaleDateString()}</td>
-                                        <td className="px-6 py-4 text-right">
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    generateAWB(order);
-                                                }}
-                                                className="inline-flex items-center gap-2 rounded-md bg-stone-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-stone-700 dark:bg-white dark:text-stone-900"
-                                            >
-                                                <Printer className="h-3 w-3" /> AWB
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={7} className="py-8 text-center text-stone-500">No recent orders.</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                                    <div>
+                                        <p className="text-sm font-medium text-stone-900 dark:text-white truncate max-w-[150px]">{order.user_email}</p>
+                                        <p className="text-xs text-stone-500">ID: {order.id.slice(0, 8)}...</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-sm font-bold text-stone-900 dark:text-white">{order.total} {order.currency}</p>
+                                        <p className={`text-xs capitalize ${
+                                            order.status === 'completed' ? 'text-green-600' : 
+                                            order.status === 'pending' ? 'text-amber-600' : 'text-stone-500'
+                                        }`}>{order.status}</p>
+                                    </div>
+                                </div>
+                            ))}
+                            {recentOrders.length === 0 && <p className="text-center text-stone-500 text-sm py-4">No recent orders.</p>}
+                        </div>
+                    </div>
                 </div>
             </div>
-            
+
             {selectedOrder && (
                 <OrderDetailsModal 
                     order={selectedOrder} 
                     onClose={() => setSelectedOrder(null)}
+                    onUpdateStatus={handleUpdateStatus}
                 />
             )}
         </div>

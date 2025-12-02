@@ -3,7 +3,7 @@ const { execSync } = require('child_process');
 
 try {
     const commitHash = execSync('git rev-parse --short HEAD').toString().trim();
-    const commitMessage = execSync('git log -1 --pretty=%B').toString().trim();
+    const commitMessage = process.env.RELEASE_NOTE || execSync('git log -1 --pretty=%B').toString().trim();
     const date = new Date().toISOString();
     
     // Fetch history (last 10 commits)

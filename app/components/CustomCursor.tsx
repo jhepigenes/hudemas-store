@@ -1,22 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue } from 'framer-motion';
 
 export default function CustomCursor() {
     const [isHovering, setIsHovering] = useState(false);
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
 
-    // Tighter, snappier physics to remove "rubbery" lag
-    const springConfig = { damping: 40, stiffness: 800 };
-    const cursorXSpring = useSpring(cursorX, springConfig);
-    const cursorYSpring = useSpring(cursorY, springConfig);
-
     useEffect(() => {
         const moveCursor = (e: MouseEvent) => {
-            // Center the cursor
-            cursorX.set(e.clientX - 4); // Offset by half width (8px/2)
+            cursorX.set(e.clientX - 4);
             cursorY.set(e.clientY - 4);
         };
 
@@ -46,17 +40,18 @@ export default function CustomCursor() {
 
     return (
         <motion.div
-            className="pointer-events-none fixed left-0 top-0 z-[9999] hidden md:block rounded-full bg-stone-900/30 dark:bg-white/30 border border-stone-900 dark:border-white backdrop-blur-sm"
+            className="pointer-events-none fixed left-0 top-0 z-[9999] hidden md:block rounded-full border-2 border-stone-900 dark:border-white"
             style={{
-                x: cursorXSpring,
-                y: cursorYSpring,
-                width: 8,
-                height: 8,
+                x: cursorX,
+                y: cursorY,
+                width: 16,
+                height: 16,
             }}
             animate={{
                 scale: isHovering ? 1.5 : 1,
+                backgroundColor: isHovering ? "rgba(28, 25, 23, 0.1)" : "transparent",
             }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
+            transition={{ duration: 0.1 }}
         />
     );
 }

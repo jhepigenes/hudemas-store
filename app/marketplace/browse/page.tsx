@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Search, Filter, SlidersHorizontal, Loader2 } from 'lucide-react';
+import { Search, Filter, SlidersHorizontal, Loader2, Grid3X3, LayoutGrid } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -15,6 +15,7 @@ export default function BrowsePage() {
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
+    const [gridCols, setGridCols] = useState<3 | 4>(4);
 
     useEffect(() => {
         fetchListings();
@@ -100,16 +101,36 @@ export default function BrowsePage() {
                         ))}
                     </div>
 
-                    {/* Search */}
-                    <div className="relative w-full md:w-80">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5" />
-                        <input
-                            type="text"
-                            placeholder="Search by title or artist..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-12 pr-4 py-2.5 rounded-full border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-50 focus:border-stone-900 dark:focus:border-stone-50 focus:ring-0 transition-all shadow-sm font-sans placeholder:text-stone-400 dark:placeholder:text-stone-500"
-                        />
+                    {/* Search & Grid Toggle */}
+                    <div className="flex items-center gap-4 w-full md:w-auto">
+                        <div className="relative flex-1 md:w-80">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5" />
+                            <input
+                                type="text"
+                                placeholder="Search by title or artist..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full pl-12 pr-4 py-2.5 rounded-full border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-50 focus:border-stone-900 dark:focus:border-stone-50 focus:ring-0 transition-all shadow-sm font-sans placeholder:text-stone-400 dark:placeholder:text-stone-500"
+                            />
+                        </div>
+
+                        {/* Grid Toggle (Desktop Only) */}
+                        <div className="hidden lg:flex bg-white dark:bg-stone-800 rounded-full p-1 border border-stone-200 dark:border-stone-700 items-center gap-1 shadow-sm">
+                            <button 
+                                onClick={() => setGridCols(3)}
+                                className={`p-2 rounded-full transition-colors ${gridCols === 3 ? 'bg-stone-100 dark:bg-stone-700 text-stone-900 dark:text-white' : 'text-stone-400 hover:text-stone-600 dark:hover:text-stone-200'}`}
+                                title="3 Columns"
+                            >
+                                <Grid3X3 className="h-4 w-4" />
+                            </button>
+                            <button 
+                                onClick={() => setGridCols(4)}
+                                className={`p-2 rounded-full transition-colors ${gridCols === 4 ? 'bg-stone-100 dark:bg-stone-700 text-stone-900 dark:text-white' : 'text-stone-400 hover:text-stone-600 dark:hover:text-stone-200'}`}
+                                title="4 Columns"
+                            >
+                                <LayoutGrid className="h-4 w-4" />
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -119,7 +140,7 @@ export default function BrowsePage() {
                         <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                    <div className={`grid grid-cols-1 md:grid-cols-2 ${gridCols === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'} gap-x-8 gap-y-12`}>
                         {filteredItems.map((item: any) => (
                             <motion.div
                                 key={item.id}

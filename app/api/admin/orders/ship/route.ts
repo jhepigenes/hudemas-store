@@ -31,10 +31,11 @@ export async function POST(request: Request) {
             if (!email) return { id: order.id, status: 'skipped_no_email' };
 
             try {
+                const subject = `Your Order #${order.id.slice(0, 8)} has Shipped!`;
                 await resend.emails.send({
                     from: 'Hudemas Orders <orders@hudemas.ro>',
                     to: [email],
-                    subject: `Your Order #${order.id.slice(0, 8)} has Shipped!`,
+                    subject: subject,
                     html: `
                         <div style="font-family: sans-serif; color: #333;">
                             <h1>Good news!</h1>
@@ -45,6 +46,16 @@ export async function POST(request: Request) {
                         </div>
                     `
                 });
+
+                // Log to DB
+                await supabaseAdmin.from('sent_emails').insert({
+                    recipient_email: email,
+                    subject: subject,
+                    body: 'Shipping Update (HTML)',
+                    status: 'sent',
+                    metadata: { order_id: order.id, type: 'shipping' }
+                });
+
                 return { id: order.id, status: 'sent' };
             } catch (emailError) {
                 console.error(`Failed to send shipping email to ${email}:`, emailError);

@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { createClient } from '@/lib/supabase';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Package, Store, User, LogOut, Clock, CheckCircle, XCircle, Edit2, FileText, X } from 'lucide-react';
+import { Package, Store, User, LogOut, Clock, CheckCircle, XCircle, Edit2, FileText, X, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/app/context/LanguageContext';
 import jsPDF from 'jspdf';
@@ -120,6 +120,20 @@ function ProfileContent() {
         router.refresh();
     };
 
+    const handlePasswordReset = async () => {
+        if (!user?.email) return;
+        try {
+            const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+                redirectTo: `${window.location.origin}/auth/callback?next=/profile/reset-password`,
+            });
+            if (error) throw error;
+            alert('Password reset email sent! Check your inbox.');
+        } catch (error: any) {
+            console.error('Error sending reset email:', error);
+            alert('Error sending reset email: ' + error.message);
+        }
+    };
+
     const handleSaveProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         setSaving(true);
@@ -218,21 +232,29 @@ function ProfileContent() {
                         <h1 className="font-serif text-4xl text-stone-900 dark:text-white">{t.profile.title}</h1>
                         <div className="flex items-center gap-3 mt-2">
                             <p className="text-stone-500 dark:text-stone-400">{t.profile.welcome} {profile?.full_name || user?.email}</p>
-                            <button 
-                                onClick={() => setIsEditing(true)}
-                                className="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-2 py-1 rounded-full flex items-center gap-1 transition-colors dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700"
-                            >
-                                <Edit2 className="h-3 w-3" /> Edit
-                            </button>
                         </div>
                     </div>
-                    <button 
-                        onClick={handleSignOut}
-                        className="flex items-center gap-2 px-4 py-2 rounded-full border border-stone-200 text-stone-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors dark:border-stone-800 dark:text-stone-400 dark:hover:bg-red-900/20 dark:hover:text-red-400"
-                    >
-                        <LogOut className="h-4 w-4" />
-                        {t.profile.signOut}
-                    </button>
+                    <div className="flex flex-wrap gap-3">
+                        <button 
+                            onClick={() => setIsEditing(true)}
+                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-stone-900 text-white hover:bg-stone-800 transition-colors dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200 shadow-sm text-sm font-medium"
+                        >
+                            <Edit2 className="h-4 w-4" /> Edit Profile
+                        </button>
+                        <button 
+                            onClick={handlePasswordReset}
+                            className="flex items-center gap-2 px-4 py-2 rounded-full border border-stone-200 text-stone-600 hover:bg-stone-50 transition-colors dark:border-stone-800 dark:text-stone-400 dark:hover:bg-stone-800 text-sm font-medium"
+                        >
+                            <Lock className="h-4 w-4" /> Reset Password
+                        </button>
+                        <button 
+                            onClick={handleSignOut}
+                            className="flex items-center gap-2 px-4 py-2 rounded-full border border-stone-200 text-stone-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors dark:border-stone-800 dark:text-stone-400 dark:hover:bg-red-900/20 dark:hover:text-red-400 text-sm font-medium"
+                        >
+                            <LogOut className="h-4 w-4" />
+                            {t.profile.signOut}
+                        </button>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -386,13 +408,13 @@ function ProfileContent() {
                             >
                                 <div className="p-6 border-b border-stone-100 dark:border-stone-800 flex justify-between items-center">
                                     <h3 className="text-xl font-serif font-medium text-stone-900 dark:text-white">Edit Profile</h3>
-                                    <button onClick={handleCancelEdit} className="text-stone-400 hover:text-stone-900 dark:hover:text-white"><X className="h-5 w-5" /></button>
+                                    {!isOnboarding && <button onClick={handleCancelEdit} className="text-stone-400 hover:text-stone-900 dark:hover:text-white"><X className="h-5 w-5" /></button>}
                                 </div>
                                 <form onSubmit={handleSaveProfile}>
                                     <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
                                         {isOnboarding && (
                                             <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-sm text-blue-600 dark:text-blue-400 mb-4">
-                                                Please complete your profile to continue.
+                                                Please complete your profile to continue. All fields marked with * are mandatory.
                                             </div>
                                         )}
                                         <div>
@@ -467,13 +489,15 @@ function ProfileContent() {
                                         </div>
                                     </div>
                                     <div className="p-6 border-t border-stone-100 dark:border-stone-800 flex justify-end gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={handleCancelEdit}
-                                            className="px-4 py-2 rounded-lg text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
-                                        >
-                                            Cancel
-                                        </button>
+                                        {!isOnboarding && (
+                                            <button
+                                                type="button"
+                                                onClick={handleCancelEdit}
+                                                className="px-4 py-2 rounded-lg text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
+                                            >
+                                                Cancel
+                                            </button>
+                                        )}
                                         <button
                                             type="submit"
                                             disabled={saving}

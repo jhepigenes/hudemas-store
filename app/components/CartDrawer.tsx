@@ -56,8 +56,8 @@ export default function CartDrawer() {
                                         {items.map((item) => {
                                             const priceNum = typeof item.price === 'string' ? parseFloat(item.price.replace(',', '.')) : item.price;
                                             return (
-                                            <li key={item.name} className="flex gap-4">
-                                                <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md bg-stone-100">
+                                            <li key={item.name} className="flex gap-5">
+                                                <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-lg bg-white border border-stone-200 dark:border-stone-700">
                                                     <Image
                                                         src={item.image}
                                                         alt={item.name}
@@ -65,38 +65,41 @@ export default function CartDrawer() {
                                                         className="object-cover"
                                                     />
                                                 </div>
-                                                <div className="flex flex-1 flex-col justify-between">
+                                                <div className="flex flex-1 flex-col justify-between py-1">
                                                     <div>
-                                                        <h3 className="font-serif text-lg font-medium text-stone-900 dark:text-white">
+                                                        <h3 className="font-serif text-xl font-bold text-stone-900 dark:text-white leading-tight">
                                                             {item.name}
                                                         </h3>
-                                                        <p className="text-sm text-stone-500">
+                                                        <p className="text-lg font-medium text-stone-600 dark:text-stone-300 mt-1">
                                                             {formatPrice(priceNum)}
                                                         </p>
                                                     </div>
-                                                    <div className="flex items-center justify-between">
-                                                        <div className="flex items-center gap-3 rounded-full border border-stone-200 px-2 py-1 dark:border-stone-700">
+                                                    <div className="flex items-center justify-between mt-3">
+                                                        <div className="flex items-center gap-3 rounded-full border border-stone-200 px-4 py-2 dark:border-stone-700 bg-stone-50 dark:bg-stone-800">
                                                             <button
                                                                 onClick={() => updateQuantity(item.name, item.quantity - 1)}
-                                                                className="p-1 text-stone-500 hover:text-stone-900 dark:text-stone-400"
+                                                                className="p-1 text-stone-600 hover:text-stone-900 dark:text-stone-400"
+                                                                aria-label="Decrease quantity"
                                                             >
-                                                                <Minus className="h-3 w-3" />
+                                                                <Minus className="h-5 w-5" />
                                                             </button>
-                                                            <span className="text-sm font-medium w-4 text-center">
+                                                            <span className="text-lg font-bold w-8 text-center tabular-nums">
                                                                 {item.quantity}
                                                             </span>
                                                             <button
                                                                 onClick={() => updateQuantity(item.name, item.quantity + 1)}
-                                                                className="p-1 text-stone-500 hover:text-stone-900 dark:text-stone-400"
+                                                                className="p-1 text-stone-600 hover:text-stone-900 dark:text-stone-400"
+                                                                aria-label="Increase quantity"
                                                             >
-                                                                <Plus className="h-3 w-3" />
+                                                                <Plus className="h-5 w-5" />
                                                             </button>
                                                         </div>
                                                         <button
                                                             onClick={() => removeItem(item.name)}
-                                                            className="text-stone-400 hover:text-red-500"
+                                                            className="p-3 text-stone-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors"
+                                                            aria-label="Remove item"
                                                         >
-                                                            <Trash2 className="h-4 w-4" />
+                                                            <Trash2 className="h-6 w-6" />
                                                         </button>
                                                     </div>
                                                 </div>

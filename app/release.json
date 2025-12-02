@@ -1,9 +1,14 @@
 {
-  "version": "v2025.12.02-f8674a2",
-  "lastUpdated": "2025-12-02T08:11:17.934Z",
-  "commit": "f8674a2",
-  "note": "Fix: Increase z-index of Feedback Modal and improve styling",
+  "version": "v2025.12.02-fe6354c",
+  "lastUpdated": "2025-12-02T13:36:58.435Z",
+  "commit": "fe6354c",
+  "note": "Improvement: Add timestamp to release history and refine modal UI",
   "history": [
+    {
+      "hash": "fe6354c",
+      "date": "2025-12-02T09:14:39+01:00",
+      "message": "Improvement: Add timestamp to release history and refine modal UI"
+    },
     {
       "hash": "f8674a2",
       "date": "2025-12-02T09:04:38+01:00",
@@ -48,11 +53,6 @@
       "hash": "b86d8eb",
       "date": "2025-12-02T06:32:38+01:00",
       "message": "Feature Release: Beta Feedback system, Blog, Reviews, and Admin updates"
-    },
-    {
-      "hash": "11770cb",
-      "date": "2025-11-30T11:35:37+01:00",
-      "message": "Fix CRM data display logic and add verification scripts"
     }
   ]
 }

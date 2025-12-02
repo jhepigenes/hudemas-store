@@ -16,7 +16,7 @@ interface OrderItem {
 export interface Order {
     id: string;
     created_at: string;
-    status: 'pending' | 'processing' | 'completed' | 'cancelled' | 'refunded';
+    status: 'pending' | 'processing' | 'completed' | 'cancelled' | 'refunded' | 'pending_payment';
     total: number;
     currency: string;
     payment_method: string;
@@ -250,18 +250,17 @@ export default function OrderDetailsModal({ order, onClose, onRefund, onUpdateSt
                         Download Invoice
                     </button>
 
-                    {order.status === 'pending' && onUpdateStatus ? (
+                    {(order.status === 'pending' || order.status === 'pending_payment') && onUpdateStatus ? (
                         <button
                             onClick={() => onUpdateStatus(order.id, 'processing')}
                             className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-medium transition-colors"
                         >
                             Mark Payment Received
                         </button>
-                    ) : (
+                    ) : (order.status === 'processing' || order.status === 'completed') && (
                         <button
                             onClick={() => generateAWB(order)}
-                            disabled={order.status === 'cancelled' || order.status === 'refunded'}
-                            className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200 text-sm font-medium transition-colors disabled:opacity-50"
+                            className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200 text-sm font-medium transition-colors"
                         >
                             Generate AWB
                         </button>

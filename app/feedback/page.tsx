@@ -20,7 +20,7 @@ interface FeedbackItem {
     name: string;
     section: string;
     comment: string;
-    status: 'open' | 'ready_for_review' | 'done';
+    status: 'open' | 'ready_for_review' | 'done' | 'rework';
     screenshot_url?: string;
 }
 
@@ -129,7 +129,7 @@ export default function FeedbackPage() {
     const exportForGemini = () => {
         const data = feedback.filter(f => f.status !== 'done').map(f => ({
             instruction: `[Feedback for ${f.section}] ${f.comment} ${f.screenshot_url ? `(Screenshot: ${f.screenshot_url})` : ''}`,
-            status: "pending",
+            status: f.status || 'pending',
             id: f.id,
             date: f.date,
             name: f.name,
@@ -151,6 +151,7 @@ export default function FeedbackPage() {
         switch (status) {
             case 'done': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200';
             case 'ready_for_review': return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200';
+            case 'rework': return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 border-purple-200';
             default: return 'bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-400 border-stone-200';
         }
     };
@@ -165,6 +166,7 @@ export default function FeedbackPage() {
     const uniqueNames = Array.from(new Set(feedback.map(f => f.name))).sort();
 
     const [showReleaseDetails, setShowReleaseDetails] = useState(false);
+    const [expandedHistoryItem, setExpandedHistoryItem] = useState<number | null>(null);
 
     // ... (existing useEffects) ...
 
@@ -172,12 +174,13 @@ export default function FeedbackPage() {
     const stats = {
         open: feedback.filter(f => f.status === 'open' || !f.status).length,
         ready: feedback.filter(f => f.status === 'ready_for_review').length,
+        rework: feedback.filter(f => f.status === 'rework').length,
         done: feedback.filter(f => f.status === 'done').length,
         total: feedback.length
     };
 
     return (
-        <div className="min-h-screen bg-stone-50 dark:bg-stone-950 pt-24 pb-12 px-4 flex flex-col">
+        <div className="min-h-screen bg-stone-50 dark:bg-stone-950 pt-36 pb-12 px-4 flex flex-col">
             {/* Background Pattern Overlay (CSS) */}
             <div className="fixed inset-0 opacity-[0.03] pointer-events-none" style={{ 
                 backgroundImage: 'radial-gradient(#444 1px, transparent 1px)', 
@@ -214,28 +217,34 @@ export default function FeedbackPage() {
                         </div>
                         <p className="text-lg font-bold text-stone-900 dark:text-white">
                             {new Date(releaseInfo.lastUpdated).toLocaleDateString()}
+                            <span className="block text-xs font-normal text-stone-500">{new Date(releaseInfo.lastUpdated).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                         </p>
                         <p className="text-xs text-stone-400 truncate" title={releaseInfo.note}>
                             {releaseInfo.note}
                         </p>
                     </div>
-                    <div className="md:col-span-2 bg-white dark:bg-stone-900 p-4 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm flex items-center justify-between gap-4">
-                        <div className="flex flex-col items-center flex-1">
+                    <div className="md:col-span-2 bg-white dark:bg-stone-900 p-4 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm flex items-center justify-between gap-4 overflow-x-auto">
+                        <div className="flex flex-col items-center flex-1 min-w-[60px]">
                             <span className="text-xs font-medium uppercase tracking-wide text-stone-500 mb-1">Open</span>
                             <span className="text-2xl font-bold text-stone-900 dark:text-white">{stats.open}</span>
                         </div>
                         <div className="w-px h-8 bg-stone-200 dark:bg-stone-800"></div>
-                        <div className="flex flex-col items-center flex-1">
+                        <div className="flex flex-col items-center flex-1 min-w-[60px]">
                             <span className="text-xs font-medium uppercase tracking-wide text-amber-600 dark:text-amber-500 mb-1">Ready</span>
                             <span className="text-2xl font-bold text-amber-600 dark:text-amber-500">{stats.ready}</span>
                         </div>
                         <div className="w-px h-8 bg-stone-200 dark:bg-stone-800"></div>
-                        <div className="flex flex-col items-center flex-1">
+                        <div className="flex flex-col items-center flex-1 min-w-[60px]">
+                            <span className="text-xs font-medium uppercase tracking-wide text-purple-600 dark:text-purple-500 mb-1">Rework</span>
+                            <span className="text-2xl font-bold text-purple-600 dark:text-purple-500">{stats.rework}</span>
+                        </div>
+                        <div className="w-px h-8 bg-stone-200 dark:bg-stone-800"></div>
+                        <div className="flex flex-col items-center flex-1 min-w-[60px]">
                             <span className="text-xs font-medium uppercase tracking-wide text-green-600 dark:text-green-500 mb-1">Done</span>
                             <span className="text-2xl font-bold text-green-600 dark:text-green-500">{stats.done}</span>
                         </div>
                         <div className="w-px h-8 bg-stone-200 dark:bg-stone-800"></div>
-                        <div className="flex flex-col items-center flex-1">
+                        <div className="flex flex-col items-center flex-1 min-w-[60px]">
                             <span className="text-xs font-medium uppercase tracking-wide text-stone-400 mb-1">Total</span>
                             <span className="text-2xl font-bold text-stone-400">{stats.total}</span>
                         </div>
@@ -280,7 +289,15 @@ export default function FeedbackPage() {
                                     <div className="space-y-2 relative">
                                         <div className="absolute left-[15px] top-2 bottom-2 w-px bg-stone-200 dark:bg-stone-800" />
                                         {(releaseInfo as any).history?.map((item: any, i: number) => (
-                                            <div key={i} className="relative flex gap-4 p-3 rounded-lg hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors border border-transparent hover:border-stone-100 dark:hover:border-stone-800 group">
+                                            <div 
+                                                key={i} 
+                                                onClick={() => setExpandedHistoryItem(expandedHistoryItem === i ? null : i)}
+                                                className={`relative flex gap-4 p-3 rounded-lg transition-colors border group cursor-pointer ${
+                                                    expandedHistoryItem === i 
+                                                        ? 'bg-stone-50 dark:bg-stone-800/50 border-stone-200 dark:border-stone-700' 
+                                                        : 'border-transparent hover:bg-stone-50 dark:hover:bg-stone-800/50 hover:border-stone-100 dark:hover:border-stone-800'
+                                                }`}
+                                            >
                                                 <div className="absolute left-[11px] top-6 w-2 h-2 rounded-full bg-stone-300 dark:bg-stone-700 ring-4 ring-white dark:ring-stone-900 group-hover:bg-stone-900 dark:group-hover:bg-white transition-colors" />
                                                 <div className="flex-shrink-0 w-24 pl-6">
                                                     <p className="text-xs font-mono text-stone-500">{item.hash}</p>
@@ -290,7 +307,9 @@ export default function FeedbackPage() {
                                                     </p>
                                                 </div>
                                                 <div className="flex-1">
-                                                    <p className="text-sm text-stone-700 dark:text-stone-300 line-clamp-2 leading-relaxed">{item.message}</p>
+                                                    <p className={`text-sm text-stone-700 dark:text-stone-300 leading-relaxed ${expandedHistoryItem === i ? '' : 'line-clamp-2'}`}>
+                                                        {item.message}
+                                                    </p>
                                                 </div>
                                             </div>
                                         ))}
@@ -307,7 +326,7 @@ export default function FeedbackPage() {
                 )}
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 flex-1 min-h-0">
-                    <div className="lg:col-span-2 space-y-12 overflow-y-auto pr-2 scrollbar-hide">
+                    <div className="lg:col-span-2 space-y-12 overflow-y-auto pr-2 scrollbar-hide order-2 lg:order-1">
                         {PREVIEWS.map((item) => (
                             <div key={item.name} className="space-y-4">
                                 <h3 className="text-xl font-serif text-stone-900 dark:text-white flex items-center gap-2">
@@ -329,7 +348,7 @@ export default function FeedbackPage() {
                         ))}
                     </div>
 
-                    <div className="lg:col-span-1 flex flex-col gap-8 h-full">
+                    <div className="lg:col-span-1 flex flex-col gap-8 h-full order-1 lg:order-2">
                         <div className="bg-white dark:bg-stone-900 p-6 rounded-2xl shadow-lg border border-stone-200 dark:border-stone-800 flex-shrink-0">
                             <h3 className="text-lg font-medium text-stone-900 dark:text-white mb-4">Submit Feedback</h3>
                             <form onSubmit={handleSubmit} className="space-y-4">
@@ -367,6 +386,7 @@ export default function FeedbackPage() {
                                         >
                                             <option value="open">Open</option>
                                             <option value="ready_for_review">Ready for Review</option>
+                                            <option value="rework">Rework</option>
                                             <option value="done">Done</option>
                                         </select>
                                     </div>
@@ -460,6 +480,7 @@ export default function FeedbackPage() {
                                             <option value="all">All Statuses</option>
                                             <option value="open">Open</option>
                                             <option value="ready_for_review">Ready for Review</option>
+                                            <option value="rework">Rework</option>
                                             <option value="done">Done</option>
                                         </select>
                                         <Filter className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-stone-400" />
@@ -497,7 +518,8 @@ export default function FeedbackPage() {
                                 {filteredFeedback.map((item) => (
                                     <div key={item.id} className={`bg-white dark:bg-stone-900 p-4 rounded-lg shadow-sm text-sm group relative border-l-4 transition-all hover:shadow-md ${ 
                                         item.status === 'done' ? 'border-l-green-500 opacity-60' : 
-                                        item.status === 'ready_for_review' ? 'border-l-amber-500' : 'border-l-stone-300'
+                                        item.status === 'ready_for_review' ? 'border-l-amber-500' : 
+                                        item.status === 'rework' ? 'border-l-purple-500' : 'border-l-stone-300'
                                     }`}> 
                                         <div className="flex justify-between mb-2">
                                             <span className="font-bold text-stone-900 dark:text-white">{item.name}</span>
@@ -522,6 +544,7 @@ export default function FeedbackPage() {
                                                     >
                                                         <option value="open">Open</option>
                                                         <option value="ready_for_review">Ready for Review</option>
+                                                        <option value="rework">Rework</option>
                                                         <option value="done">Done</option>
                                                     </select>
                                                     <textarea
