@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Send, Copy, Monitor, Smartphone, Check, Pencil, Trash2, X, Save, Download, Image as ImageIcon, Loader2, Filter } from 'lucide-react';
+import { Send, Copy, Monitor, Smartphone, Check, Pencil, Trash2, X, Save, Download, Image as ImageIcon, Loader2, Filter, Activity, GitCommit, Clock } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
+import releaseInfo from '../release.json';
 
 const PREVIEWS = [
     { name: 'Homepage', url: '/' },
@@ -35,6 +36,7 @@ export default function FeedbackPage() {
     // Filters
     const [statusFilter, setStatusFilter] = useState<string>('all');
     const [sectionFilter, setSectionFilter] = useState<string>('all');
+    const [nameFilter, setNameFilter] = useState<string>('all');
 
     const supabase = createClient();
 
@@ -156,15 +158,81 @@ export default function FeedbackPage() {
     const filteredFeedback = feedback.filter(item => {
         if (statusFilter !== 'all' && item.status !== statusFilter) return false;
         if (sectionFilter !== 'all' && item.section !== sectionFilter) return false;
+        if (nameFilter !== 'all' && item.name !== nameFilter) return false;
         return true;
     });
 
+    const uniqueNames = Array.from(new Set(feedback.map(f => f.name))).sort();
+
+    // Stats Calculation
+    const stats = {
+        open: feedback.filter(f => f.status === 'open' || !f.status).length,
+        ready: feedback.filter(f => f.status === 'ready_for_review').length,
+        done: feedback.filter(f => f.status === 'done').length,
+        total: feedback.length
+    };
+
     return (
         <div className="min-h-screen bg-stone-50 dark:bg-stone-950 pt-24 pb-12 px-4 flex flex-col">
-            <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col">
-                <div className="text-center mb-8 flex-shrink-0">
+            {/* Background Pattern Overlay (CSS) */}
+            <div className="fixed inset-0 opacity-[0.03] pointer-events-none" style={{ 
+                backgroundImage: 'radial-gradient(#444 1px, transparent 1px)', 
+                backgroundSize: '20px 20px' 
+            }}></div>
+
+            <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col relative z-10">
+                <div className="text-center mb-8 flex-shrink-0 flex flex-col items-center">
+                    <div className="w-16 h-16 mb-4 bg-stone-100 dark:bg-stone-800 rounded-full flex items-center justify-center text-3xl shadow-sm">
+                        🧵
+                    </div>
                     <h1 className="font-serif text-4xl text-stone-900 dark:text-white mb-4">Beta Feedback Portal</h1>
                     <p className="text-stone-600 dark:text-stone-400">Review the site sections below and leave your thoughts.</p>
+                </div>
+
+                {/* System Overview Dashboard */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    <div className="bg-white dark:bg-stone-900 p-4 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm">
+                        <div className="flex items-center gap-2 text-stone-500 mb-1">
+                            <GitCommit className="h-4 w-4" />
+                            <span className="text-xs font-medium uppercase tracking-wide">Current Version</span>
+                        </div>
+                        <p className="text-lg font-mono font-bold text-stone-900 dark:text-white truncate" title={releaseInfo.version}>
+                            {releaseInfo.version}
+                        </p>
+                    </div>
+                    <div className="bg-white dark:bg-stone-900 p-4 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm">
+                        <div className="flex items-center gap-2 text-stone-500 mb-1">
+                            <Clock className="h-4 w-4" />
+                            <span className="text-xs font-medium uppercase tracking-wide">Last Updated</span>
+                        </div>
+                        <p className="text-lg font-bold text-stone-900 dark:text-white">
+                            {new Date(releaseInfo.lastUpdated).toLocaleDateString()}
+                        </p>
+                        <p className="text-xs text-stone-400 truncate" title={releaseInfo.note}>
+                            {releaseInfo.note}
+                        </p>
+                    </div>
+                    <div className="md:col-span-2 bg-white dark:bg-stone-900 p-4 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm flex items-center justify-between gap-4">
+                        <div className="flex flex-col items-center flex-1">
+                            <span className="text-xs font-medium uppercase tracking-wide text-stone-500 mb-1">Open</span>
+                            <span className="text-2xl font-bold text-stone-900 dark:text-white">{stats.open}</span>
+                        </div>
+                        <div className="w-px h-8 bg-stone-200 dark:bg-stone-800"></div>
+                        <div className="flex flex-col items-center flex-1">
+                            <span className="text-xs font-medium uppercase tracking-wide text-amber-600 dark:text-amber-500 mb-1">Ready</span>
+                            <span className="text-2xl font-bold text-amber-600 dark:text-amber-500">{stats.ready}</span>
+                        </div>
+                        <div className="w-px h-8 bg-stone-200 dark:bg-stone-800"></div>
+                        <div className="flex flex-col items-center flex-1">
+                            <span className="text-xs font-medium uppercase tracking-wide text-green-600 dark:text-green-500 mb-1">Done</span>
+                            <span className="text-2xl font-bold text-green-600 dark:text-green-500">{stats.done}</span>
+                        </div>
+                        <div className="w-px h-8 bg-stone-200 dark:bg-stone-800"></div>
+                        <div className="flex flex-col items-center flex-1">
+                            <span className="text-xs font-medium uppercase tracking-wide text-stone-400 mb-1">Total</span>
+                            <span className="text-2xl font-bold text-stone-400">{stats.total}</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 flex-1 min-h-0">
@@ -336,6 +404,18 @@ export default function FeedbackPage() {
                                             {PREVIEWS.map(p => <option key={p.name} value={p.name}>{p.name}</option>)}
                                             <option value="Admin Panel">Admin Panel</option>
                                             <option value="Mobile Experience">Mobile Experience</option>
+                                        </select>
+                                    </div>
+                                    <div className="relative flex-1">
+                                        <select
+                                            value={nameFilter}
+                                            onChange={(e) => setNameFilter(e.target.value)}
+                                            className="w-full pl-2 pr-2 py-1.5 rounded-lg text-xs border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-stone-900 dark:text-white appearance-none"
+                                        >
+                                            <option value="all">All Users</option>
+                                            {uniqueNames.map(name => (
+                                                <option key={name} value={name}>{name}</option>
+                                            ))}
                                         </select>
                                     </div>
                                 </div>
