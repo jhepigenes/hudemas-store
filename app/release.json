@@ -1,6 +1,6 @@
 {
-  "version": "v2025.12.02-07bb20b",
-  "lastUpdated": "2025-12-02T06:40:04.053Z",
-  "commit": "07bb20b",
-  "note": "Fix: Improve scrolling and layout on Feedback page"
+  "version": "v2025.12.02-d1a5834",
+  "lastUpdated": "2025-12-02T07:14:18.091Z",
+  "commit": "d1a5834",
+  "note": "Feature: Add 'From' filter and System Overview to Feedback page"
 }
