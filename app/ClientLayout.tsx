@@ -8,6 +8,7 @@ import CustomCursor from "./components/CustomCursor";
 import NoiseOverlay from "./components/NoiseOverlay";
 import NewsletterPopup from "./components/NewsletterPopup";
 import StickyPhone from "./components/StickyPhone";
+import OnboardingCheck from "./components/OnboardingCheck";
 import { LanguageProvider } from "./context/LanguageContext";
 import { CurrencyProvider } from "./context/CurrencyContext";
 
@@ -18,6 +19,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <LanguageProvider>
       <CurrencyProvider>
+        {!isAdmin && <OnboardingCheck />}
         {!isAdmin && <Header />}
         {children}
         {!isAdmin && <Footer />}

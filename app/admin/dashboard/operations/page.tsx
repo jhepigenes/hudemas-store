@@ -23,8 +23,6 @@ export default function DailyOperationsPage() {
     const fetchOrders = async () => {
         setLoading(true);
         try {
-            // Fetch orders for the selected date (ignoring time for simplicity in this demo, or fetch all recent)
-            // For now, let's fetch all orders to ensure we see the one we just created
             const { data, error } = await supabase
                 .from('orders')
                 .select(`
@@ -107,7 +105,7 @@ export default function DailyOperationsPage() {
 
             const data = await res.json();
 
-            // Optimistic update or refetch
+            // Optimistic update
             setOrders(prevOrders =>
                 prevOrders.map(order =>
                     ids.includes(order.id)
@@ -149,6 +147,27 @@ export default function DailyOperationsPage() {
             case 'processing': return 'bg-blue-50 text-blue-800 border-blue-200';
             case 'completed': return 'bg-green-50 text-green-800 border-green-200';
             default: return 'bg-stone-100 text-stone-800 border-stone-200';
+        }
+    };
+
+    const handleUpdateStatus = async (orderId: string, status: string) => {
+        try {
+            const res = await fetch('/api/admin/orders/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderId, status })
+            });
+
+            if (!res.ok) throw new Error('Update failed');
+
+            setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: status as any } : o));
+            if (viewOrder && viewOrder.id === orderId) {
+                setViewOrder({ ...viewOrder, status: status as any });
+            }
+            alert(`Order status updated to ${status}`);
+        } catch (e) {
+            console.error('Error updating status:', e);
+            alert('Failed to update order status.');
         }
     };
 
@@ -233,8 +252,7 @@ export default function DailyOperationsPage() {
                         return (
                             <div
                                 key={order.id}
-                                className={`group relative rounded-xl border bg-white dark:bg-stone-900 p-6 transition-all duration-200 hover:shadow-md ${selectedOrders.includes(order.id) ? 'border-stone-900 dark:border-stone-50 ring-1 ring-stone-900 dark:ring-stone-50' : 'border-stone-200 dark:border-stone-800'
-                                    }`}
+                                className={`group relative rounded-xl border bg-white dark:bg-stone-900 p-6 transition-all duration-200 hover:shadow-md ${selectedOrders.includes(order.id) ? 'border-stone-900 dark:border-stone-50 ring-1 ring-stone-900 dark:ring-stone-50' : 'border-stone-200 dark:border-stone-800'}`}
                             >
                                 <div className="flex items-start gap-4">
                                     <div className="pt-1">
@@ -329,6 +347,7 @@ export default function DailyOperationsPage() {
                 <OrderDetailsModal
                     order={viewOrder}
                     onClose={() => setViewOrder(null)}
+                    onUpdateStatus={handleUpdateStatus}
                     onRefund={async (orderId) => {
                         if (!confirm('Refund this order? Action is irreversible.')) return;
                         try {

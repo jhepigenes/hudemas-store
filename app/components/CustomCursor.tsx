@@ -9,16 +9,15 @@ export default function CustomCursor() {
     const cursorY = useMotionValue(-100);
 
     // Tighter, snappier physics to remove "rubbery" lag
-    // High stiffness = fast response. Critical damping = no wobble.
     const springConfig = { damping: 40, stiffness: 800 };
     const cursorXSpring = useSpring(cursorX, springConfig);
     const cursorYSpring = useSpring(cursorY, springConfig);
 
     useEffect(() => {
         const moveCursor = (e: MouseEvent) => {
-            // Center the cursor (offset by half width/height of 12px -> 6px)
-            cursorX.set(e.clientX - 6);
-            cursorY.set(e.clientY - 6);
+            // Center the cursor
+            cursorX.set(e.clientX - 4); // Offset by half width (8px/2)
+            cursorY.set(e.clientY - 4);
         };
 
         const handleMouseOver = (e: MouseEvent) => {
@@ -47,18 +46,17 @@ export default function CustomCursor() {
 
     return (
         <motion.div
-            className="pointer-events-none fixed left-0 top-0 z-[9999] hidden md:block rounded-full bg-white mix-blend-difference"
+            className="pointer-events-none fixed left-0 top-0 z-[9999] hidden md:block rounded-full bg-stone-900/30 dark:bg-white/30 border border-stone-900 dark:border-white backdrop-blur-sm"
             style={{
                 x: cursorXSpring,
                 y: cursorYSpring,
-                width: 12,
-                height: 12,
+                width: 8,
+                height: 8,
             }}
             animate={{
-                scale: isHovering ? 2.5 : 1,
-                opacity: isHovering ? 0.5 : 1, // Fade out slightly when expanding to be less intrusive
+                scale: isHovering ? 1.5 : 1,
             }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
         />
     );
 }

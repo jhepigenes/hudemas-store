@@ -34,13 +34,14 @@ export interface Order {
         vatId?: string;
     };
     items?: OrderItem[];
-    user_email?: string; // Helper for overview
+    user_email?: string;
 }
 
 interface OrderDetailsModalProps {
     order: Order;
     onClose: () => void;
     onRefund?: (orderId: string) => Promise<void>;
+    onUpdateStatus?: (orderId: string, status: string) => Promise<void>;
 }
 
 export const generateInvoice = (order: Order) => {
@@ -155,7 +156,7 @@ export const generateAWB = (order: Order) => {
     doc.save(`AWB_${order.id.slice(0, 8)}.pdf`);
 };
 
-export default function OrderDetailsModal({ order, onClose, onRefund }: OrderDetailsModalProps) {
+export default function OrderDetailsModal({ order, onClose, onRefund, onUpdateStatus }: OrderDetailsModalProps) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
             <div className="w-full max-w-2xl bg-white dark:bg-stone-900 rounded-xl shadow-xl p-6 border border-stone-200 dark:border-stone-800 max-h-[90vh] overflow-y-auto">
@@ -233,26 +234,38 @@ export default function OrderDetailsModal({ order, onClose, onRefund }: OrderDet
                 </div>
 
                 <div className="mt-8 flex justify-end gap-3">
-                    {order.status !== 'refunded' && order.payment_method !== 'cod' && onRefund && (
+                    {order.status !== 'refunded' && order.status !== 'cancelled' && onRefund && (
                         <button
                             onClick={() => onRefund(order.id)}
                             className="px-4 py-2 rounded-lg border border-red-200 bg-red-50 text-red-700 text-sm font-medium hover:bg-red-100 transition-colors"
                         >
-                            Refund Order
+                            Refund
                         </button>
                     )}
+                    
                     <button
                         onClick={() => generateInvoice(order)}
                         className="px-4 py-2 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-700 dark:text-stone-300 dark:border-stone-700 dark:hover:bg-stone-800 text-sm font-medium transition-colors"
                     >
                         Download Invoice
                     </button>
-                    <button
-                        onClick={() => generateAWB(order)}
-                        className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200 text-sm font-medium transition-colors"
-                    >
-                        Generate AWB
-                    </button>
+
+                    {order.status === 'pending' && onUpdateStatus ? (
+                        <button
+                            onClick={() => onUpdateStatus(order.id, 'processing')}
+                            className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-medium transition-colors"
+                        >
+                            Mark Payment Received
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => generateAWB(order)}
+                            disabled={order.status === 'cancelled' || order.status === 'refunded'}
+                            className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200 text-sm font-medium transition-colors disabled:opacity-50"
+                        >
+                            Generate AWB
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

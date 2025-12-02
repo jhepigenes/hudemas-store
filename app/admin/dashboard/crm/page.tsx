@@ -162,9 +162,10 @@ export default function CRMPage() {
 
     const handleSaveCustomer = async (updated: Customer) => {
         try {
-            const { error } = await supabase
-                .from('customer_details')
-                .upsert({
+            const res = await fetch('/api/admin/customers', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
                     email: updated.email,
                     name: updated.name,
                     phone: updated.phone,
@@ -173,11 +174,14 @@ export default function CRMPage() {
                     address: updated.address,
                     city: updated.city,
                     county: updated.county,
-                    country: updated.country,
-                    updated_at: new Date().toISOString()
-                });
+                    country: updated.country
+                })
+            });
 
-            if (error) throw error;
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Failed to update');
+            }
 
             setCustomers(prev => prev.map(c => c.email === updated.email ? updated : c));
             setIsEditing(false);

@@ -139,17 +139,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <ThemeToggle />
                     </div>
                 </div>
-                <div className="absolute bottom-16 w-full px-4">
-                    <Link
-                        href="https://msepwdbzrzqotapgesnd.supabase.co"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/10"
-                    >
-                        <span className="h-5 w-5 flex items-center justify-center font-bold">NOR</span>
-                        Supabase Project
-                    </Link>
-                </div>
                 <div className="absolute bottom-4 w-full px-4">
                     <button
                         onClick={handleLogout}
