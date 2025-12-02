@@ -29,8 +29,11 @@ export default function CRMPage() {
     const [activeTab, setActiveTab] = useState<'individual' | 'company'>('individual');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-    const [showEmailHistory, setShowEmailHistory] = useState(false);
+    const [emailHistory, setEmailHistory] = useState<any[]>([]);
+    const [emailForm, setEmailForm] = useState({ subject: '', body: '' });
+    const [sendingEmail, setSendingEmail] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [showEmailHistory, setShowEmailHistory] = useState(false);
 
     const supabase = createClient();
 
@@ -143,9 +146,6 @@ export default function CRMPage() {
                 });
             }
 
-            // Also add customers that might exist in details but have no orders (if we supported that)
-            // For now, let's just stick to order-based customers + details overlay.
-
             setCustomers(Array.from(customerMap.values()));
             setLoading(false);
         };
@@ -192,9 +192,46 @@ export default function CRMPage() {
         }
     };
 
-    const handleSendEmail = (email: string, subject: string = '', body: string = '') => {
-        const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        window.open(mailtoLink, '_blank');
+    const fetchEmailHistory = async (email: string) => {
+        setEmailHistory([]); // Clear previous
+        try {
+            const res = await fetch(`/api/admin/email/history?email=${encodeURIComponent(email)}`);
+            const data = await res.json();
+            if (Array.isArray(data)) {
+                setEmailHistory(data);
+            }
+        } catch (e) {
+            console.error("Failed to fetch email history", e);
+        }
+    };
+
+    const handleSendEmail = async () => {
+        if (!selectedCustomer || !emailForm.subject || !emailForm.body) return;
+        setSendingEmail(true);
+        try {
+            const res = await fetch('/api/admin/email/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    recipient: selectedCustomer.email,
+                    subject: emailForm.subject,
+                    body: emailForm.body
+                })
+            });
+
+            if (res.ok) {
+                alert('Email sent successfully!');
+                setEmailForm({ subject: '', body: '' });
+                fetchEmailHistory(selectedCustomer.email); // Refresh list
+            } else {
+                alert('Failed to send email.');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Error sending email.');
+        } finally {
+            setSendingEmail(false);
+        }
     };
 
     return (
@@ -265,8 +302,8 @@ export default function CRMPage() {
                                         <td className="px-6 py-4 text-stone-600 dark:text-stone-400">
                                             <div className="flex flex-col gap-1">
                                                 <button
-                                                    onClick={() => handleSendEmail(customer.email)}
-                                                    className="flex items-center gap-2 hover:text-stone-900 dark:hover:text-white transition-colors"
+                                                    onClick={() => { setSelectedCustomer(customer); setShowEmailHistory(true); fetchEmailHistory(customer.email); }}
+                                                    className="flex items-center gap-2 hover:text-stone-900 dark:hover:text-white transition-colors text-left"
                                                 >
                                                     <Mail className="h-3 w-3" /> {customer.email}
                                                 </button>
@@ -287,7 +324,7 @@ export default function CRMPage() {
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex justify-end gap-2">
                                                 <button
-                                                    onClick={() => { setSelectedCustomer(customer); setShowEmailHistory(true); }}
+                                                    onClick={() => { setSelectedCustomer(customer); setShowEmailHistory(true); fetchEmailHistory(customer.email); }}
                                                     className="p-2 text-stone-400 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full"
                                                     title="Email History"
                                                 >
@@ -425,7 +462,7 @@ export default function CRMPage() {
                 )}
             </AnimatePresence>
 
-            {/* Email History Modal */}
+            {/* Email History & Compose Modal */}
             <AnimatePresence>
                 {showEmailHistory && selectedCustomer && (
                     <motion.div
@@ -434,37 +471,54 @@ export default function CRMPage() {
                     >
                         <motion.div
                             initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }}
-                            className="bg-white dark:bg-stone-900 rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden"
+                            className="bg-white dark:bg-stone-900 rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[80vh]"
                         >
-                            <div className="p-6 border-b border-stone-100 dark:border-stone-800 flex justify-between items-center">
+                            <div className="p-6 border-b border-stone-100 dark:border-stone-800 flex justify-between items-center shrink-0">
                                 <h3 className="text-xl font-serif font-medium text-stone-900 dark:text-white">Email History: {selectedCustomer.name}</h3>
                                 <button onClick={() => setShowEmailHistory(false)} className="text-stone-400 hover:text-stone-900 dark:hover:text-white">✕</button>
                             </div>
-                            <div className="p-0 max-h-[60vh] overflow-y-auto">
+                            
+                            <div className="flex-1 overflow-y-auto p-0">
                                 <div className="divide-y divide-stone-100 dark:divide-stone-800">
-                                    {[1, 2, 3].map((i) => (
-                                        <div key={i} className="p-6 hover:bg-stone-50 dark:hover:bg-stone-800/50">
+                                    {emailHistory.length === 0 && <div className="p-8 text-center text-stone-500">No history available.</div>}
+                                    {emailHistory.map((email) => (
+                                        <div key={email.id} className="p-6 hover:bg-stone-50 dark:hover:bg-stone-800/50">
                                             <div className="flex justify-between mb-2">
-                                                <span className="font-medium text-stone-900 dark:text-white">Order Confirmation #{1000 + i}</span>
-                                                <span className="text-sm text-stone-500">2 days ago</span>
+                                                <span className="font-medium text-stone-900 dark:text-white">{email.subject}</span>
+                                                <span className="text-sm text-stone-500">{new Date(email.created_at).toLocaleString()}</span>
                                             </div>
-                                            <p className="text-sm text-stone-600 dark:text-stone-400 mb-2">
-                                                Thank you for your order! We are preparing your items for shipment...
+                                            <p className="text-sm text-stone-600 dark:text-stone-400 mb-2 whitespace-pre-wrap">
+                                                {email.body}
                                             </p>
                                             <div className="flex gap-2">
-                                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full dark:bg-green-900/20 dark:text-green-400">Delivered</span>
-                                                <span className="text-xs bg-stone-100 text-stone-600 px-2 py-0.5 rounded-full dark:bg-stone-800 dark:text-stone-400">Opened</span>
+                                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full dark:bg-green-900/20 dark:text-green-400 capitalize">{email.status}</span>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             </div>
-                            <div className="p-6 border-t border-stone-100 dark:border-stone-800 bg-stone-50 dark:bg-stone-800/50">
+
+                            <div className="p-6 border-t border-stone-100 dark:border-stone-800 bg-stone-50 dark:bg-stone-800/50 shrink-0 space-y-3">
+                                <h4 className="text-sm font-medium text-stone-900 dark:text-white">Reply / New Message</h4>
+                                <input
+                                    type="text"
+                                    placeholder="Subject"
+                                    value={emailForm.subject}
+                                    onChange={(e) => setEmailForm({...emailForm, subject: e.target.value})}
+                                    className="w-full rounded-lg border-stone-300 p-2 text-sm dark:bg-stone-900 dark:border-stone-700"
+                                />
+                                <textarea 
+                                    placeholder="Message..."
+                                    value={emailForm.body}
+                                    onChange={(e) => setEmailForm({...emailForm, body: e.target.value})}
+                                    className="w-full rounded-lg border-stone-300 p-2 text-sm min-h-[80px] dark:bg-stone-900 dark:border-stone-700"
+                                />
                                 <button
-                                    onClick={() => handleSendEmail(selectedCustomer.email, 'Regarding your order')}
-                                    className="w-full py-2 rounded-lg border border-stone-300 bg-white text-stone-700 hover:bg-stone-50 dark:bg-stone-800 dark:border-stone-700 dark:text-stone-300 dark:hover:bg-stone-700 transition-colors"
+                                    onClick={handleSendEmail}
+                                    disabled={sendingEmail}
+                                    className="w-full py-2 rounded-lg bg-stone-900 text-white hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200 transition-colors disabled:opacity-50"
                                 >
-                                    Compose New Email
+                                    {sendingEmail ? 'Sending...' : 'Send Email'}
                                 </button>
                             </div>
                         </motion.div>

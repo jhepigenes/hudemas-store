@@ -1,15 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Printer, FileText, PackageCheck, Truck, Building2, User, Filter, Calendar, Download } from 'lucide-react';
 import { useLanguage } from '@/app/context/LanguageContext';
 import { createClient } from '@/lib/supabase';
 import OrderDetailsModal, { Order, generateAWB, generateInvoice } from '../components/OrderDetailsModal';
 
-
-export default function DailyOperationsPage() {
+function OperationsContent() {
+    const searchParams = useSearchParams();
     const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
     const [orders, setOrders] = useState<Order[]>([]);
+    const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
     const [viewOrder, setViewOrder] = useState<Order | null>(null);
@@ -19,6 +21,27 @@ export default function DailyOperationsPage() {
     useEffect(() => {
         fetchOrders();
     }, [selectedDate]);
+
+    useEffect(() => {
+        if (orders.length > 0) {
+            applyFilters();
+        }
+    }, [orders, searchParams]);
+
+    const applyFilters = () => {
+        const status = searchParams.get('status');
+        const filter = searchParams.get('filter');
+        
+        let result = [...orders];
+
+        if (status) {
+            result = result.filter(o => o.status === status);
+        } else if (filter === 'active') {
+            result = result.filter(o => ['pending', 'processing', 'pending_payment'].includes(o.status));
+        }
+
+        setFilteredOrders(result);
+    };
 
     const fetchOrders = async () => {
         setLoading(true);
@@ -33,12 +56,15 @@ export default function DailyOperationsPage() {
 
             if (error) throw error;
             setOrders(data || []);
+            setFilteredOrders(data || []);
         } catch (error) {
             console.error('Error fetching orders:', error);
         } finally {
             setLoading(false);
         }
     };
+
+    // ... (keep existing handlers: toggleOrder, toggleAll, etc.)
 
     const toggleOrder = (id: string) => {
         setSelectedOrders(prev =>
@@ -47,17 +73,17 @@ export default function DailyOperationsPage() {
     };
 
     const toggleAll = () => {
-        if (selectedOrders.length === orders.length) {
+        if (selectedOrders.length === filteredOrders.length) {
             setSelectedOrders([]);
         } else {
-            setSelectedOrders(orders.map(o => o.id));
+            setSelectedOrders(filteredOrders.map(o => o.id));
         }
     };
 
     const generateAccountantExport = () => {
         const ordersToExport = selectedOrders.length > 0
-            ? orders.filter(o => selectedOrders.includes(o.id))
-            : orders;
+            ? filteredOrders.filter(o => selectedOrders.includes(o.id))
+            : filteredOrders;
 
         const csvRows = [
             ['Data', 'Numar Factura', 'Client', 'CUI/CNP', 'Valoare Neta', 'TVA', 'Total'],
@@ -113,6 +139,11 @@ export default function DailyOperationsPage() {
                         : order
                 )
             );
+            // Also update filtered list
+            setFilteredOrders(prev => prev.map(order =>
+                ids.includes(order.id) ? { ...order, status: 'completed' } : order
+            ));
+
             setSelectedOrders([]);
             alert(`${t.admin.operations.markShipped} (${ids.length}) - Emails Sent!`);
         } catch (error) {
@@ -128,7 +159,7 @@ export default function DailyOperationsPage() {
         }
 
         if (selectedOrders.length === 0) return;
-        const ordersToProcess = orders.filter(o => selectedOrders.includes(o.id));
+        const ordersToProcess = filteredOrders.filter(o => selectedOrders.includes(o.id));
 
         if (action === 'invoice') {
             ordersToProcess.forEach(o => generateInvoice(o));
@@ -160,7 +191,11 @@ export default function DailyOperationsPage() {
 
             if (!res.ok) throw new Error('Update failed');
 
-            setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: status as any } : o));
+            const updateFn = (list: Order[]) => list.map(o => o.id === orderId ? { ...o, status: status as any } : o);
+            
+            setOrders(prev => updateFn(prev));
+            setFilteredOrders(prev => updateFn(prev));
+
             if (viewOrder && viewOrder.id === orderId) {
                 setViewOrder({ ...viewOrder, status: status as any });
             }
@@ -173,10 +208,17 @@ export default function DailyOperationsPage() {
 
     return (
         <div className="space-y-8 pb-20">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            {/* Header and Date Picker... (same as before) */}
+             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 className="font-serif text-3xl font-medium text-stone-900 dark:text-white">{t.admin.operations.title}</h2>
                     <p className="text-stone-500">{t.admin.operations.subtitle}</p>
+                    {/* Active Filter Badge */}
+                    {(searchParams.get('status') || searchParams.get('filter')) && (
+                        <span className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            Filter: {searchParams.get('status') || searchParams.get('filter')}
+                        </span>
+                    )}
                 </div>
 
                 {/* Date Picker */}
@@ -191,13 +233,13 @@ export default function DailyOperationsPage() {
                 </div>
             </div>
 
-            {/* Bulk Actions Toolbar */}
-            <div className="sticky top-28 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md p-4 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm flex flex-wrap gap-4 items-center justify-between">
+            {/* Bulk Actions Toolbar ... (same as before) */}
+             <div className="sticky top-28 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md p-4 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm flex flex-wrap gap-4 items-center justify-between">
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                         <input
                             type="checkbox"
-                            checked={orders.length > 0 && selectedOrders.length === orders.length}
+                            checked={filteredOrders.length > 0 && selectedOrders.length === filteredOrders.length}
                             onChange={toggleAll}
                             className="rounded border-stone-300 text-stone-900 focus:ring-stone-900"
                         />
@@ -238,14 +280,19 @@ export default function DailyOperationsPage() {
                 </button>
             </div>
 
-            {/* Orders List */}
+            {/* Orders List (Using filteredOrders now) */}
             {loading ? (
                 <div className="flex justify-center py-12">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-stone-900 dark:border-white"></div>
                 </div>
             ) : (
                 <div className="space-y-4">
-                    {orders.map((order) => {
+                    {filteredOrders.length === 0 && (
+                        <div className="text-center py-12 text-stone-500 bg-stone-50 dark:bg-stone-800/50 rounded-xl border border-stone-100 dark:border-stone-800">
+                            No orders found matching criteria.
+                        </div>
+                    )}
+                    {filteredOrders.map((order) => {
                         const customerName = `${order.customer_details.firstName} ${order.customer_details.lastName}`;
                         const shippingCost = order.shipping_method === 'easybox' ? 12 : 19;
 
@@ -372,5 +419,13 @@ export default function DailyOperationsPage() {
                 />
             )}
         </div>
+    );
+}
+
+export default function DailyOperationsPage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center items-center h-96">Loading operations...</div>}>
+            <OperationsContent />
+        </Suspense>
     );
 }

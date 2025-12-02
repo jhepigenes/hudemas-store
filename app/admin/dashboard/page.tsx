@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { DollarSign, ShoppingBag, Users, ArrowUpRight, Printer } from 'lucide-react';
 import AnalyticsChart from '../components/AnalyticsChart';
 import ShippingManager from '../components/ShippingManager';
@@ -90,9 +91,9 @@ export default function DashboardOverview() {
     }, []);
 
     const stats = [
-        { name: 'Weekly Orders', value: activeOrders !== null ? `${activeOrders}` : 'Loading...', change: '+12% vs last week', icon: ShoppingBag },
-        { name: 'Pending Shipments', value: activeOrders !== null ? `${activeOrders}` : 'Loading...', change: 'Needs attention', icon: Printer },
-        { name: 'Marketplace Sellers', value: marketplaceSellers !== null ? `${marketplaceSellers}` : 'Loading...', change: '+2 this week', icon: Users },
+        { name: 'Weekly Orders', value: activeOrders !== null ? `${activeOrders}` : 'Loading...', change: '+12% vs last week', icon: ShoppingBag, link: '/admin/dashboard/operations?filter=active' },
+        { name: 'Pending Shipments', value: activeOrders !== null ? `${activeOrders}` : 'Loading...', change: 'Needs attention', icon: Printer, link: '/admin/dashboard/operations?status=pending' },
+        { name: 'Marketplace Sellers', value: marketplaceSellers !== null ? `${marketplaceSellers}` : 'Loading...', change: '+2 this week', icon: Users, link: '/admin/dashboard/marketplace' },
     ];
 
     const handlePrintLabel = (orderId: string) => {
@@ -119,21 +120,23 @@ export default function DashboardOverview() {
                 {stats.map((stat) => {
                     const Icon = stat.icon;
                     return (
-                        <div key={stat.name} className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm font-medium text-stone-500">{stat.name}</p>
-                                    <p className="mt-2 text-3xl font-semibold text-stone-900 dark:text-white">{stat.value}</p>
+                        <Link key={stat.name} href={stat.link} className="block group">
+                            <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900 transition-all duration-200 hover:shadow-md hover:border-stone-300 dark:hover:border-stone-700">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-sm font-medium text-stone-500 group-hover:text-stone-900 dark:group-hover:text-stone-300 transition-colors">{stat.name}</p>
+                                        <p className="mt-2 text-3xl font-semibold text-stone-900 dark:text-white">{stat.value}</p>
+                                    </div>
+                                    <div className="rounded-full bg-stone-100 p-3 dark:bg-stone-800 group-hover:bg-stone-200 dark:group-hover:bg-stone-700 transition-colors">
+                                        <Icon className="h-6 w-6 text-stone-900 dark:text-white" />
+                                    </div>
                                 </div>
-                                <div className="rounded-full bg-stone-100 p-3 dark:bg-stone-800">
-                                    <Icon className="h-6 w-6 text-stone-900 dark:text-white" />
+                                <div className="mt-4 flex items-center text-sm text-green-600">
+                                    <ArrowUpRight className="mr-1 h-4 w-4" />
+                                    {stat.change}
                                 </div>
                             </div>
-                            <div className="mt-4 flex items-center text-sm text-green-600">
-                                <ArrowUpRight className="mr-1 h-4 w-4" />
-                                {stat.change}
-                            </div>
-                        </div>
+                        </Link>
                     );
                 })}
             </div>

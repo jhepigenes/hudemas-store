@@ -1,9 +1,14 @@
 {
-  "version": "v2025.12.02-dc6ba79",
-  "lastUpdated": "2025-12-02T07:26:57.018Z",
-  "commit": "dc6ba79",
-  "note": "Feature: Make release info clickable with detailed modal in Feedback Page",
+  "version": "v2025.12.02-9302351",
+  "lastUpdated": "2025-12-02T07:49:54.834Z",
+  "commit": "9302351",
+  "note": "Feature: Add release history from git log to feedback page modal",
   "history": [
+    {
+      "hash": "9302351",
+      "date": "2025-12-02T08:30:32+01:00",
+      "message": "Feature: Add release history from git log to feedback page modal"
+    },
     {
       "hash": "dc6ba79",
       "date": "2025-12-02T08:17:52+01:00",
@@ -48,11 +53,6 @@
       "hash": "13bc0a3",
       "date": "2025-11-28T22:39:00+01:00",
       "message": "Fix RLS policies, restore OAuth buttons, and complete Admin Panel"
-    },
-    {
-      "hash": "cb6e520",
-      "date": "2025-11-27T19:04:33+01:00",
-      "message": "Initial commit from Create Next App"
     }
   ]
 }

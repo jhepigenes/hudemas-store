@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Filter, Search } from 'lucide-react';
+import { Filter, Search, Grid3X3, Grid2X2, LayoutGrid } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
 import { useLanguage } from '@/app/context/LanguageContext';
 import { useCurrency } from '@/app/context/CurrencyContext';
@@ -16,13 +16,12 @@ export default function ShopPage() {
     const [category, setCategory] = useState('all');
     const [visibleCount, setVisibleCount] = useState(24);
     const [searchQuery, setSearchQuery] = useState('');
+    const [gridCols, setGridCols] = useState<3 | 4>(3);
     const { t } = useLanguage();
     const { formatPrice } = useCurrency();
     const supabase = createClient();
 
-    // Category Configuration (Maps Translation Key -> DB Value)
-    // Category Configuration (Maps Translation Key -> DB Value)
-    // Imported from @/app/utils/categories
+    // ... (keep existing fetch logic)
 
     useEffect(() => {
         fetchProducts();
@@ -104,7 +103,7 @@ export default function ShopPage() {
 
     return (
         <div className="min-h-screen bg-stone-50 dark:bg-stone-950 pt-32 pb-20">
-            <div className="mx-auto max-w-7xl px-6">
+            <div className="mx-auto max-w-[1600px] px-6">
                 <div className="mb-12 text-center">
                     <h1 className="font-serif text-4xl text-stone-900 dark:text-white md:text-5xl">
                         {t.nav.shop}
@@ -133,28 +132,48 @@ export default function ShopPage() {
                         ))}
                     </div>
 
-                    <div className="relative w-full sm:w-64 shrink-0">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
-                        <input
-                            type="text"
-                            placeholder={t.shop.searchPlaceholder}
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full rounded-full border-stone-200 bg-white pl-10 pr-4 py-2 text-sm focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-900 dark:border-stone-800 dark:text-white"
-                        />
+                    <div className="flex justify-between items-center gap-4 max-w-2xl mx-auto w-full">
+                        <div className="relative flex-1">
+                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                            <input
+                                type="text"
+                                placeholder={t.shop.searchPlaceholder}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full rounded-full border-stone-200 bg-white pl-10 pr-4 py-2 text-sm focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-900 dark:border-stone-800 dark:text-white"
+                            />
+                        </div>
+                        
+                        {/* Grid Toggle (Desktop Only) */}
+                        <div className="hidden lg:flex bg-white dark:bg-stone-900 rounded-full p-1 border border-stone-200 dark:border-stone-800 items-center gap-1">
+                            <button 
+                                onClick={() => setGridCols(3)}
+                                className={`p-1.5 rounded-full transition-colors ${gridCols === 3 ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white' : 'text-stone-400 hover:text-stone-600'}`}
+                                title="3 Columns"
+                            >
+                                <Grid3X3 className="h-4 w-4" />
+                            </button>
+                            <button 
+                                onClick={() => setGridCols(4)}
+                                className={`p-1.5 rounded-full transition-colors ${gridCols === 4 ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white' : 'text-stone-400 hover:text-stone-600'}`}
+                                title="4 Columns"
+                            >
+                                <LayoutGrid className="h-4 w-4" />
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 {/* Grid */}
                 {loading ? (
-                    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                        {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <div className={`grid grid-cols-1 gap-8 sm:grid-cols-2 ${gridCols === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                             <div key={i} className="aspect-[4/5] animate-pulse rounded-2xl bg-stone-200 dark:bg-stone-800" />
                         ))}
                     </div>
                 ) : (
                     <>
-                        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className={`grid grid-cols-1 gap-8 sm:grid-cols-2 ${gridCols === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
                             {visibleProducts.map((product, index) => (
                                 <ProductCard
                                     key={product.id}
