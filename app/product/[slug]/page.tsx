@@ -110,15 +110,18 @@ export default async function ProductPage({
             />
             <main className="mx-auto max-w-7xl px-4 py-32 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-24">
-                    {/* Image Section */}
-                    <div className="relative aspect-square w-full overflow-hidden bg-stone-100 dark:bg-stone-800 lg:aspect-[4/5]">
-                        <Image
-                            src={product.image}
-                            alt={product.name}
-                            fill
-                            className="object-cover"
-                            priority
-                        />
+                    {/* Image Section - Sticky on Desktop */}
+                    <div className="relative w-full lg:sticky lg:top-32 lg:h-[calc(100vh-10rem)]">
+                        <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-stone-100 dark:bg-stone-800 lg:aspect-auto lg:h-full">
+                            <Image
+                                src={product.image}
+                                alt={product.name}
+                                fill
+                                className="object-cover"
+                                priority
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                            />
+                        </div>
                     </div>
 
                     {/* Details Section */}

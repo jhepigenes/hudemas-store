@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Package, Users, Settings, LogOut, TrendingUp, Contact, ClipboardList, Menu, X, Landmark, FileText } from 'lucide-react';
+import { LayoutDashboard, Package, Users, Settings, LogOut, TrendingUp, Contact, ClipboardList, Menu, X, Landmark, FileText, BarChart, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import OnboardingTour from '../components/OnboardingTour';
 import { ThemeToggle } from '@/app/components/ThemeToggle';
@@ -71,12 +71,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     const navItems = [
         { name: 'Overview', href: '/admin/dashboard', icon: LayoutDashboard },
+        { name: 'Analytics', href: '/admin/dashboard/analytics', icon: BarChart },
         { name: 'Daily Operations', href: '/admin/dashboard/operations', icon: ClipboardList },
         { name: 'Financials', href: '/admin/dashboard/financials', icon: Landmark },
         { name: 'CRM', href: '/admin/dashboard/crm', icon: Contact },
         { name: 'Inventory & Bundles', href: '/admin/dashboard/inventory', icon: Package },
         { name: 'Marketplace & Fees', href: '/admin/dashboard/marketplace', icon: Users },
         { name: 'The Atelier (Blog)', href: '/admin/dashboard/blog', icon: FileText },
+        { name: 'Automations', href: '/admin/dashboard/automations', icon: Zap },
         { name: 'Marketing & SEO', href: '/admin/dashboard/marketing', icon: TrendingUp },
         { name: 'Platform Settings', href: '/admin/dashboard/settings', icon: Settings },
     ];
@@ -103,10 +105,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* Sidebar */}
             <aside
-                className={`fixed inset-y-0 left-0 z-40 w-64 transform border-r border-stone-200 bg-white transition-transform duration-300 ease-in-out dark:border-stone-800 dark:bg-stone-900 overflow-y-auto
+                className={`fixed inset-y-0 left-0 z-40 w-64 transform border-r border-stone-200 bg-white/80 backdrop-blur-xl transition-transform duration-300 ease-in-out dark:border-stone-800 dark:bg-stone-900/80 overflow-y-auto
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
             >
-                <div className="flex h-20 items-center justify-between px-6 border-b border-stone-100 dark:border-stone-800">
+                <div className="flex h-20 items-center justify-between px-6 border-b border-stone-100 dark:border-stone-800/50">
                     <h1 className="font-serif text-xl font-bold tracking-widest text-stone-900 dark:text-white">
                         HUDEMAS
                     </h1>
@@ -122,19 +124,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition-colors ${isActive
-                                        ? 'bg-stone-100 text-stone-900 dark:bg-stone-800 dark:text-white'
-                                        : 'text-stone-500 hover:bg-stone-50 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-white'
+                                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 ${isActive
+                                    ? 'bg-stone-900 text-white shadow-md dark:bg-white dark:text-stone-900'
+                                    : 'text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-white'
                                     }`}
                             >
-                                <Icon className="h-5 w-5" />
+                                <Icon className="h-4 w-4" />
                                 {item.name}
                             </Link>
                         );
                     })}
                 </nav>
                 <div className="absolute bottom-28 w-full px-4">
-                    <div className="flex items-center justify-between px-4 py-2 text-sm font-medium text-stone-500 dark:text-stone-400">
+                    <div className="flex items-center justify-between px-4 py-2 text-sm font-medium text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-stone-800/50 rounded-lg">
                         <span>Theme</span>
                         <ThemeToggle />
                     </div>
@@ -142,9 +144,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <div className="absolute bottom-4 w-full px-4">
                     <button
                         onClick={handleLogout}
-                        className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/10"
+                        className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/10 transition-colors"
                     >
-                        <LogOut className="h-5 w-5" />
+                        <LogOut className="h-4 w-4" />
                         Logout
                     </button>
                 </div>            </aside>

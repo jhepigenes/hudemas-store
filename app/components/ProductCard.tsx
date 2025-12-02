@@ -1,10 +1,10 @@
-import Link from 'next/link';
 import { Product } from '../types/index';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useCurrency } from '../context/CurrencyContext';
 import { slugify } from '../utils/slug';
-import { MouseEvent } from 'react';
+import Link from 'next/link';
+import { trackEvent } from '@/lib/analytics';
 import SafeImage from './SafeImage';
 
 interface ProductCardProps {
@@ -20,7 +20,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
-    function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+    function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent<HTMLDivElement>) {
         const { left, top } = currentTarget.getBoundingClientRect();
         mouseX.set(clientX - left);
         mouseY.set(clientY - top);
@@ -55,7 +55,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
                         Sale
                     </span>
                 </div>
-                <Link href={`/product/${slug}`} className="block relative h-full w-full">
+                <Link
+                    href={`/product/${slug}`}
+                    className="block relative h-full w-full"
+                    onClick={() => trackEvent('view_item', { product_id: product.id, name: product.name, price: product.price })}
+                >
                     <SafeImage
                         src={product.image}
                         alt={product.name}
@@ -77,7 +81,10 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             </div>
 
             <div className="mt-4 text-left">
-                <Link href={`/product/${slug}`}>
+                <Link
+                    href={`/product/${slug}`}
+                    onClick={() => trackEvent('view_item', { product_id: product.id, name: product.name, price: product.price })}
+                >
                     <h3 className="font-serif text-xl font-medium text-stone-900 dark:text-stone-50 group-hover:text-stone-600 dark:group-hover:text-stone-300">
                         {product.name}
                     </h3>

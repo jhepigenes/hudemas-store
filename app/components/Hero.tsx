@@ -65,7 +65,7 @@ export default function Hero() {
                         />
                     </motion.div>
                 </motion.div>
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-stone-900/90" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-stone-950" />
             </div>
 
             <div className="relative z-10 mx-auto flex h-full max-w-5xl flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8">
@@ -74,10 +74,10 @@ export default function Hero() {
                     initial="hidden"
                     animate="visible"
                 >
-                    <motion.h1 variants={itemVariants} className="font-serif text-5xl font-medium tracking-tight text-white sm:text-7xl md:text-8xl">
+                    <motion.h1 variants={itemVariants} className="font-serif text-5xl font-medium tracking-tight text-white sm:text-7xl md:text-8xl drop-shadow-lg">
                         {t.hero.title1}
                     </motion.h1>
-                    <motion.h1 variants={itemVariants} className="font-serif text-5xl font-medium italic tracking-tight text-stone-200 sm:text-7xl md:text-8xl mt-2">
+                    <motion.h1 variants={itemVariants} className="font-serif text-5xl font-medium italic tracking-tight text-stone-200 sm:text-7xl md:text-8xl mt-2 drop-shadow-lg">
                         {t.hero.title2}
                     </motion.h1>
 

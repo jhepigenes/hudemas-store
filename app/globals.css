@@ -21,6 +21,19 @@
   --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 500; /* Medium weight for elegance */
+    letter-spacing: -0.02em; /* Slightly tighter tracking for headings */
+  }
+  
+  body {
+    font-family: var(--font-sans);
+    font-weight: 300; /* Light weight for body text */
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

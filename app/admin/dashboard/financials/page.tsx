@@ -14,6 +14,8 @@ export default function FinancialsPage() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
+    const [selectedMetric, setSelectedMetric] = useState<'revenue' | 'orders' | 'aov'>('revenue');
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -116,16 +118,16 @@ export default function FinancialsPage() {
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
-                        <input 
-                            type="date" 
-                            value={startDate} 
+                        <input
+                            type="date"
+                            value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                             className="rounded-md border-stone-300 text-sm dark:bg-stone-800 dark:border-stone-700"
                         />
                         <span className="text-stone-400">-</span>
-                        <input 
-                            type="date" 
-                            value={endDate} 
+                        <input
+                            type="date"
+                            value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
                             className="rounded-md border-stone-300 text-sm dark:bg-stone-800 dark:border-stone-700"
                         />
@@ -141,7 +143,10 @@ export default function FinancialsPage() {
 
             {/* Key Metrics */}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-                <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900">
+                <div
+                    onClick={() => setSelectedMetric('revenue')}
+                    className={`cursor-pointer rounded-xl border bg-white p-6 shadow-sm transition-all dark:bg-stone-900 ${selectedMetric === 'revenue' ? 'border-stone-900 ring-1 ring-stone-900 dark:border-white dark:ring-white' : 'border-stone-200 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700'}`}
+                >
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm font-medium text-stone-500">Total Revenue (YTD)</p>
@@ -159,7 +164,10 @@ export default function FinancialsPage() {
                     </div>
                 </div>
 
-                <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900">
+                <div
+                    onClick={() => setSelectedMetric('aov')}
+                    className={`cursor-pointer rounded-xl border bg-white p-6 shadow-sm transition-all dark:bg-stone-900 ${selectedMetric === 'aov' ? 'border-stone-900 ring-1 ring-stone-900 dark:border-white dark:ring-white' : 'border-stone-200 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700'}`}
+                >
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm font-medium text-stone-500">Average Order Value</p>
@@ -177,28 +185,36 @@ export default function FinancialsPage() {
                     </div>
                 </div>
 
-                <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900">
+                <div
+                    onClick={() => setSelectedMetric('orders')}
+                    className={`cursor-pointer rounded-xl border bg-white p-6 shadow-sm transition-all dark:bg-stone-900 ${selectedMetric === 'orders' ? 'border-stone-900 ring-1 ring-stone-900 dark:border-white dark:ring-white' : 'border-stone-200 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700'}`}
+                >
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm font-medium text-stone-500">Projected (EOM)</p>
+                            <p className="text-sm font-medium text-stone-500">Total Orders</p>
                             <p className="mt-2 text-3xl font-semibold text-stone-900 dark:text-white">
-                                15,000 RON
+                                142
                             </p>
                         </div>
                         <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900/20">
                             <Calendar className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                         </div>
                     </div>
-                    <div className="mt-4 flex items-center text-sm text-stone-500">
-                        Based on current velocity
+                    <div className="mt-4 flex items-center text-sm text-green-600">
+                        <TrendingUp className="mr-1 h-4 w-4" />
+                        +18% vs last year
                     </div>
                 </div>
             </div>
 
             {/* Main Chart */}
             <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900">
-                <h3 className="mb-6 font-medium text-stone-900 dark:text-white">Revenue Overview</h3>
-                <AnalyticsChart data={revenueData} />
+                <AnalyticsChart
+                    data={revenueData}
+                    dataKey={selectedMetric}
+                    title={selectedMetric === 'revenue' ? 'Weekly Revenue' : selectedMetric === 'orders' ? 'Weekly Orders' : 'Average Order Value'}
+                    unit={selectedMetric === 'orders' ? '' : 'RON'}
+                />
             </div>
 
             {/* Year over Year Comparison Table */}

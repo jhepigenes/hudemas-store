@@ -97,7 +97,27 @@ export async function POST(request: Request) {
             }
         }
 
-        // 6. Send Confirmation Email (Async, don't block)
+        // 6. Track Purchase Event (Async)
+        (async () => {
+            try {
+                await supabaseAdmin.from('analytics_events').insert({
+                    event_name: 'purchase',
+                    user_id: finalUserId || null,
+                    data: {
+                        order_id: order.id,
+                        total: orderTotal,
+                        items_count: items.length,
+                        currency: items[0]?.currency || 'RON'
+                    },
+                    user_agent: request.headers.get('user-agent') || 'server',
+                    url: request.headers.get('referer') || ''
+                });
+            } catch (e) {
+                console.error('Failed to track purchase event:', e);
+            }
+        })();
+
+        // 7. Send Confirmation Email (Async, don't block)
         (async () => {
             try {
                 const subject = `Order Confirmation #${order.id.slice(0, 8)}`;
@@ -175,7 +195,7 @@ export async function POST(request: Request) {
         // 8. Handle Coupon Usage
         if (couponCode) {
             const { error: couponError } = await supabaseAdmin.rpc('increment_coupon_usage', { coupon_code: couponCode });
-            
+
             // Fallback if RPC doesn't exist (try direct update)
             if (couponError) {
                 console.warn('RPC increment_coupon_usage failed, trying direct update', couponError);

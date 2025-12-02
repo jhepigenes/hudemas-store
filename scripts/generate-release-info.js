@@ -28,13 +28,19 @@ try {
     fs.writeFileSync('./app/release.json', JSON.stringify(releaseInfo, null, 2));
     console.log('Generated release.json with history');
 } catch (e) {
-    console.error('Failed to generate release info (git might not be available)', e.message);
-    const releaseInfo = {
-        version: 'dev-' + Date.now(),
-        lastUpdated: new Date().toISOString(),
-        commit: 'HEAD',
-        note: 'Manual/Dev Build',
-        history: []
-    };
-    fs.writeFileSync('./app/release.json', JSON.stringify(releaseInfo, null, 2));
+    console.error('Failed to generate release info (git might not be available):', e.message);
+    
+    if (fs.existsSync('./app/release.json')) {
+        console.log('Found existing release.json, using that instead of generating fallback.');
+    } else {
+        console.log('No existing release.json found, generating fallback.');
+        const releaseInfo = {
+            version: 'dev-' + Date.now(),
+            lastUpdated: new Date().toISOString(),
+            commit: 'HEAD',
+            note: 'Manual/Dev Build',
+            history: []
+        };
+        fs.writeFileSync('./app/release.json', JSON.stringify(releaseInfo, null, 2));
+    }
 }

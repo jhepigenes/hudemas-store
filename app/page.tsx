@@ -99,14 +99,20 @@ export default function Home() {
         <FeaturedMasterpiece />
         <RecentReviews />
 
-        {/* Gallery Section */}
-        <section className="px-4 py-24 sm:px-6 lg:px-8" id="collection">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-12 text-center">
-              <h2 className="font-serif text-3xl text-stone-900 dark:text-stone-50 md:text-4xl">
-                Latest Arrivals
+        {/* Gallery Section - Museum Exhibition Style */}
+        <section className="relative py-24 sm:py-32 overflow-hidden" id="collection">
+          {/* Background Texture */}
+          <div className="absolute inset-0 bg-stone-100 dark:bg-stone-900 opacity-50 pointer-events-none" />
+
+          <div className="relative mx-auto max-w-[1920px] px-4 sm:px-6 lg:px-8">
+            <div className="mb-16 flex flex-col items-center text-center">
+              <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-stone-500 dark:text-stone-400 mb-4">
+                Curated Collection
+              </span>
+              <h2 className="font-serif text-4xl text-stone-900 dark:text-stone-50 md:text-6xl">
+                Latest Acquisitions
               </h2>
-              <div className="mx-auto mt-4 h-1 w-24 bg-stone-900 dark:bg-stone-50" />
+              <div className="mt-6 h-px w-24 bg-stone-900/20 dark:bg-stone-50/20" />
             </div>
 
             <SearchAndFilter
@@ -117,40 +123,46 @@ export default function Home() {
             />
 
             {loading ? (
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="aspect-[4/5] animate-pulse rounded-2xl bg-stone-200 dark:bg-stone-800" />
+                  <div key={i} className="aspect-[4/5] animate-pulse rounded-sm bg-stone-200 dark:bg-stone-800" />
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {filteredProducts.length > 0 ? (
-                  <>
-                    {filteredProducts.slice(0, 12).map((product, index) => (
-                      <ProductCard key={`${product.id}-${index}`} product={product} index={index} />
-                    ))}
-                  </>
-                ) : (
-                  <div className="col-span-full py-20 text-center text-stone-500">
-                    <p className="font-serif text-xl">No masterpieces found.</p>
-                    <button
-                      onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}
-                      className="mt-4 text-sm underline"
-                    >
-                      Clear Filters
-                    </button>
-                  </div>
-                )}
+              <div className="mt-12">
+                {/* Horizontal Scroll Container */}
+                <div className="flex overflow-x-auto pb-12 gap-8 snap-x snap-mandatory no-scrollbar px-4 sm:px-0">
+                  {filteredProducts.length > 0 ? (
+                    <>
+                      {filteredProducts.slice(0, 12).map((product, index) => (
+                        <div key={`${product.id}-${index}`} className="min-w-[280px] md:min-w-[320px] snap-center">
+                          <ProductCard product={product} index={index} />
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <div className="w-full py-20 text-center text-stone-500">
+                      <p className="font-serif text-xl">No masterpieces found.</p>
+                      <button
+                        onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}
+                        className="mt-4 text-sm underline"
+                      >
+                        Clear Filters
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
             {filteredProducts.length > 12 && (
-              <div className="mt-16 text-center">
+              <div className="mt-8 text-center">
                 <a
                   href="/shop"
-                  className="inline-block rounded-full bg-stone-900 px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
+                  className="group inline-flex items-center gap-2 font-serif text-lg italic text-stone-900 dark:text-stone-50 transition-colors hover:text-stone-600 dark:hover:text-stone-300"
                 >
-                  View All Collection
+                  <span>View Full Collection</span>
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </a>
               </div>
             )}

@@ -1,9 +1,14 @@
 {
-  "version": "v2025.12.02-fe6354c",
-  "lastUpdated": "2025-12-02T13:36:58.435Z",
-  "commit": "fe6354c",
-  "note": "Improvement: Add timestamp to release history and refine modal UI",
+  "version": "v2025.12.02-3a046fc",
+  "lastUpdated": "2025-12-02T18:49:40.598Z",
+  "commit": "3a046fc",
+  "note": "Feature: Add Rework status, fix feedback export, improve UI/UX, and enhance Admin features",
   "history": [
+    {
+      "hash": "3a046fc",
+      "date": "2025-12-02T14:37:33+01:00",
+      "message": "Feature: Add Rework status, fix feedback export, improve UI/UX, and enhance Admin features"
+    },
     {
       "hash": "fe6354c",
       "date": "2025-12-02T09:14:39+01:00",
@@ -48,11 +53,6 @@
       "hash": "c570bf2",
       "date": "2025-12-02T07:00:12+01:00",
       "message": "Fix: Address all beta feedback (UX, Admin, CRM, Profile, Orders)"
-    },
-    {
-      "hash": "b86d8eb",
-      "date": "2025-12-02T06:32:38+01:00",
-      "message": "Feature Release: Beta Feedback system, Blog, Reviews, and Admin updates"
     }
   ]
 }

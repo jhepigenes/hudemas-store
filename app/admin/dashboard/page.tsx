@@ -112,7 +112,7 @@ export default function DashboardOverview() {
 
             // Update local state
             setRecentOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: status as any } : o));
-            
+
             // Also update selected order if open
             if (selectedOrder && selectedOrder.id === orderId) {
                 setSelectedOrder(prev => prev ? { ...prev, status: status as any } : null);
@@ -139,17 +139,17 @@ export default function DashboardOverview() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((item) => (
                     <Link href={item.link} key={item.name} className="block group">
-                        <div className="bg-white dark:bg-stone-900 p-6 rounded-xl shadow-sm border border-stone-200 dark:border-stone-800 group-hover:shadow-md group-hover:border-stone-300 dark:group-hover:border-stone-700 transition-all h-full">
+                        <div className="bg-white/60 dark:bg-stone-900/60 backdrop-blur-md p-6 rounded-xl shadow-sm border border-stone-200 dark:border-stone-800 group-hover:shadow-lg group-hover:border-stone-300 dark:group-hover:border-stone-700 transition-all duration-300 h-full">
                             <div className="flex items-center justify-between mb-4">
-                                <div className="p-2 bg-stone-100 dark:bg-stone-800 rounded-lg group-hover:bg-stone-200 dark:group-hover:bg-stone-700 transition-colors">
-                                    <item.icon className="h-6 w-6 text-stone-900 dark:text-white" />
+                                <div className="p-2 bg-stone-100 dark:bg-stone-800 rounded-lg group-hover:bg-stone-900 group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-stone-900 transition-colors duration-300">
+                                    <item.icon className="h-5 w-5" />
                                 </div>
-                                <span className="text-xs font-medium text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded-full">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded-full">
                                     {item.change}
                                 </span>
                             </div>
-                            <h3 className="text-sm font-medium text-stone-500 dark:text-stone-400">{item.name}</h3>
-                            <p className="text-2xl font-serif font-bold text-stone-900 dark:text-white mt-1">{item.value}</p>
+                            <h3 className="text-xs font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">{item.name}</h3>
+                            <p className="text-3xl font-serif font-medium text-stone-900 dark:text-white mt-2">{item.value}</p>
                         </div>
                     </Link>
                 ))}
@@ -161,7 +161,7 @@ export default function DashboardOverview() {
                     <ShippingManager />
                 </div>
                 <div className="space-y-8">
-                     <div className="bg-white dark:bg-stone-900 p-6 rounded-xl shadow-sm border border-stone-200 dark:border-stone-800">
+                    <div className="bg-white dark:bg-stone-900 p-6 rounded-xl shadow-sm border border-stone-200 dark:border-stone-800">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="font-serif text-lg text-stone-900 dark:text-white">Recent Orders</h3>
                             <Link href="/admin/dashboard/operations" className="text-sm text-stone-500 hover:text-stone-900 dark:hover:text-white flex items-center gap-1">
@@ -170,8 +170,8 @@ export default function DashboardOverview() {
                         </div>
                         <div className="space-y-4">
                             {recentOrders.map((order) => (
-                                <div 
-                                    key={order.id} 
+                                <div
+                                    key={order.id}
                                     onClick={() => setSelectedOrder(order)}
                                     className="flex items-center justify-between p-3 hover:bg-stone-50 dark:hover:bg-stone-800/50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-stone-100 dark:hover:border-stone-800"
                                 >
@@ -181,10 +181,9 @@ export default function DashboardOverview() {
                                     </div>
                                     <div className="text-right">
                                         <p className="text-sm font-bold text-stone-900 dark:text-white">{order.total} {order.currency}</p>
-                                        <p className={`text-xs capitalize ${
-                                            order.status === 'completed' ? 'text-green-600' : 
-                                            order.status === 'pending' ? 'text-amber-600' : 'text-stone-500'
-                                        }`}>{order.status}</p>
+                                        <p className={`text-xs capitalize ${order.status === 'completed' ? 'text-green-600' :
+                                                order.status === 'pending' ? 'text-amber-600' : 'text-stone-500'
+                                            }`}>{order.status}</p>
                                     </div>
                                 </div>
                             ))}
@@ -195,8 +194,8 @@ export default function DashboardOverview() {
             </div>
 
             {selectedOrder && (
-                <OrderDetailsModal 
-                    order={selectedOrder} 
+                <OrderDetailsModal
+                    order={selectedOrder}
                     onClose={() => setSelectedOrder(null)}
                     onUpdateStatus={handleUpdateStatus}
                 />

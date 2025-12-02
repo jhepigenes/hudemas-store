@@ -78,22 +78,17 @@ export default function ProductActions({ product }: ProductActionsProps) {
                 {product.formats && product.formats.length > 1 && (
                     <div>
                         <h3 className="text-sm font-medium text-stone-900 dark:text-white mb-3">Format</h3>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="flex flex-wrap gap-3">
                             {product.formats.map((format) => (
                                 <button
                                     key={format}
                                     onClick={() => setSelectedFormat(format)}
-                                    className={`relative flex items-center justify-center rounded-lg border px-4 py-3 text-sm font-medium transition-all ${selectedFormat === format
-                                            ? 'border-stone-900 ring-1 ring-stone-900 bg-stone-50 text-stone-900 dark:border-white dark:ring-white dark:bg-stone-800 dark:text-white'
-                                            : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-400 dark:hover:bg-stone-800'
+                                    className={`relative flex items-center justify-center rounded-full border px-6 py-3 text-sm font-medium transition-all ${selectedFormat === format
+                                        ? 'border-stone-900 bg-stone-900 text-white dark:border-white dark:bg-white dark:text-stone-900 shadow-md'
+                                        : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-400 dark:hover:bg-stone-800'
                                         }`}
                                 >
                                     {format}
-                                    {selectedFormat === format && (
-                                        <div className="absolute top-0 right-0 -mt-2 -mr-2 rounded-full bg-stone-900 p-1 text-white dark:bg-white dark:text-stone-900">
-                                            <Check className="h-3 w-3" />
-                                        </div>
-                                    )}
                                 </button>
                             ))}
                         </div>
@@ -163,11 +158,11 @@ export default function ProductActions({ product }: ProductActionsProps) {
                     <div>
                         <h3 className="text-sm font-medium text-stone-900 dark:text-white mb-3">Size</h3>
                         <div className="flex flex-wrap gap-3">
-                            <button
-                                className="px-4 py-2 rounded-md text-sm font-medium border border-stone-900 bg-stone-900 text-white dark:bg-white dark:text-stone-900 cursor-default"
+                            <div
+                                className="px-6 py-2 rounded-full text-sm font-medium border border-stone-900 bg-stone-900 text-white dark:bg-white dark:text-stone-900 cursor-default shadow-sm"
                             >
                                 {product.dimensions}
-                            </button>
+                            </div>
                         </div>
                     </div>
                 )}

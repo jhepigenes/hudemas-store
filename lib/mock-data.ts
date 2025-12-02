@@ -60,7 +60,9 @@ export const generateRevenueData = () => {
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   return days.map(day => ({
     name: day,
-    total: faker.number.int({ min: 1000, max: 15000 }),
+    revenue: faker.number.int({ min: 1000, max: 15000 }),
+    orders: faker.number.int({ min: 5, max: 50 }),
+    aov: faker.number.int({ min: 150, max: 500 }),
   }));
 };
 

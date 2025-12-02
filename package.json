@@ -7,7 +7,7 @@
     "build": "node scripts/generate-release-info.js && next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "npx vercel"
+    "deploy": "node scripts/generate-release-info.js && npx vercel --prod"
   },
   "dependencies": {
     "@faker-js/faker": "^10.1.0",

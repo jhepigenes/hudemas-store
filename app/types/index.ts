@@ -43,7 +43,7 @@ export interface Order {
     currency: string;
     status: 'pending' | 'processing' | 'completed' | 'cancelled' | 'paid';
     items: OrderItem[];
-    customer_details: any; // Can be typed further
+    customer_details: Record<string, unknown>; // Can be typed further
 }
 
 export interface OrderItem {
