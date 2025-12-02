@@ -8,6 +8,7 @@ import { useLanguage } from '@/app/context/LanguageContext';
 import { useCurrency } from '@/app/context/CurrencyContext';
 import ProductCard from '@/app/components/ProductCard';
 import { Product } from '@/app/types/index';
+import { CATEGORY_CONFIG } from '@/app/utils/categories';
 
 export default function ShopPage() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -20,24 +21,8 @@ export default function ShopPage() {
     const supabase = createClient();
 
     // Category Configuration (Maps Translation Key -> DB Value)
-    const CATEGORY_CONFIG = [
-        { id: 'all', dbValue: 'All' },
-        { id: 'fruits', dbValue: 'Fructe' },
-        { id: 'flowers', dbValue: 'Flori' },
-        { id: 'landscapes', dbValue: 'Peisaje' },
-        { id: 'religious', dbValue: 'Religioase' },
-        { id: 'stillLife', dbValue: 'Natură moartă' },
-        { id: 'animals', dbValue: 'Animale' },
-        { id: 'kids', dbValue: 'Pentru copii' },
-        { id: 'modern', dbValue: 'Moderne' },
-        { id: 'marine', dbValue: 'Marine' },
-        { id: 'characters', dbValue: 'Personaje' },
-        { id: 'painters', dbValue: 'Pictori celebri' },
-        { id: 'zodiac', dbValue: 'Zodii' },
-        { id: 'patterns', dbValue: 'Modele 2-4 culori' },
-        { id: 'allegories', dbValue: 'Alegorii' },
-        { id: 'accessories', dbValue: 'Accesorii' }
-    ] as const;
+    // Category Configuration (Maps Translation Key -> DB Value)
+    // Imported from @/app/utils/categories
 
     useEffect(() => {
         fetchProducts();
@@ -45,27 +30,52 @@ export default function ShopPage() {
 
     const fetchProducts = async () => {
         try {
-            const { data, error } = await supabase
-                .from('marketplace_listings')
-                .select('*')
-                .in('product_type', ['kit', 'accessory'])
-                .eq('status', 'active');
+            let allProducts: any[] = [];
+            let from = 0;
+            const step = 1000;
+            let more = true;
 
-            if (error) throw error;
+            while (more) {
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .range(from, from + step - 1);
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    allProducts = [...allProducts, ...data];
+                    from += step;
+                    if (data.length < step) {
+                        more = false;
+                    }
+                } else {
+                    more = false;
+                }
+            }
 
             // Transform DB shape to Product type
-            const mappedProducts: Product[] = (data || []).map((item: any) => ({
+            const mappedProducts: Product[] = allProducts.map((item: any) => ({
                 id: item.id,
                 name: item.title,
                 image: item.image_url,
                 price: item.price,
                 currency: item.currency,
                 product_type: item.product_type,
-                status: item.status,
-                description: item.description
+                description: item.description,
+                category: item.category,
+                slug: item.slug,
+                dimensions: item.dimensions,
+                colors: item.colors,
+                formats: item.formats
             }));
 
             setProducts(mappedProducts);
+
+            // Debug: Log distinct categories
+            const distinctCategories = Array.from(new Set(mappedProducts.map(p => p.category)));
+            console.log('Fetched distinct categories:', distinctCategories);
+            console.log('Total products:', mappedProducts.length);
         } catch (error) {
             console.error('Error fetching shop products:', error);
         } finally {
@@ -77,20 +87,14 @@ export default function ShopPage() {
         const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
         let matchesCategory = true;
 
-        // Get the DB value for the current selected category ID
-        const currentCategoryConfig = CATEGORY_CONFIG.find(c => c.id === category);
-        const dbCategoryValue = currentCategoryConfig?.dbValue || 'All';
+        if (category !== 'all') {
+            // Get the DB value for the current selected category ID
+            const currentCategoryConfig = CATEGORY_CONFIG.find(c => c.id === category);
+            const dbCategoryValue = currentCategoryConfig?.dbValue;
 
-        if (category === 'all') {
-            matchesCategory = true;
-        } else if (category === 'accessories') {
-            // Special case for Accessories
-            matchesCategory = product.product_type === 'accessory';
-        } else {
-            // For all other categories (Goblenuri), check the description
-            // We only want 'kit' types for these categories to avoid cross-contamination if any
-            matchesCategory = product.product_type === 'kit' &&
-                (product.description && product.description.includes(`Category: ${dbCategoryValue}`)) || false;
+            if (dbCategoryValue) {
+                matchesCategory = product.category === dbCategoryValue;
+            }
         }
 
         return matchesSearch && matchesCategory;
@@ -149,15 +153,28 @@ export default function ShopPage() {
                         ))}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                        {visibleProducts.map((product, index) => (
-                            <ProductCard
-                                key={product.id}
-                                index={index}
-                                product={product}
-                            />
-                        ))}
-                    </div>
+                    <>
+                        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                            {visibleProducts.map((product, index) => (
+                                <ProductCard
+                                    key={product.id}
+                                    index={index}
+                                    product={product}
+                                />
+                            ))}
+                        </div>
+
+                        {visibleCount < filteredProducts.length && (
+                            <div className="mt-16 flex justify-center">
+                                <button
+                                    onClick={() => setVisibleCount(prev => prev + 24)}
+                                    className="rounded-full bg-stone-900 px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-stone-800 dark:bg-white dark:text-stone-900 dark:hover:bg-stone-200"
+                                >
+                                    Load More
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
         </div>

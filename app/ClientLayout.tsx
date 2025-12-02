@@ -6,6 +6,8 @@ import Footer from "./components/Footer";
 import CartDrawer from "./components/CartDrawer";
 import CustomCursor from "./components/CustomCursor";
 import NoiseOverlay from "./components/NoiseOverlay";
+import NewsletterPopup from "./components/NewsletterPopup";
+import StickyPhone from "./components/StickyPhone";
 import { LanguageProvider } from "./context/LanguageContext";
 import { CurrencyProvider } from "./context/CurrencyContext";
 
@@ -22,6 +24,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         {!isAdmin && <CustomCursor />}
         <NoiseOverlay />
         {!isAdmin && <CartDrawer />}
+        {!isAdmin && <NewsletterPopup />}
+        {!isAdmin && <StickyPhone />}
       </CurrencyProvider>
     </LanguageProvider>
   );

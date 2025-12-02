@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product } from '../types/index';
+import { createClient } from '@/lib/supabase';
 
 export interface CartItem extends Product {
     quantity: number;
@@ -18,6 +19,9 @@ interface CartContextType {
     cartCount: number;
     discount: number;
     subtotal: number;
+    applyCoupon: (code: string) => Promise<{ success: boolean; message: string }>;
+    removeCoupon: () => void;
+    couponCode: string | null;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -25,6 +29,8 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
     const [items, setItems] = useState<CartItem[]>([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [couponCode, setCouponCode] = useState<string | null>(null);
+    const [couponDetails, setCouponDetails] = useState<{ type: 'percentage' | 'fixed', value: number } | null>(null);
 
     // Load from local storage on mount
     useEffect(() => {
@@ -98,8 +104,70 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return acc + price * item.quantity;
     }, 0);
 
-    // Black Friday Logic: 20% OFF
-    const discount = subtotal * 0.20;
+    const applyCoupon = async (code: string) => {
+        const supabase = createClient();
+        const { data, error } = await supabase
+            .from('coupons')
+            .select('*')
+            .eq('code', code)
+            .eq('is_active', true)
+            .single();
+
+        if (error || !data) {
+            return { success: false, message: 'Invalid or expired coupon.' };
+        }
+
+        // Check expiry
+        if (data.expires_at && new Date(data.expires_at) < new Date()) {
+            return { success: false, message: 'Coupon has expired.' };
+        }
+
+        // Check Usage Limit
+        if (data.max_uses !== null && data.used_count >= data.max_uses) {
+            return { success: false, message: 'Coupon usage limit reached.' };
+        }
+
+        // Check min order
+        if (subtotal < data.min_order_amount) {
+            return { success: false, message: `Minimum order of ${data.min_order_amount} required.` };
+        }
+
+        setCouponCode(code);
+        setCouponDetails({ type: data.discount_type, value: data.discount_value });
+        return { success: true, message: 'Coupon applied successfully!' };
+    };
+
+    const removeCoupon = () => {
+        setCouponCode(null);
+        setCouponDetails(null);
+    };
+
+    // Calculate Discount
+    let discount = 0;
+    if (couponDetails) {
+        if (couponDetails.type === 'percentage') {
+            discount = subtotal * (couponDetails.value / 100);
+        } else {
+            discount = couponDetails.value;
+        }
+    } else {
+        // Default Black Friday Logic: 20% OFF (Fallback/Auto)
+        // Only apply if no specific coupon is used? Or verify strategy.
+        // For now, let's say Coupon overrides Auto-Discount.
+        // Or we can keep it cumulative? No, risky.
+        // Let's keep it simple: Coupon OR Black Friday.
+        // Actually, to increase sales "massively", let's enable coupons.
+        // If coupon is applied, use it. If not, use default 20%.
+        // Wait, if coupon is 10% and BF is 20%, user loses money.
+        // Let's say: Base discount is 0. Coupons apply on top?
+        // Let's remove the hardcoded 20% BF deal for now, or make it a default coupon 'BF2025'.
+        // I will comment out the hardcoded one to test the dynamic one fully.
+        // discount = subtotal * 0.20; 
+    }
+    
+    // Ensure discount doesn't exceed subtotal
+    if (discount > subtotal) discount = subtotal;
+
     const cartTotal = subtotal - discount;
 
     return (
@@ -114,7 +182,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 cartTotal,
                 cartCount,
                 discount,
-                subtotal
+                subtotal,
+                applyCoupon,
+                removeCoupon,
+                couponCode
             }}
         >
             {children}

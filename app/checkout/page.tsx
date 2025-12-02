@@ -11,10 +11,22 @@ import { createClient } from '@/lib/supabase';
 import StripePaymentModal from '../components/StripePaymentModal';
 
 export default function CheckoutPage() {
-    const { items, cartTotal, subtotal, discount } = useCart();
+    const { items, cartTotal, subtotal, discount, applyCoupon, removeCoupon, couponCode } = useCart();
     const { formatPrice } = useCurrency();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [promoCode, setPromoCode] = useState('');
+    const [couponMessage, setCouponMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+    const handleApplyCoupon = async () => {
+        if (!promoCode) return;
+        const result = await applyCoupon(promoCode);
+        if (result.success) {
+            setCouponMessage({ type: 'success', text: result.message });
+        } else {
+            setCouponMessage({ type: 'error', text: result.message });
+        }
+    };
     const [paymentMethod, setPaymentMethod] = useState<'card' | 'cod'>('cod');
     const [shippingMethod, setShippingMethod] = useState<'courier' | 'easybox'>('courier');
     const [customerType, setCustomerType] = useState<'private' | 'company'>('private');
@@ -110,7 +122,8 @@ export default function CheckoutPage() {
                     paymentMethod,
                     shippingMethod,
                     customerType,
-                    userId: session?.user?.id
+                    userId: session?.user?.id,
+                    couponCode // Pass the coupon code
                 }),
             });
 
@@ -389,6 +402,42 @@ export default function CheckoutPage() {
                             ))}
                         </ul>
                         <div className="mt-6 border-t border-stone-200 pt-6 dark:border-stone-700">
+                            {/* Coupon Input */}
+                            <div className="mb-6">
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        placeholder="Promo Code"
+                                        value={promoCode}
+                                        onChange={(e) => setPromoCode(e.target.value)}
+                                        disabled={!!couponCode}
+                                        className="flex-1 rounded-md border-stone-300 shadow-sm focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700 dark:text-white text-sm"
+                                    />
+                                    {couponCode ? (
+                                        <button
+                                            type="button"
+                                            onClick={() => { removeCoupon(); setPromoCode(''); setCouponMessage(null); }}
+                                            className="rounded-md border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 dark:bg-stone-900 dark:border-red-900 dark:text-red-500"
+                                        >
+                                            Remove
+                                        </button>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            onClick={handleApplyCoupon}
+                                            className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 dark:bg-white dark:text-stone-900"
+                                        >
+                                            Apply
+                                        </button>
+                                    )}
+                                </div>
+                                {couponMessage && (
+                                    <p className={`mt-2 text-xs ${couponMessage.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                                        {couponMessage.text}
+                                    </p>
+                                )}
+                            </div>
+
                             <div className="flex items-center justify-between text-sm text-stone-600 dark:text-stone-400">
                                 <p>Subtotal</p>
                                 <p>{formatPrice(subtotal)}</p>

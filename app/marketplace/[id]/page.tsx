@@ -63,7 +63,9 @@ export default function MarketplaceListingPage() {
             image: listing.image_url,
             type: 'marketplace',
             artist_id: listing.artist_id,
-            description: listing.description
+            description: listing.description,
+            category: 'Marketplace',
+            product_type: 'finished'
         });
     };
 

@@ -9,35 +9,56 @@ import StorySection from './components/StorySection';
 import Marquee from './components/Marquee';
 import SearchAndFilter from './components/SearchAndFilter';
 import FeaturedMasterpiece from './components/FeaturedMasterpiece';
+import RecentReviews from './components/RecentReviews';
+import { CATEGORY_CONFIG } from '@/app/utils/categories';
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const supabase = createClient();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data, error } = await supabase
-          .from('marketplace_listings')
-          .select('*')
-          .in('product_type', ['kit']) // Only kits for homepage? Or both? Let's show kits mainly.
-          .eq('status', 'active')
-          .limit(50); // Limit for homepage
+        let allProducts: any[] = [];
+        let from = 0;
+        const step = 1000;
+        let more = true;
 
-        if (error) throw error;
+        while (more) {
+          const { data, error } = await supabase
+            .from('products')
+            .select('*')
+            .range(from, from + step - 1);
 
-        const mappedProducts: Product[] = (data || []).map((item: any) => ({
+          if (error) throw error;
+
+          if (data && data.length > 0) {
+            allProducts = [...allProducts, ...data];
+            from += step;
+            if (data.length < step) {
+              more = false;
+            }
+          } else {
+            more = false;
+          }
+        }
+
+        // Sort by created_at descending for "Latest Arrivals"
+        allProducts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+        const mappedProducts: Product[] = allProducts.map((item: any) => ({
           id: item.id,
           name: item.title,
           image: item.image_url,
           price: item.price,
           currency: item.currency,
           product_type: item.product_type,
-          status: item.status,
-          description: item.description
+          description: item.description,
+          category: item.category,
+          created_at: item.created_at
         }));
 
         setProducts(mappedProducts);
@@ -54,12 +75,16 @@ export default function Home() {
   // Filter Logic
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-
-    // Category Logic
     let matchesCategory = true;
-    if (selectedCategory !== 'All') {
-      // Check description for category
-      matchesCategory = (product.description && product.description.includes(`Category: ${selectedCategory}`)) || false;
+
+    if (selectedCategory !== 'all') {
+      // Get the DB value for the current selected category ID
+      const currentCategoryConfig = CATEGORY_CONFIG.find(c => c.id === selectedCategory);
+      const dbCategoryValue = currentCategoryConfig?.dbValue;
+
+      if (dbCategoryValue) {
+        matchesCategory = product.category === dbCategoryValue;
+      }
     }
 
     return matchesSearch && matchesCategory;
@@ -72,13 +97,14 @@ export default function Home() {
         <Marquee />
         <StorySection />
         <FeaturedMasterpiece />
+        <RecentReviews />
 
         {/* Gallery Section */}
         <section className="px-4 py-24 sm:px-6 lg:px-8" id="collection">
           <div className="mx-auto max-w-7xl">
             <div className="mb-12 text-center">
               <h2 className="font-serif text-3xl text-stone-900 dark:text-stone-50 md:text-4xl">
-                Curated Collection
+                Latest Arrivals
               </h2>
               <div className="mx-auto mt-4 h-1 w-24 bg-stone-900 dark:bg-stone-50" />
             </div>
@@ -108,7 +134,7 @@ export default function Home() {
                   <div className="col-span-full py-20 text-center text-stone-500">
                     <p className="font-serif text-xl">No masterpieces found.</p>
                     <button
-                      onClick={() => { setSearchTerm(''); setSelectedCategory('All'); }}
+                      onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}
                       className="mt-4 text-sm underline"
                     >
                       Clear Filters

@@ -17,6 +17,10 @@ interface Customer {
     lastOrderDate: string;
     phone?: string;
     notes?: string;
+    address?: string;
+    city?: string;
+    county?: string;
+    country?: string;
 }
 
 export default function CRMPage() {
@@ -107,6 +111,10 @@ export default function CRMPage() {
                     const companyName = details?.company_name || orderDetails.companyName || orderDetails.company_name;
                     const notes = details?.notes || '';
                     const type = details?.type || orderDetails.customerType || 'individual';
+                    const address = details?.address || orderDetails.address;
+                    const city = details?.city || orderDetails.city;
+                    const county = details?.county || orderDetails.county;
+                    const country = details?.country || orderDetails.country;
 
                     if (existing) {
                         existing.totalSpent += order.total; // Migration uses 'total', not 'total_amount'
@@ -125,7 +133,11 @@ export default function CRMPage() {
                             orderCount: 1,
                             lastOrderDate: order.created_at,
                             phone,
-                            notes
+                            notes,
+                            address,
+                            city,
+                            county,
+                            country
                         });
                     }
                 });
@@ -158,6 +170,10 @@ export default function CRMPage() {
                     phone: updated.phone,
                     company_name: updated.companyName,
                     notes: updated.notes,
+                    address: updated.address,
+                    city: updated.city,
+                    county: updated.county,
+                    country: updated.country,
                     updated_at: new Date().toISOString()
                 });
 
@@ -337,6 +353,44 @@ export default function CRMPage() {
                                         onChange={(e) => setSelectedCustomer({ ...selectedCustomer, phone: e.target.value })}
                                         className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-2 text-stone-900 dark:bg-stone-800 dark:border-stone-700 dark:text-white"
                                     />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">Address</label>
+                                        <input
+                                            type="text"
+                                            value={selectedCustomer.address || ''}
+                                            onChange={(e) => setSelectedCustomer({ ...selectedCustomer, address: e.target.value })}
+                                            className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-2 text-stone-900 dark:bg-stone-800 dark:border-stone-700 dark:text-white"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">City</label>
+                                        <input
+                                            type="text"
+                                            value={selectedCustomer.city || ''}
+                                            onChange={(e) => setSelectedCustomer({ ...selectedCustomer, city: e.target.value })}
+                                            className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-2 text-stone-900 dark:bg-stone-800 dark:border-stone-700 dark:text-white"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">County</label>
+                                        <input
+                                            type="text"
+                                            value={selectedCustomer.county || ''}
+                                            onChange={(e) => setSelectedCustomer({ ...selectedCustomer, county: e.target.value })}
+                                            className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-2 text-stone-900 dark:bg-stone-800 dark:border-stone-700 dark:text-white"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">Country</label>
+                                        <input
+                                            type="text"
+                                            value={selectedCustomer.country || ''}
+                                            onChange={(e) => setSelectedCustomer({ ...selectedCustomer, country: e.target.value })}
+                                            className="w-full rounded-lg border-stone-200 bg-stone-50 px-4 py-2 text-stone-900 dark:bg-stone-800 dark:border-stone-700 dark:text-white"
+                                        />
+                                    </div>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">Notes</label>

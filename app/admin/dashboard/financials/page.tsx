@@ -4,13 +4,15 @@ import { useState, useEffect } from 'react';
 import AnalyticsChart from '../../components/AnalyticsChart';
 import { createClient } from '@/lib/supabase';
 import { generateRevenueData, getMockStats } from '@/lib/mock-data';
-import { DollarSign, TrendingUp, Calendar } from 'lucide-react';
+import { DollarSign, TrendingUp, Calendar, Download } from 'lucide-react';
 
 export default function FinancialsPage() {
     const supabase = createClient();
     const [revenueData, setRevenueData] = useState<any[]>([]);
     const [totalRevenue, setTotalRevenue] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,6 +43,62 @@ export default function FinancialsPage() {
         fetchData();
     }, []);
 
+    const generateAccountantExport = async () => {
+        try {
+            let query = supabase
+                .from('orders')
+                .select('*, order_items(*), customer_details:customer_details')
+                .order('created_at', { ascending: false });
+
+            if (startDate) query = query.gte('created_at', new Date(startDate).toISOString());
+            if (endDate) query = query.lte('created_at', new Date(endDate).toISOString());
+
+            const { data: orders } = await query;
+
+            if (!orders || orders.length === 0) {
+                alert('No orders to export for the selected period.');
+                return;
+            }
+
+            const csvRows = [
+                ['Data', 'Numar Factura', 'Client', 'CUI/CNP', 'Valoare Neta', 'TVA', 'Total'],
+                ...orders.map((o: any) => { // Use any to avoid strict type checking against Order interface locally defined elsewhere
+                    const shippingCost = o.shipping_method === 'easybox' ? 12 : 19;
+                    const totalWithShipping = o.total + shippingCost;
+                    const net = (totalWithShipping / 1.19).toFixed(2);
+                    const vat = (totalWithShipping - (totalWithShipping / 1.19)).toFixed(2);
+
+                    const details = o.customer_details || {};
+                    const customerName = `${details.firstName || ''} ${details.lastName || ''}`.trim() || 'Guest';
+                    const clientName = details.customerType === 'company' ? details.companyName : customerName;
+                    const cui = details.customerType === 'company' ? details.vatId : '-';
+
+                    return [
+                        new Date(o.created_at).toLocaleDateString(),
+                        'HUD-' + o.id.slice(0, 8),
+                        '"' + (clientName || 'Unknown') + '"',
+                        cui || '-',
+                        net,
+                        vat,
+                        totalWithShipping.toFixed(2)
+                    ];
+                })
+            ];
+
+            const csvContent = "data:text/csv;charset=utf-8," + csvRows.map(e => e.join(",")).join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Export_Contabilitate_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (e) {
+            console.error("Export failed", e);
+            alert("Failed to generate export.");
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-[300px]">
@@ -51,9 +109,34 @@ export default function FinancialsPage() {
 
     return (
         <div className="space-y-8">
-            <div>
-                <h2 className="font-serif text-2xl font-medium text-stone-900 dark:text-white">Financials</h2>
-                <p className="text-stone-500">Revenue analytics and performance metrics.</p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 className="font-serif text-2xl font-medium text-stone-900 dark:text-white">Financials</h2>
+                    <p className="text-stone-500">Revenue analytics and performance metrics.</p>
+                </div>
+                <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                        <input 
+                            type="date" 
+                            value={startDate} 
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="rounded-md border-stone-300 text-sm dark:bg-stone-800 dark:border-stone-700"
+                        />
+                        <span className="text-stone-400">-</span>
+                        <input 
+                            type="date" 
+                            value={endDate} 
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className="rounded-md border-stone-300 text-sm dark:bg-stone-800 dark:border-stone-700"
+                        />
+                    </div>
+                    <button
+                        onClick={generateAccountantExport}
+                        className="flex items-center gap-2 rounded-full bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 dark:bg-white dark:text-stone-900 transition-colors"
+                    >
+                        <Download className="h-4 w-4" /> Export Accounting CSV
+                    </button>
+                </div>
             </div>
 
             {/* Key Metrics */}

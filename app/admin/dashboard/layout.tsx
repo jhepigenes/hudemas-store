@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Package, Users, Settings, LogOut, TrendingUp, Contact, ClipboardList, Menu, X, Landmark } from 'lucide-react';
+import { LayoutDashboard, Package, Users, Settings, LogOut, TrendingUp, Contact, ClipboardList, Menu, X, Landmark, FileText } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import OnboardingTour from '../components/OnboardingTour';
+import { ThemeToggle } from '@/app/components/ThemeToggle';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -75,6 +76,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: 'CRM', href: '/admin/dashboard/crm', icon: Contact },
         { name: 'Inventory & Bundles', href: '/admin/dashboard/inventory', icon: Package },
         { name: 'Marketplace & Fees', href: '/admin/dashboard/marketplace', icon: Users },
+        { name: 'The Atelier (Blog)', href: '/admin/dashboard/blog', icon: FileText },
         { name: 'Marketing & SEO', href: '/admin/dashboard/marketing', icon: TrendingUp },
         { name: 'Platform Settings', href: '/admin/dashboard/settings', icon: Settings },
     ];
@@ -131,6 +133,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         );
                     })}
                 </nav>
+                <div className="absolute bottom-28 w-full px-4">
+                    <div className="flex items-center justify-between px-4 py-2 text-sm font-medium text-stone-500 dark:text-stone-400">
+                        <span>Theme</span>
+                        <ThemeToggle />
+                    </div>
+                </div>
                 <div className="absolute bottom-16 w-full px-4">
                     <Link
                         href="https://msepwdbzrzqotapgesnd.supabase.co"

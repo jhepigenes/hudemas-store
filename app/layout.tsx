@@ -5,6 +5,7 @@ import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./components/ThemeProvider";
 import ClientLayout from "./ClientLayout";
 import { GoogleAnalytics } from '@next/third-parties/google';
+import FacebookPixel from "./components/FacebookPixel";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -17,6 +18,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://hudemas-store.vercel.app'),
   title: {
     default: "Hudemas - The Art of Gobelin",
     template: "%s | Hudemas"
@@ -63,6 +65,7 @@ export default function RootLayout({
           </CartProvider>
         </ThemeProvider>
         <GoogleAnalytics gaId="G-HUDEMAS01" />
+        <FacebookPixel />
       </body>
     </html>
   );

@@ -1,9 +1,9 @@
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 // Note: This client should ONLY be used in server-side contexts (API routes, Server Actions)
 // never in Client Components.
-export const supabaseAdmin = createClient(
+export const supabaseAdmin = createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
     process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key',
     {
@@ -13,6 +13,8 @@ export const supabaseAdmin = createClient(
         }
     }
 );
+
+export const createClient = () => supabaseAdmin;
 
 export async function getGuestUserId() {
     const GUEST_EMAIL = 'guest@hudemas.ro';

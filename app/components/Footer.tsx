@@ -45,6 +45,9 @@ export default function Footer() {
                             <li>
                                 <Link href="/#collection" className="transition-colors hover:text-white">New Arrivals</Link>
                             </li>
+                            <li>
+                                <Link href="/feedback" className="text-yellow-500 hover:text-yellow-400 transition-colors">Beta Feedback</Link>
+                            </li>
                         </ul>
                     </div>
 

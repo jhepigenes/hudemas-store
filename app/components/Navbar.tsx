@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { ShoppingBag, Menu, X, User } from 'lucide-react';
+import { ShoppingBag, Menu, X, User, Instagram, Facebook } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence, Variants } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { ThemeToggle } from './ThemeToggle';
 import { useLanguage } from '../context/LanguageContext';
@@ -54,6 +54,36 @@ export default function Navbar({ isFixed = true }: { isFixed?: boolean }) {
     const showSolidNav = isScrolled || !isHomePage;
     const textColorClass = showSolidNav ? 'text-stone-900 dark:text-white' : 'text-white';
 
+    const menuVariants: Variants = {
+        closed: {
+            opacity: 0,
+            x: "100%",
+            transition: {
+                type: "spring",
+                stiffness: 400,
+                damping: 40,
+                staggerChildren: 0.05,
+                staggerDirection: -1
+            }
+        },
+        open: {
+            opacity: 1,
+            x: 0,
+            transition: {
+                type: "spring",
+                stiffness: 400,
+                damping: 40,
+                staggerChildren: 0.07,
+                delayChildren: 0.2
+            }
+        }
+    };
+
+    const itemVariants: Variants = {
+        closed: { opacity: 0, x: 50 },
+        open: { opacity: 1, x: 0 }
+    };
+
     return (
         <>
             <motion.nav
@@ -63,7 +93,7 @@ export default function Navbar({ isFixed = true }: { isFixed?: boolean }) {
                     }`}
             >
                 <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-12">
-                    
+
                     {/* Mobile Menu Icon (Left on Mobile) */}
                     <button
                         onClick={() => setIsMobileMenuOpen(true)}
@@ -72,7 +102,7 @@ export default function Navbar({ isFixed = true }: { isFixed?: boolean }) {
                         <Menu className="h-6 w-6" />
                     </button>
 
-                    {/* Logo (Left on Desktop, Center on Mobile via flex-1/absolute if needed, but let's keep it simple left for now or left-aligned) */}
+                    {/* Logo */}
                     <Link href="/" className="shrink-0 mr-8">
                         <span className={`font-serif text-2xl lg:text-3xl font-bold tracking-[0.2em] ${textColorClass}`}>
                             HUDEMAS
@@ -93,6 +123,9 @@ export default function Navbar({ isFixed = true }: { isFixed?: boolean }) {
                         <Link href="/sell" className="text-[10px] lg:text-xs font-medium uppercase tracking-widest hover:opacity-60 transition-opacity whitespace-nowrap">
                             {t.nav.sell}
                         </Link>
+                        <Link href="/blog" className="text-[10px] lg:text-xs font-medium uppercase tracking-widest hover:opacity-60 transition-opacity whitespace-nowrap">
+                            The Atelier
+                        </Link>
                         <Link href="/about" className="text-[10px] lg:text-xs font-medium uppercase tracking-widest hover:opacity-60 transition-opacity whitespace-nowrap">
                             {t.nav.about}
                         </Link>
@@ -103,18 +136,19 @@ export default function Navbar({ isFixed = true }: { isFixed?: boolean }) {
                         <Link href="/admin/login" className={`text-[10px] font-medium uppercase tracking-widest hover:opacity-60 transition-opacity hidden md:block ${textColorClass}`}>
                             {t.nav.admin}
                         </Link>
-                        
-                        <div className={showSolidNav ? '' : 'text-white'}>
+
+                        {/* Toggles - Hidden on Mobile, Visible on Desktop */}
+                        <div className={`hidden md:block ${showSolidNav ? '' : 'text-white'}`}>
                             <CurrencySwitcher />
                         </div>
-                        <div className={showSolidNav ? '' : 'text-white'}>
+                        <div className={`hidden md:block ${showSolidNav ? '' : 'text-white'}`}>
                             <LanguageSwitcher />
                         </div>
-                        <div className={showSolidNav ? '' : 'text-white'}>
+                        <div className={`hidden md:block ${showSolidNav ? '' : 'text-white'}`}>
                             <ThemeToggle />
                         </div>
-                        
-                        {/* User Profile Link - High Contrast */}
+
+                        {/* User Profile Link */}
                         <Link href={user ? "/profile" : "/login"} className="p-2 flex items-center justify-center rounded-full bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white shadow-sm hover:bg-stone-200 dark:hover:bg-stone-700 transition-colors">
                             <User className="h-5 w-5" />
                         </Link>
@@ -138,42 +172,89 @@ export default function Navbar({ isFixed = true }: { isFixed?: boolean }) {
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, x: '100%' }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: '100%' }}
-                        transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed inset-0 z-[60] bg-white dark:bg-stone-950 md:hidden"
+                        initial="closed"
+                        animate="open"
+                        exit="closed"
+                        variants={menuVariants}
+                        className="fixed inset-0 z-[60] bg-white/95 dark:bg-stone-950/95 backdrop-blur-xl md:hidden"
                     >
                         <div className="flex flex-col h-full p-6">
-                            <div className="flex justify-end mb-8">
+                            <div className="flex justify-between items-center mb-8">
+                                <span className="font-serif text-xl font-bold tracking-widest text-stone-900 dark:text-white">
+                                    HUDEMAS
+                                </span>
                                 <button
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="p-2 text-stone-900 dark:text-white"
+                                    className="p-2 text-stone-900 dark:text-white hover:opacity-60 transition-opacity"
                                 >
                                     <X className="h-8 w-8" />
                                 </button>
                             </div>
 
-                            <div className="flex flex-col gap-8 items-center text-center">
-                                <Link href="/" className="text-2xl font-serif text-stone-900 dark:text-white">
-                                    {t.nav.home}
-                                </Link>
-                                <Link href="/shop" className="text-2xl font-serif text-stone-900 dark:text-white">
-                                    {t.nav.shop}
-                                </Link>
-                                <Link href="/marketplace" className="text-2xl font-serif text-stone-900 dark:text-white">
-                                    Marketplace
-                                </Link>
-                                <Link href="/sell" className="text-2xl font-serif text-stone-900 dark:text-white">
-                                    {t.nav.sell}
-                                </Link>
-                                <Link href="/about" className="text-2xl font-serif text-stone-900 dark:text-white">
-                                    {t.nav.about}
-                                </Link>
-                                <Link href="/admin/login" className="text-lg font-sans text-stone-500 dark:text-stone-400 mt-4">
-                                    {t.nav.admin}
-                                </Link>
+                            <div className="flex flex-col gap-6 items-start px-4 overflow-y-auto">
+                                <motion.div variants={itemVariants} className="w-full">
+                                    <Link href="/" className="text-3xl font-serif text-stone-900 dark:text-white hover:text-stone-600 dark:hover:text-stone-300 transition-colors block w-full">
+                                        {t.nav.home}
+                                    </Link>
+                                </motion.div>
+                                <motion.div variants={itemVariants} className="w-full">
+                                    <Link href="/shop" className="text-3xl font-serif text-stone-900 dark:text-white hover:text-stone-600 dark:hover:text-stone-300 transition-colors block w-full">
+                                        {t.nav.shop}
+                                    </Link>
+                                </motion.div>
+                                <motion.div variants={itemVariants} className="w-full">
+                                    <Link href="/marketplace" className="text-3xl font-serif text-stone-900 dark:text-white hover:text-stone-600 dark:hover:text-stone-300 transition-colors block w-full">
+                                        Marketplace
+                                    </Link>
+                                </motion.div>
+                                <motion.div variants={itemVariants} className="w-full">
+                                    <Link href="/sell" className="text-3xl font-serif text-stone-900 dark:text-white hover:text-stone-600 dark:hover:text-stone-300 transition-colors block w-full">
+                                        {t.nav.sell}
+                                    </Link>
+                                </motion.div>
+                                <motion.div variants={itemVariants} className="w-full">
+                                    <Link href="/blog" className="text-3xl font-serif text-stone-900 dark:text-white hover:text-stone-600 dark:hover:text-stone-300 transition-colors block w-full">
+                                        The Atelier
+                                    </Link>
+                                </motion.div>
+                                <motion.div variants={itemVariants} className="w-full">
+                                    <Link href="/about" className="text-3xl font-serif text-stone-900 dark:text-white hover:text-stone-600 dark:hover:text-stone-300 transition-colors block w-full">
+                                        {t.nav.about}
+                                    </Link>
+                                </motion.div>
+
+                                <motion.div variants={itemVariants} className="w-full pt-6 border-t border-stone-200 dark:border-stone-800 mt-2">
+                                    <Link href="/admin/login" className="text-lg font-sans text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors">
+                                        {t.nav.admin}
+                                    </Link>
+                                </motion.div>
+
+                                {/* Mobile Toggles */}
+                                <motion.div variants={itemVariants} className="w-full flex flex-wrap gap-4 pt-4">
+                                    <div className="text-stone-900 dark:text-white">
+                                        <CurrencySwitcher />
+                                    </div>
+                                    <div className="text-stone-900 dark:text-white">
+                                        <LanguageSwitcher />
+                                    </div>
+                                    <div className="text-stone-900 dark:text-white">
+                                        <ThemeToggle />
+                                    </div>
+                                </motion.div>
                             </div>
+
+                            {/* Social Links */}
+                            <motion.div
+                                variants={itemVariants}
+                                className="mt-auto flex gap-6 justify-center pb-8 pt-4"
+                            >
+                                <a href="https://www.instagram.com/hudema.s/" target="_blank" rel="noopener noreferrer" className="text-stone-900 dark:text-white hover:opacity-60 transition-opacity">
+                                    <Instagram className="h-6 w-6" />
+                                </a>
+                                <a href="https://www.facebook.com/hudemas" target="_blank" rel="noopener noreferrer" className="text-stone-900 dark:text-white hover:opacity-60 transition-opacity">
+                                    <Facebook className="h-6 w-6" />
+                                </a>
+                            </motion.div>
                         </div>
                     </motion.div>
                 )}

@@ -49,16 +49,15 @@ export default function FeaturedMasterpiece() {
                     <div className="relative order-1 aspect-[4/5] overflow-hidden rounded-2xl lg:order-2">
                         <motion.div style={{ y }} className="absolute inset-0 h-[120%] w-full">
                             <Image
-                                src="https://www.hudemas.ro/assets/images/products/large/goblen-hudemas-760-melancholy-492.jpg"
+                                src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=2819&auto=format&fit=crop"
                                 alt="Dusk by Alphonse Mucha"
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 768px) 100vw, 50vw"
-                                unoptimized
                             />
                         </motion.div>
                         {/* Decorative Frame */}
-                        <div className="pointer-events-none absolute inset-4 border border-white/30" />
+
                     </div>
                 </div>
             </div>

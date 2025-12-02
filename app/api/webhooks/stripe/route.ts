@@ -2,6 +2,8 @@ import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { resend } from '@/lib/resend';
+import OrderConfirmationEmail from '@/app/components/emails/OrderConfirmation';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder', {
     // apiVersion: '2023-10-16', // Use env or default
@@ -38,22 +40,59 @@ export async function POST(req: Request) {
 
             if (orderId) {
                 // Update Order Status
-                const { error: updateError } = await supabaseAdmin
+                const { data: order, error: updateError } = await supabaseAdmin
                     .from('orders')
                     .update({ status: 'processing' }) // Or 'paid'
-                    .eq('id', orderId);
+                    .eq('id', orderId)
+                    .select(`
+                        *,
+                        order_items (
+                            *,
+                            products (*)
+                        )
+                    `)
+                    .single();
 
                 if (updateError) {
                     console.error(`❌ Failed to update order ${orderId}:`, updateError);
                 } else {
                     console.log(`✅ Order ${orderId} marked as processing.`);
 
-                    // Also update transactions if necessary
-                    // Logic: Find transactions for this order's items?
-                    // Better: The Create Order API already linked them.
-                    // We can try to update transactions related to this order via a join or simpler logic if we stored order_id in transactions (we didn't, we stored listing_id).
-                    // But since 'pending' transactions are created at order time, we might need a way to confirm them.
-                    // For MVP, we trust the admin/seller dashboard will see the confirmed order and act.
+                    // Send Confirmation Email
+                    try {
+                        if (order && paymentIntent.metadata.customer_email) {
+                            const items = order.order_items.map((item: any) => ({
+                                name: item.products?.title || 'Product',
+                                quantity: item.quantity,
+                                price: `${item.price.toFixed(2)} ${order.currency}`
+                            }));
+
+                            const shippingAddress = order.shipping_address || {}; // Assuming this is stored as JSONB
+
+                            await resend.emails.send({
+                                from: 'Hudemas Orders <orders@hudemas.ro>', // Ensure you verify this domain in Resend
+                                to: [paymentIntent.metadata.customer_email],
+                                subject: `Order Confirmation #${order.id.slice(0, 8)}`,
+                                react: OrderConfirmationEmail({
+                                    customerName: `${shippingAddress.firstName || 'Customer'} ${shippingAddress.lastName || ''}`.trim(),
+                                    orderId: order.id,
+                                    orderDate: new Date(order.created_at).toLocaleDateString(),
+                                    totalAmount: `${order.total_amount.toFixed(2)} ${order.currency}`,
+                                    items: items,
+                                    shippingAddress: {
+                                        street: shippingAddress.address || '',
+                                        city: shippingAddress.city || '',
+                                        state: shippingAddress.state || '',
+                                        zip: shippingAddress.zipCode || '',
+                                        country: shippingAddress.country || ''
+                                    }
+                                }),
+                            });
+                            console.log(`📧 Email sent to ${paymentIntent.metadata.customer_email}`);
+                        }
+                    } catch (emailError) {
+                        console.error('❌ Failed to send email:', emailError);
+                    }
                 }
             }
             break;

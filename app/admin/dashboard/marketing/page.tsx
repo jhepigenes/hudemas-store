@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase';
 import { Check, AlertCircle, Loader2 } from 'lucide-react';
 import { useLanguage } from '@/app/context/LanguageContext';
+import CouponsManager from './CouponsManager';
+import NewsletterManager from './NewsletterManager';
+import ReviewsManager from './ReviewsManager';
 
 export default function MarketingPage() {
     const [title, setTitle] = useState('Hudemas - The Art of Gobelin | Handcrafted Tapestries');
@@ -134,6 +137,15 @@ export default function MarketingPage() {
                 </div>
             </div>
 
+            {/* Coupons Manager */}
+            <CouponsManager />
+
+            {/* Newsletter Manager */}
+            <NewsletterManager />
+
+            {/* Reviews Manager */}
+            <ReviewsManager />
+
             {/* Ads Manager Placeholder */}
             <div className="rounded-xl border border-stone-200 bg-stone-50 p-6 dark:border-stone-800 dark:bg-stone-900/50">
                 <div className="flex items-center justify-between">
@@ -141,9 +153,14 @@ export default function MarketingPage() {
                         <h3 className="font-medium text-stone-900 dark:text-white">{t.admin.marketing.campaigns}</h3>
                         <p className="text-sm text-stone-500">{t.admin.marketing.campaignsSubtitle}</p>
                     </div>
-                    <button className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                        Connect Account
-                    </button>
+                    <a 
+                        href="https://business.facebook.com/events_manager2" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+                    >
+                        Manage Facebook Pixel
+                    </a>
                 </div>
             </div>
         </div>

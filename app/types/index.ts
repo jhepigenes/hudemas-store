@@ -1,6 +1,7 @@
 export interface Product {
     id?: string;
     name: string;
+    slug?: string;
     image: string;
     price: string | number;
     currency: string;
@@ -9,9 +10,15 @@ export interface Product {
     artist_id?: string;
     description?: string;
     status?: 'active' | 'pending' | 'sold' | 'rejected';
-    product_type?: 'kit' | 'accessory' | 'finished';
+    category: string;
+    product_type: 'kit' | 'accessory' | 'finished';
+    dimensions?: string;
+    colors?: string;
+    formats?: string[];
+    stock_quantity?: number;
     quantity?: number;
     artists?: { full_name: string };
+    created_at?: string;
 }
 
 export interface UserProfile {

@@ -49,8 +49,6 @@ function SignUpContent() {
                             colors: {
                                 brand: '#1c1917',
                                 brandAccent: '#44403c',
-                                inputBackground: 'transparent',
-                                inputText: 'inherit',
                                 inputBorder: '#e7e5e4',
                                 inputBorderFocus: '#1c1917',
                                 inputBorderHover: '#a8a29e',

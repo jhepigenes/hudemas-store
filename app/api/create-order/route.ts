@@ -9,8 +9,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder'
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { customer, items, total, paymentMethod, shippingMethod, customerType, userId } = body;
-        console.log('Received order request:', { customer, itemsCount: items?.length, total, paymentMethod, userId });
+        const { customer, items, total, paymentMethod, shippingMethod, customerType, userId, couponCode } = body;
+        console.log('Received order request:', { customer, itemsCount: items?.length, total, paymentMethod, userId, couponCode });
 
         let finalUserId = userId;
 
@@ -127,6 +127,22 @@ export async function POST(request: Request) {
             } catch (stripeError: any) {
                 console.error('Stripe Error:', stripeError);
                 return NextResponse.json({ error: stripeError.message }, { status: 500 });
+            }
+        }
+
+        // 7. Handle Coupon Usage
+        if (couponCode) {
+            const { error: couponError } = await supabaseAdmin.rpc('increment_coupon_usage', { coupon_code: couponCode });
+            
+            // Fallback if RPC doesn't exist (try direct update)
+            if (couponError) {
+                console.warn('RPC increment_coupon_usage failed, trying direct update', couponError);
+                // Fetch first to get current count? No, simple increment query is hard with supabase-js without RPC.
+                // We will read then update.
+                const { data: coupon } = await supabaseAdmin.from('coupons').select('id, used_count').eq('code', couponCode).single();
+                if (coupon) {
+                    await supabaseAdmin.from('coupons').update({ used_count: (coupon.used_count || 0) + 1 }).eq('id', coupon.id);
+                }
             }
         }
 
