@@ -245,32 +245,56 @@ export default function FeedbackPage() {
                 {/* Release Details Modal */}
                 {showReleaseDetails && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowReleaseDetails(false)}>
-                        <div className="bg-white dark:bg-stone-900 rounded-2xl shadow-xl max-w-md w-full p-6 border border-stone-200 dark:border-stone-800" onClick={e => e.stopPropagation()}>
-                            <div className="flex justify-between items-start mb-4">
+                        <div className="bg-white dark:bg-stone-900 rounded-2xl shadow-xl max-w-2xl w-full p-6 border border-stone-200 dark:border-stone-800 max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+                            <div className="flex justify-between items-start mb-4 flex-shrink-0">
                                 <h3 className="text-xl font-serif font-medium text-stone-900 dark:text-white">Release Information</h3>
                                 <button onClick={() => setShowReleaseDetails(false)} className="text-stone-400 hover:text-stone-900 dark:hover:text-white"><X className="h-5 w-5" /></button>
                             </div>
-                            <div className="space-y-4">
-                                <div>
-                                    <p className="text-xs text-stone-500 uppercase tracking-wide">Version</p>
-                                    <p className="font-mono text-sm text-stone-900 dark:text-white bg-stone-100 dark:bg-stone-800 p-2 rounded mt-1">{releaseInfo.version}</p>
+                            
+                            <div className="space-y-6 overflow-y-auto pr-2 flex-1">
+                                {/* Current Version */}
+                                <div className="bg-stone-50 dark:bg-stone-800/50 p-4 rounded-xl border border-stone-100 dark:border-stone-800">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div>
+                                            <p className="text-xs text-stone-500 uppercase tracking-wide">Current Version</p>
+                                            <p className="font-mono text-lg font-bold text-stone-900 dark:text-white mt-1">{releaseInfo.version}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-xs text-stone-500 uppercase tracking-wide">Deployed</p>
+                                            <p className="text-sm text-stone-700 dark:text-stone-300 mt-1">{new Date(releaseInfo.lastUpdated).toLocaleString()}</p>
+                                        </div>
+                                    </div>
+                                    <div className="mt-3">
+                                        <p className="text-xs text-stone-500 uppercase tracking-wide mb-1">Latest Change</p>
+                                        <p className="text-sm text-stone-800 dark:text-stone-200 bg-white dark:bg-stone-900 p-3 rounded-lg border border-stone-200 dark:border-stone-800">
+                                            {releaseInfo.note}
+                                        </p>
+                                    </div>
                                 </div>
+
+                                {/* History List */}
                                 <div>
-                                    <p className="text-xs text-stone-500 uppercase tracking-wide">Deployed At</p>
-                                    <p className="text-sm text-stone-900 dark:text-white mt-1">{new Date(releaseInfo.lastUpdated).toLocaleString()}</p>
-                                </div>
-                                <div>
-                                    <p className="text-xs text-stone-500 uppercase tracking-wide">Commit Hash</p>
-                                    <p className="font-mono text-sm text-stone-900 dark:text-white mt-1">{releaseInfo.commit}</p>
-                                </div>
-                                <div>
-                                    <p className="text-xs text-stone-500 uppercase tracking-wide">Release Note</p>
-                                    <div className="mt-1 p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 rounded-lg text-sm">
-                                        {releaseInfo.note}
+                                    <h4 className="text-sm font-medium text-stone-900 dark:text-white mb-3 flex items-center gap-2">
+                                        <Activity className="h-4 w-4" /> Release History
+                                    </h4>
+                                    <div className="space-y-3">
+                                        {(releaseInfo as any).history?.map((item: any, i: number) => (
+                                            <div key={i} className="flex gap-4 p-3 rounded-lg hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors border border-transparent hover:border-stone-100 dark:hover:border-stone-800">
+                                                <div className="flex-shrink-0 w-24">
+                                                    <p className="text-xs font-mono text-stone-500">{item.hash}</p>
+                                                    <p className="text-[10px] text-stone-400 mt-1">{new Date(item.date).toLocaleDateString()}</p>
+                                                </div>
+                                                <div className="flex-1">
+                                                    <p className="text-sm text-stone-700 dark:text-stone-300 line-clamp-2">{item.message}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {!(releaseInfo as any).history && <p className="text-sm text-stone-500 italic">No history available.</p>}
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-6 flex justify-end">
+
+                            <div className="mt-6 flex justify-end pt-4 border-t border-stone-100 dark:border-stone-800 flex-shrink-0">
                                 <button onClick={() => setShowReleaseDetails(false)} className="px-4 py-2 bg-stone-900 text-white rounded-lg text-sm hover:bg-stone-800 transition-colors">Close</button>
                             </div>
                         </div>

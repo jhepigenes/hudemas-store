@@ -1,6 +1,58 @@
 {
-  "version": "v2025.12.02-d1a5834",
-  "lastUpdated": "2025-12-02T07:14:18.091Z",
-  "commit": "d1a5834",
-  "note": "Feature: Add 'From' filter and System Overview to Feedback page"
+  "version": "v2025.12.02-dc6ba79",
+  "lastUpdated": "2025-12-02T07:26:57.018Z",
+  "commit": "dc6ba79",
+  "note": "Feature: Make release info clickable with detailed modal in Feedback Page",
+  "history": [
+    {
+      "hash": "dc6ba79",
+      "date": "2025-12-02T08:17:52+01:00",
+      "message": "Feature: Make release info clickable with detailed modal in Feedback Page"
+    },
+    {
+      "hash": "d1a5834",
+      "date": "2025-12-02T07:43:49+01:00",
+      "message": "Feature: Add 'From' filter and System Overview to Feedback page"
+    },
+    {
+      "hash": "07bb20b",
+      "date": "2025-12-02T07:27:17+01:00",
+      "message": "Fix: Improve scrolling and layout on Feedback page"
+    },
+    {
+      "hash": "ff12b99",
+      "date": "2025-12-02T07:17:58+01:00",
+      "message": "Improvement: Add status/section filters to Feedback page and fix build error"
+    },
+    {
+      "hash": "c570bf2",
+      "date": "2025-12-02T07:00:12+01:00",
+      "message": "Fix: Address all beta feedback (UX, Admin, CRM, Profile, Orders)"
+    },
+    {
+      "hash": "b86d8eb",
+      "date": "2025-12-02T06:32:38+01:00",
+      "message": "Feature Release: Beta Feedback system, Blog, Reviews, and Admin updates"
+    },
+    {
+      "hash": "11770cb",
+      "date": "2025-11-30T11:35:37+01:00",
+      "message": "Fix CRM data display logic and add verification scripts"
+    },
+    {
+      "hash": "2de7560",
+      "date": "2025-11-30T11:23:19+01:00",
+      "message": "Refine About page images and integrate Instagram feed"
+    },
+    {
+      "hash": "13bc0a3",
+      "date": "2025-11-28T22:39:00+01:00",
+      "message": "Fix RLS policies, restore OAuth buttons, and complete Admin Panel"
+    },
+    {
+      "hash": "cb6e520",
+      "date": "2025-11-27T19:04:33+01:00",
+      "message": "Initial commit from Create Next App"
+    }
+  ]
 }
