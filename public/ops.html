@@ -963,23 +963,24 @@ Phone:0726192421"></textarea>
                 </div>
 
                 <!-- Control Buttons -->
-                <div style="display:flex;gap:12px;align-items:center">
+                <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
                     <button id="validationStartBtn" class="btn" style="background:var(--green)"
                         onclick="controlValidation('start')">
-                        ▶️ Start Validation
+                        ▶️ Enable Cron
                     </button>
                     <button id="validationStopBtn" class="btn" style="background:var(--red);display:none"
                         onclick="controlValidation('stop')">
-                        ⏹️ Stop
+                        ⏹️ Disable
                     </button>
+                    <button class="btn btn-primary" onclick="runValidationBatch()">🚀 Run Batch Now</button>
                     <button class="btn btn-secondary" onclick="controlValidation('reset')">🔄 Reset Stats</button>
                     <span id="validationLastRun" style="font-size:0.75rem;color:var(--muted);margin-left:auto">Last run:
                         Never</span>
                 </div>
 
                 <p style="font-size:0.7rem;color:var(--muted);margin-top:12px">
-                    Validates ~150 addresses/hour using Nominatim geocoding. Runs automatically via Vercel cron every 2
-                    minutes when enabled.
+                    Validates 5 addresses per batch using Nominatim geocoding. Daily cron (3 AM) runs automatically when
+                    enabled. Click "Run Batch Now" for on-demand processing.
                 </p>
             </div>
 
@@ -2303,6 +2304,25 @@ Phone:0726192421"></textarea>
                 }
             } catch (err) {
                 alert('Failed to control validation: ' + err.message);
+            }
+        }
+
+        async function runValidationBatch() {
+            try {
+                const statusEl = document.getElementById('validationLastRun');
+                statusEl.textContent = '⏳ Running batch...';
+
+                const res = await fetch('https://hudemas-store.vercel.app/api/validate/batch');
+                const data = await res.json();
+
+                if (data.success) {
+                    alert(`✅ Batch complete!\n\nProcessed: ${data.processed}\nErrors: ${data.errors || 0}\nTotal validated: ${data.total || 0}${data.complete ? '\n\n🎉 All customers validated!' : ''}`);
+                    getValidationStatus();
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Failed to run batch: ' + err.message);
             }
         }
 
