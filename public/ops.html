@@ -507,7 +507,8 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.9</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge" onclick="showChangelog()"
+                            style="cursor:pointer" title="Click for changelog">v7.0</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -2772,6 +2773,58 @@ Phone:0726192421"></textarea>
 
         // Auto-load from Supabase on page load
         loadFromSupabase();
+
+        // Changelog data
+        const RELEASE_HISTORY = [
+            { version: 'v7.0', date: '2025-12-15', note: 'Added changelog modal with git history' },
+            { version: 'v6.9', date: '2025-12-15', note: 'Orders GLS export uses parsed address (Street/HouseNo/Building/Apt)' },
+            { version: 'v6.8', date: '2025-12-15', note: 'Batch size selector (5/10/25/50), time estimate, manual runs bypass cron disabled' },
+            { version: 'v6.7', date: '2025-12-15', note: 'Enhanced customer modal with editable Name/Email/Phone, fixed stats criteria' },
+            { version: 'v6.6', date: '2025-12-15', note: 'Fixed customer stats (country no longer required for complete profile)' },
+            { version: 'v6.5', date: '2025-12-15', note: 'Orders tab uses parsed address (Street/No/City) like customers tab' },
+            { version: 'v6.4', date: '2025-12-15', note: 'Improved address parser with North American format support' },
+            { version: 'v6.3', date: '2025-12-15', note: 'Improved scoring (requires parsed house#), renamed Geo to Valid' },
+            { version: 'v6.2', date: '2025-12-15', note: 'Background validation with daily cron, Run Batch Now button, monitoring panel' },
+            { version: 'v6.1', date: '2025-12-15', note: 'parseInt for All Orders limit, consolidated Street+Number columns' },
+            { version: 'v6.0', date: '2025-12-14', note: 'Split address columns (Street/No/Bl/Ap), column picker with all fields, GLS exports' },
+            { version: 'v5.9', date: '2025-12-14', note: 'Multi-language address parser, GLS Detailed export with split fields' },
+            { version: 'v5.8', date: '2025-12-14', note: 'Client-side score recalculation, header quickstats work' },
+            { version: 'v5.7', date: '2025-12-14', note: 'Order fetch now passes limit param, All orders loads up to 5000' },
+            { version: 'v5.6', date: '2025-12-14', note: 'Redesigned customer table, separate email/phone, data quality quickstats' }
+        ];
+
+        function showChangelog() {
+            const historyHtml = RELEASE_HISTORY.map((r, i) => `
+                <div style="display:flex;gap:16px;padding:12px;border-radius:8px;${i === 0 ? 'background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3)' : 'border:1px solid transparent;hover:background:rgba(255,255,255,0.05)'}" >
+                    <div style="width:60px;flex-shrink:0">
+                        <span style="font-family:monospace;font-weight:700;color:${i === 0 ? 'var(--blue)' : 'var(--text)'}">${r.version}</span>
+                        <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">${r.date}</div>
+                    </div>
+                    <div style="flex:1;font-size:0.85rem;color:${i === 0 ? 'var(--text)' : 'var(--muted)'}">${r.note}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('changelogContent').innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:20px">
+                    <div>
+                        <h2 style="margin:0;font-size:1.5rem">📋 Changelog</h2>
+                        <p style="color:var(--muted);margin-top:4px;font-size:0.85rem">Operations Center Release History</p>
+                    </div>
+                    <button onclick="closeChangelog()" style="background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer">&times;</button>
+                </div>
+                <div style="max-height:60vh;overflow-y:auto;display:flex;flex-direction:column;gap:4px">
+                    ${historyHtml}
+                </div>
+                <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);text-align:right">
+                    <button class="btn btn-secondary" onclick="closeChangelog()">Close</button>
+                </div>
+            `;
+            document.getElementById('changelogModal').style.display = 'flex';
+        }
+
+        function closeChangelog() {
+            document.getElementById('changelogModal').style.display = 'none';
+        }
     </script>
 
     <!-- Customer Detail Modal -->
@@ -2780,6 +2833,15 @@ Phone:0726192421"></textarea>
         <div
             style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:600px;width:90%;max-height:90vh;overflow:auto">
             <div id="customerDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- Changelog Modal -->
+    <div id="changelogModal"
+        style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:1001;align-items:center;justify-content:center">
+        <div
+            style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:600px;width:95%;max-height:90vh;overflow:hidden">
+            <div id="changelogContent"></div>
         </div>
     </div>
 </body>
