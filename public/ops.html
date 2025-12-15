@@ -5,18 +5,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hudemas Operations Center</title>
+    <!-- Google Fonts: Elegant serif + Clean sans-serif -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Lato:wght@300;400;700&family=Fira+Code:wght@400&display=swap"
+        rel="stylesheet">
     <style>
+        /* ═══════════════════════════════════════════════════════════════
+           DIGITAL ATELIER THEME v8.4 - "Midnight Gallery" Palette
+           Designed for Hudemas - Where Data Becomes Art
+           ═══════════════════════════════════════════════════════════════ */
+
         :root {
-            --bg: #0f0f0f;
-            --card: #1a1a1a;
-            --border: #333;
-            --text: #fff;
-            --muted: #888;
-            --accent: #8b5cf6;
-            --green: #22c55e;
-            --red: #ef4444;
-            --yellow: #eab308;
-            --blue: #3b82f6;
+            /* Midnight Gallery Palette */
+            --bg: #121212;
+            --bg-elevated: #1a1a1f;
+            --card: #1E1E24;
+            --card-glass: rgba(30, 30, 36, 0.85);
+            --border: rgba(212, 175, 55, 0.12);
+            --border-hover: rgba(212, 175, 55, 0.3);
+            --text: #EAEAEA;
+            --muted: #A0A0A0;
+
+            /* Gold Accent System */
+            --accent: #D4AF37;
+            --accent-soft: #C8B273;
+            --accent-glow: rgba(212, 175, 55, 0.15);
+
+            /* Status Colors - Muted & Artistic (High Readability) */
+            --green: #A6C4A8;
+            /* Vintage Celadon */
+            --green-soft: rgba(166, 196, 168, 0.15);
+            --red: #C47474;
+            /* Dusty Rose - softer red */
+            --red-soft: rgba(196, 116, 116, 0.15);
+            --yellow: #D6C68B;
+            /* Aged Parchment */
+            --blue: #8EA8C3;
+            /* Dusty Slate */
+            --blue-soft: rgba(142, 168, 195, 0.15);
+
+            /* Typography */
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+
+            /* Effects */
+            --shadow-soft: 0 4px 24px -4px rgba(0, 0, 0, 0.3);
+            --shadow-glow: 0 0 20px rgba(212, 175, 55, 0.1);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -25,133 +61,226 @@
             padding: 0;
         }
 
+        /* Tapestry Texture Background */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: var(--font-body);
+            font-size: 16px;
             background: var(--bg);
             color: var(--text);
-            padding: 20px;
-            line-height: 1.5;
+            padding: 24px;
+            line-height: 1.65;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
         }
 
         .container {
             max-width: 1600px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Header */
+        /* ═══════════════ HEADER - Gallery Entrance ═══════════════ */
         .header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #1a1a24 0%, #1E1E28 50%, #222230 100%);
             border-radius: 16px;
-            padding: 24px 32px;
-            margin-bottom: 20px;
+            padding: 28px 36px;
+            margin-bottom: 24px;
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
         }
 
         .header::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 300px;
-            height: 300px;
-            background: rgba(139, 92, 246, 0.15);
+            top: -60%;
+            right: -5%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
             border-radius: 50%;
-            filter: blur(60px);
+            filter: blur(40px);
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.3;
         }
 
         .header h1 {
-            font-size: 1.75rem;
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
+            color: var(--text);
+        }
+
+        .header h1 .brand {
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header .badge {
-            background: var(--green);
-            color: white;
-            padding: 4px 12px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            color: #1a1a1a;
+            padding: 5px 14px;
             border-radius: 20px;
+            font-family: var(--font-body);
             font-size: 0.7rem;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .header .badge:hover {
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-1px);
         }
 
         .header .subtitle {
             color: var(--muted);
             font-size: 0.9rem;
+            margin-top: 4px;
+            font-weight: 300;
+            letter-spacing: 0.3px;
         }
 
-        /* Tabs */
+        /* ═══════════════ NAVIGATION TABS ═══════════════ */
         .tabs {
             display: flex;
-            gap: 4px;
-            margin-bottom: 20px;
-            background: var(--card);
-            padding: 6px;
-            border-radius: 12px;
+            gap: 6px;
+            margin-bottom: 24px;
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 8px;
+            border-radius: 14px;
             border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
         }
 
         .tab {
             flex: 1;
-            padding: 12px 16px;
-            border-radius: 8px;
+            padding: 14px 20px;
+            border-radius: 10px;
             border: none;
             background: transparent;
             color: var(--muted);
             cursor: pointer;
+            font-family: var(--font-body);
             font-size: 0.9rem;
             font-weight: 500;
-            transition: all 0.2s;
+            transition: var(--transition-smooth);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            position: relative;
         }
 
         .tab:hover {
             color: var(--text);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(212, 175, 55, 0.05);
         }
 
         .tab.active {
-            background: var(--accent);
-            color: white;
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            color: #1a1a1a;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
         }
 
         .tab-content {
             display: none;
+            animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .tab-content.active {
             display: block;
         }
 
-        /* Stats Row */
+        /* ═══════════════ STAT CARDS ═══════════════ */
         .stats {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 14px;
+            margin-bottom: 24px;
         }
 
         .stat {
-            background: var(--card);
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 14px;
+            border-radius: 12px;
+            padding: 18px 16px;
             text-align: center;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--border-hover), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat:hover::before {
+            opacity: 1;
         }
 
         .stat-value {
-            font-size: 1.4rem;
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
         }
 
         .stat-label {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--muted);
             text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-top: 4px;
         }
 
         .stat-purple .stat-value {
@@ -171,51 +300,66 @@
         }
 
         .stat-yellow .stat-value {
-            color: #eab308;
+            color: var(--yellow);
         }
 
         .stat-orange .stat-value {
-            color: #f97316;
+            color: #CD853F;
         }
 
-        /* Cards */
+        /* ═══════════════ GLASSMORPHISM CARDS ═══════════════ */
         .card {
-            background: var(--card);
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 18px;
+            transition: var(--transition-smooth);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
         }
 
         .card h2 {
-            font-size: 1rem;
-            margin-bottom: 8px;
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            color: var(--text);
         }
 
         .card h2 .num {
-            background: var(--accent);
-            width: 24px;
-            height: 24px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            color: #1a1a1a;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: var(--font-body);
             font-size: 0.8rem;
+            font-weight: 700;
         }
 
         .card p {
             color: var(--muted);
             font-size: 0.85rem;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
+            font-weight: 300;
         }
 
-        /* Grid */
+        /* ═══════════════ GRID LAYOUTS ═══════════════ */
         .grid {
             display: grid;
-            gap: 16px;
+            gap: 18px;
         }
 
         .grid-2 {
@@ -226,121 +370,143 @@
             grid-template-columns: 1fr 1fr 1fr;
         }
 
-        /* Forms */
+        /* ═══════════════ FORM ELEMENTS ═══════════════ */
         textarea,
         input[type="text"],
-        input[type="number"] {
+        input[type="number"],
+        select {
             width: 100%;
-            background: #0a0a0a;
+            background: rgba(10, 10, 12, 0.8);
             border: 1px solid var(--border);
+            border-bottom: 2px solid rgba(212, 175, 55, 0.2);
             border-radius: 8px;
-            padding: 12px;
+            padding: 12px 14px;
             color: var(--text);
-            font-family: inherit;
+            font-family: var(--font-body);
             font-size: 0.9rem;
+            transition: var(--transition-smooth);
         }
 
         textarea {
             height: 100px;
             resize: vertical;
-            font-family: monospace;
+            font-family: var(--font-mono);
             font-size: 0.85rem;
         }
 
         textarea:focus,
-        input:focus {
+        input:focus,
+        select:focus {
             outline: none;
             border-color: var(--accent);
+            border-bottom-color: var(--accent);
+            box-shadow: 0 2px 12px rgba(212, 175, 55, 0.1);
         }
 
         .search-box {
-            padding: 12px 16px;
+            padding: 14px 18px;
             font-size: 1rem;
+            background: rgba(10, 10, 12, 0.6);
         }
 
-        /* Buttons */
+        /* ═══════════════ BUTTONS ═══════════════ */
         .btn {
-            padding: 10px 18px;
+            padding: 11px 20px;
             border-radius: 8px;
-            border: none;
+            border: 1px solid transparent;
             cursor: pointer;
+            font-family: var(--font-body);
             font-weight: 500;
-            font-size: 0.85rem;
-            transition: all 0.2s;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+            transition: var(--transition-smooth);
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: var(--accent);
-            color: white;
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            color: #1a1a1a;
+            border: none;
         }
 
         .btn-primary:hover {
-            background: #7c3aed;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
-            background: var(--card);
+            background: transparent;
             border: 1px solid var(--border);
             color: var(--text);
         }
 
         .btn-secondary:hover {
-            background: #222;
+            background: rgba(212, 175, 55, 0.08);
+            border-color: var(--border-hover);
         }
 
         .btn-success {
             background: var(--green);
-            color: white;
+            color: #1a1a1a;
+            border: none;
         }
 
         .btn-success:hover {
-            background: #16a34a;
+            background: #b8d4ba;
+            box-shadow: 0 4px 15px rgba(166, 196, 168, 0.3);
         }
 
         .btn-group {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-top: 12px;
+            margin-top: 14px;
         }
 
-        /* Filter Pills */
+        /* ═══════════════ FILTER PILLS ═══════════════ */
         .filter-pills {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         .pill {
-            padding: 8px 14px;
-            border-radius: 20px;
+            padding: 9px 16px;
+            border-radius: 24px;
             border: 1px solid var(--border);
             background: transparent;
-            color: var(--text);
-            font-size: 0.8rem;
+            color: var(--muted);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition-smooth);
         }
 
         .pill:hover {
-            border-color: var(--accent);
+            border-color: var(--border-hover);
+            color: var(--text);
+            background: rgba(212, 175, 55, 0.05);
         }
 
         .pill.active {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
             border-color: var(--accent);
+            color: #1a1a1a;
+            font-weight: 600;
         }
 
-        /* Table */
+        /* ═══════════════ DATA TABLES ═══════════════ */
         .table-card {
-            background: var(--card);
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
+            box-shadow: var(--shadow-soft);
         }
 
         .table-wrapper {
@@ -348,77 +514,103 @@
             overflow-y: auto;
         }
 
+        .table-wrapper::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-track {
+            background: var(--bg-elevated);
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: var(--border-hover);
+            border-radius: 4px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.8rem;
+            font-size: 0.95rem;
         }
 
         th,
         td {
-            padding: 10px 8px;
+            padding: 12px 10px;
             text-align: left;
             border-bottom: 1px solid var(--border);
         }
 
         th {
-            background: #111;
+            background: rgba(18, 18, 18, 0.95);
             font-weight: 600;
             position: sticky;
             top: 0;
             z-index: 10;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
         }
 
         th.sortable {
             cursor: pointer;
             user-select: none;
+            transition: var(--transition-smooth);
         }
 
         th.sortable:hover {
-            background: #1a1a1a;
+            background: rgba(30, 30, 36, 0.95);
+            color: var(--accent);
         }
 
         th.sortable::after {
             content: ' ↕';
             opacity: 0.3;
-            font-size: 0.7em;
+            font-size: 0.8em;
         }
 
         th.sort-asc::after {
             content: ' ↑';
             opacity: 1;
+            color: var(--accent);
         }
 
         th.sort-desc::after {
             content: ' ↓';
             opacity: 1;
+            color: var(--accent);
+        }
+
+        tr {
+            transition: background 0.2s;
         }
 
         tr:hover {
-            background: rgba(139, 92, 246, 0.05);
+            background: rgba(212, 175, 55, 0.03);
         }
 
         .missing-row {
-            background: rgba(239, 68, 68, 0.1) !important;
+            background: var(--red-soft) !important;
         }
 
-        /* Badges */
+        /* ═══════════════ TIER BADGES ═══════════════ */
         .badge-tier {
-            padding: 3px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
             font-size: 0.65rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .badge-platinum {
-            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            background: linear-gradient(135deg, #8B7355, #C4A35A);
             color: white;
         }
 
         .badge-gold {
-            background: linear-gradient(135deg, #d97706, #fbbf24);
-            color: white;
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            color: #1a1a1a;
         }
 
         .badge-vip {
@@ -436,14 +628,15 @@
             color: white;
         }
 
-        /* Footer */
+        /* ═══════════════ TABLE FOOTER ═══════════════ */
         .table-footer {
-            padding: 12px 16px;
+            padding: 14px 18px;
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
             align-items: center;
             border-top: 1px solid var(--border);
+            background: rgba(18, 18, 18, 0.5);
         }
 
         .file-input {
@@ -456,7 +649,7 @@
             font-size: 0.8rem;
         }
 
-        /* Dropdown */
+        /* ═══════════════ DROPDOWNS ═══════════════ */
         .dropdown {
             position: relative;
             display: inline-block;
@@ -466,35 +659,114 @@
             position: absolute;
             bottom: 100%;
             left: 0;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            min-width: 180px;
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            min-width: 200px;
+            box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.4);
             display: none;
             z-index: 100;
+            overflow: hidden;
         }
 
         .dropdown-menu.show {
             display: block;
+            animation: fadeUp 0.2s ease;
         }
 
         .dropdown-item {
-            padding: 10px 14px;
+            padding: 12px 16px;
             cursor: pointer;
             display: block;
             font-size: 0.85rem;
+            transition: background 0.2s;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
         }
 
         .dropdown-item:hover {
-            background: rgba(139, 92, 246, 0.1);
+            background: rgba(212, 175, 55, 0.08);
+            color: var(--accent);
         }
 
         .dropdown-item small {
             color: var(--muted);
             display: block;
             font-size: 0.7rem;
+            margin-top: 2px;
+        }
+
+        /* ═══════════════ ANIMATIONS ═══════════════ */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-gold {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 20px 5px rgba(212, 175, 55, 0.1);
+            }
+        }
+
+        /* ═══════════════ QUICK STATS HEADER ═══════════════ */
+        #quickStats>div {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: var(--transition-smooth);
+        }
+
+        #quickStats>div:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-1px);
+        }
+
+        /* ═══════════════ RESPONSIVE ═══════════════ */
+        @media (max-width: 1200px) {
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
         }
     </style>
     <!-- Supabase JS Client -->
@@ -507,29 +779,34 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge" onclick="showChangelog()"
-                            style="cursor:pointer" title="Click for changelog">v7.0</span> <span id="cloudStatus"
-                            style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
-                            Connecting...</span></h1>
+                    <h1><span class="brand">HUDEMAS</span> Operations Center <span class="badge"
+                            onclick="showChangelog()" style="cursor:pointer" title="Click for changelog">v8.4</span>
+                        <span id="cloudStatus"
+                            style="font-size:0.7rem;padding:5px 12px;border-radius:12px;margin-left:8px;background:rgba(75,127,82,0.2);border:1px solid rgba(75,127,82,0.3)">⏳
+                            Connecting...</span>
+                    </h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
                         Supabase ☁️</p>
                 </div>
                 <!-- Quick Stats -->
                 <div id="quickStats" style="display:flex;gap:16px">
-                    <div
-                        style="text-align:center;padding:8px 16px;background:rgba(255,255,255,0.1);border-radius:10px;min-width:80px">
-                        <div style="font-size:1.5rem;font-weight:700;color:#4ade80" id="qs-ordersToday">—</div>
-                        <div style="font-size:0.65rem;color:#888;text-transform:uppercase">Today</div>
+                    <div style="text-align:center;padding:10px 18px;min-width:80px">
+                        <div style="font-size:1.5rem;font-weight:700;color:var(--green);font-family:var(--font-display)"
+                            id="qs-ordersToday">—</div>
+                        <div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">
+                            Today</div>
                     </div>
-                    <div
-                        style="text-align:center;padding:8px 16px;background:rgba(255,255,255,0.1);border-radius:10px;min-width:100px">
-                        <div style="font-size:1.5rem;font-weight:700;color:#8b5cf6" id="qs-weekRevenue">—</div>
-                        <div style="font-size:0.65rem;color:#888;text-transform:uppercase">This Week</div>
+                    <div style="text-align:center;padding:10px 18px;min-width:100px">
+                        <div style="font-size:1.5rem;font-weight:700;color:var(--accent);font-family:var(--font-display)"
+                            id="qs-weekRevenue">—</div>
+                        <div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">
+                            This Week</div>
                     </div>
-                    <div
-                        style="text-align:center;padding:8px 16px;background:rgba(255,255,255,0.1);border-radius:10px;min-width:80px">
-                        <div style="font-size:1.5rem;font-weight:700;color:#3b82f6" id="qs-processing">—</div>
-                        <div style="font-size:0.65rem;color:#888;text-transform:uppercase">Processing</div>
+                    <div style="text-align:center;padding:10px 18px;min-width:80px">
+                        <div style="font-size:1.5rem;font-weight:700;color:var(--blue);font-family:var(--font-display)"
+                            id="qs-processing">—</div>
+                        <div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">
+                            Processing</div>
                     </div>
                 </div>
             </div>
@@ -1932,42 +2209,89 @@ Phone:0726192421"></textarea>
         }
 
         function exportCustomers(format) {
-            if (filteredCustomers.length === 0) return alert('No customers to export');
+            // Export selected customers if any, otherwise use filtered
+            const selectedCustomers = filteredCustomers.filter(c => c.selected);
+            const toExport = selectedCustomers.length > 0 ? selectedCustomers : filteredCustomers;
+
+            if (toExport.length === 0) return alert('No customers to export. Load customers first or adjust your filters.');
             document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
-            const clean = s => String(s || '').replace(/[";]/g, ' ').trim();
+
+            const clean = s => String(s || '').replace(/[";]/g, ' ').replace(/[\r\n]/g, ' ').trim();
             let header, rows;
-            switch (format) {
-                case 'gls':
-                    // Standard GLS format with full address
-                    header = 'Amount of CoD;Name;Address;City;ZIP Code;Country;E-mail;Phone;Client reference';
-                    rows = filteredCustomers.map(c => {
-                        const addr = parseAddress(c.address);
-                        // Combine street + nr + bl + ap into address field
-                        let fullAddr = addr.street;
-                        if (addr.houseNo) fullAddr += ' nr.' + addr.houseNo;
-                        if (addr.building) fullAddr += ' bl.' + addr.building;
-                        if (addr.staircase) fullAddr += ' sc.' + addr.staircase;
-                        if (addr.apartment) fullAddr += ' ap.' + addr.apartment;
-                        return ['0', clean(c.name), clean(fullAddr || c.address), clean(c.locality), clean(c.postalcode), c.country || 'Romania', clean(c.email), clean(c.phone), ''].join(';');
-                    });
-                    break;
-                case 'gls-detailed':
-                    // Detailed GLS format with separate street/number/building columns
-                    header = 'Amount of CoD;Name;Street;House No;Building;Apartment;City;County;ZIP Code;Country;E-mail;Phone;Reference';
-                    rows = filteredCustomers.map(c => {
-                        const addr = parseAddress(c.address);
-                        return ['0', clean(c.name), clean(addr.street), clean(addr.houseNo), clean(addr.building), clean(addr.apartment), clean(c.locality), clean(c.state), clean(c.postalcode), c.country || 'Romania', clean(c.email), clean(c.phone), c.id || ''].join(';');
-                    });
-                    break;
-                case 'mailchimp': header = 'Email Address,First Name,Last Name,Phone,Total Spent,LTV Tier';
-                    rows = filteredCustomers.filter(c => c.email).map(c => { const p = (c.name || '').split(' '); return [c.email, p[0] || '', p.slice(1).join(' ') || '', c.phone || '', c.total_spent || 0, c.ltv_tier || ''].map(v => `"${v}"`).join(','); }); break;
-                case 'meta': header = 'email,phone,fn,ln,ct,st,zip,country';
-                    rows = filteredCustomers.map(c => { const p = (c.name || '').split(' '); const ph = (c.phone || '').replace(/^0/, '+40'); return [c.email || '', ph, p[0]?.toLowerCase() || '', p.slice(1).join(' ')?.toLowerCase() || '', c.locality?.toLowerCase() || '', c.state?.toLowerCase() || '', c.postalcode || '', 'ro'].join(','); }); break;
-                case 'google': header = 'Email,Phone,First Name,Last Name,Country,Zip';
-                    rows = filteredCustomers.map(c => { const p = (c.name || '').split(' '); const ph = (c.phone || '').replace(/^0/, '+40'); return [c.email || '', ph, p[0] || '', p.slice(1).join(' ') || '', 'RO', c.postalcode || ''].map(v => `"${v}"`).join(','); }); break;
+
+            try {
+                switch (format) {
+                    case 'gls':
+                        // GLS Romania EXACT format from working sample
+                        header = 'Amount of CoD;Name;Address;City;ZIP Code;Country;E-mail;Phone;Client reference;CoD reference;Comment;Count;Contact;Services';
+                        rows = toExport.map(c => {
+                            const addr = parseAddress(c.address || '');
+                            // Build full address
+                            let fullAddress = clean(addr.street) || clean(c.address) || '';
+                            if (addr.houseNo) fullAddress += ' ' + addr.houseNo;
+                            if (addr.building) fullAddress += ' bl.' + addr.building;
+                            if (addr.apartment) fullAddress += ' ap.' + addr.apartment;
+                            if (!fullAddress) fullAddress = clean(c.locality || 'Unknown');
+                            // Country ISO code
+                            let country = (c.country || 'Romania').toUpperCase();
+                            if (country === 'ROMANIA' || country.includes('ROMAN')) country = 'RO';
+                            else if (country.length > 2) country = 'RO';
+                            // 14 columns: empty COD for customers
+                            return ['', clean(c.name || 'Unknown'), fullAddress, clean(c.locality || ''), clean(c.postalcode || ''), country, clean(c.email || ''), clean(c.phone || ''), c.id || '', '', '', '1', clean(c.name || 'Unknown'), ''].join(';');
+                        });
+                        break;
+                    case 'gls-detailed':
+                        // Same as gls format for compatibility  
+                        header = 'Amount of CoD;Name;Address;City;ZIP Code;Country;E-mail;Phone;Client reference;CoD reference;Comment;Count;Contact;Services';
+                        rows = toExport.map(c => {
+                            const addr = parseAddress(c.address || '');
+                            let fullAddress = clean(addr.street) || clean(c.address) || '';
+                            if (addr.houseNo) fullAddress += ' ' + addr.houseNo;
+                            if (addr.building) fullAddress += ' bl.' + addr.building;
+                            if (addr.apartment) fullAddress += ' ap.' + addr.apartment;
+                            if (!fullAddress) fullAddress = clean(c.locality || 'Unknown');
+                            let country = (c.country || 'Romania').toUpperCase();
+                            if (country === 'ROMANIA' || country.includes('ROMAN')) country = 'RO';
+                            else if (country.length > 2) country = 'RO';
+                            return ['', clean(c.name || 'Unknown'), fullAddress, clean(c.locality || ''), clean(c.postalcode || ''), country, clean(c.email || ''), clean(c.phone || ''), c.id || '', '', '', '1', clean(c.name || 'Unknown'), ''].join(';');
+                        });
+                        break;
+                    case 'mailchimp':
+                        header = 'Email Address,First Name,Last Name,Phone,Total Spent,LTV Tier';
+                        rows = toExport.filter(c => c.email).map(c => {
+                            const p = (c.name || '').split(' ');
+                            return [c.email, p[0] || '', p.slice(1).join(' ') || '', c.phone || '', c.total_spent || 0, c.ltv_tier || ''].map(v => `"${v}"`).join(',');
+                        });
+                        break;
+                    case 'meta':
+                        header = 'email,phone,fn,ln,ct,st,zip,country';
+                        rows = toExport.map(c => {
+                            const p = (c.name || '').split(' ');
+                            const ph = (c.phone || '').replace(/^0/, '+40');
+                            return [c.email || '', ph, p[0]?.toLowerCase() || '', p.slice(1).join(' ')?.toLowerCase() || '', c.locality?.toLowerCase() || '', c.state?.toLowerCase() || '', c.postalcode || '', 'ro'].join(',');
+                        });
+                        break;
+                    case 'google':
+                        header = 'Email,Phone,First Name,Last Name,Country,Zip';
+                        rows = toExport.map(c => {
+                            const p = (c.name || '').split(' ');
+                            const ph = (c.phone || '').replace(/^0/, '+40');
+                            return [c.email || '', ph, p[0] || '', p.slice(1).join(' ') || '', 'RO', c.postalcode || ''].map(v => `"${v}"`).join(',');
+                        });
+                        break;
+                    default:
+                        return alert('Unknown export format: ' + format);
+                }
+
+                // Add BOM for Excel UTF-8 compatibility (for semicolon formats)
+                const bom = format.startsWith('gls') ? '\uFEFF' : '';
+                const filename = `customers_${format}_${customerFilter}_${new Date().toISOString().split('T')[0]}.csv`;
+                downloadCSV(bom + [header, ...rows].join('\n'), filename);
+                alert(`✅ Exported ${rows.length} customers (${format.toUpperCase()})\n\nFile saved: ${filename}`);
+            } catch (err) {
+                console.error('Export error:', err);
+                alert('❌ Export failed: ' + err.message);
             }
-            downloadCSV([header, ...rows].join('\n'), `customers_${format}_${customerFilter}_${new Date().toISOString().split('T')[0]}.csv`);
-            alert(`Exported ${filteredCustomers.length} customers (${format.toUpperCase()})`);
         }
 
         // ===== ORDERS TAB =====
@@ -2289,33 +2613,101 @@ Phone:0726192421"></textarea>
         function clearOrders() { if (confirm('Clear all orders?')) { orders = []; renderOrderTable(); } }
 
         function exportGLS() {
-            if (orders.length === 0) return alert('No orders to export');
-            // GLS format with parsed address columns (Street, House No, etc.)
-            const header = 'Amount of CoD;Name;Street;House No;Building;Apt;City;ZIP Code;Country;E-mail;Phone;Order ID;CoD reference;Products;Contact';
-            const clean = s => String(s || '').replace(/;/g, ',').replace(/\n/g, ' ').trim();
-            const rows = orders.map(o => {
-                const addr = parseAddress(o.address);
-                const houseNo = [addr.houseNo, addr.building ? 'bl.' + addr.building : '', addr.staircase ? 'sc.' + addr.staircase : ''].filter(Boolean).join(' ');
-                return [
-                    clean(o.isCOD ? o.total.toFixed(2) : ''),
-                    clean(o.customerName),
-                    clean(addr.street),
-                    clean(addr.houseNo),
-                    clean(addr.building),
-                    clean(addr.apartment),
-                    clean(o.city),
-                    clean(o.zip),
-                    o.country || 'RO',
-                    clean(o.email),
-                    clean(o.phone),
-                    clean(o.id),
-                    clean(o.isCOD ? o.id : ''),
-                    clean(o.products?.substring(0, 50) || ''),
-                    clean(o.customerName)
-                ].join(';');
+            // Export filtered orders (or selected if any selected)
+            const selectedOrders = orders.filter(o => o.selected);
+            const toExport = selectedOrders.length > 0 ? selectedOrders : filteredOrders.length > 0 ? filteredOrders : orders;
+
+            if (toExport.length === 0) return alert('No orders to export. Pull orders first using the "Pull Orders" button.');
+
+            // GLS Romania v8.4 - Fixed format based on actual import errors:
+            // - DeliveryStreet MUST NOT be empty
+            // - Country must be valid ISO code
+            // - Count must be integer string
+            const header = 'Amount of CoD;Name;Address;City;ZIP Code;Country;E-mail;Phone;Client reference;CoD reference;Comment;Count;Contact;Services';
+            const clean = s => String(s || '').replace(/[;\r\n]/g, ' ').trim();
+
+            const rows = toExport.map(o => {
+                try {
+                    const addr = parseAddress(o.address || '');
+                    const total = typeof o.total === 'number' ? o.total : parseFloat(o.total) || 0;
+                    const isCOD = o.isCOD !== false;
+
+                    // CRITICAL: Street MUST NOT be empty - GLS will reject with MissingMandatoryData
+                    // Priority: 1) Parsed street, 2) Raw address, 3) City as fallback, 4) "See notes"
+                    let streetAddress = clean(addr.street);
+                    if (!streetAddress) streetAddress = clean(o.address);
+                    if (!streetAddress) streetAddress = clean(o.city || o.locality);
+                    if (!streetAddress) streetAddress = 'See notes';
+
+                    // Add house number if available
+                    if (addr.houseNo) streetAddress += ' ' + addr.houseNo;
+                    if (addr.building) streetAddress += ' bl.' + addr.building;
+                    if (addr.apartment) streetAddress += ' ap.' + addr.apartment;
+
+                    // Country: MUST be ISO 2-letter code - GLS rejects full names
+                    let country = (o.country || 'Romania').toUpperCase().trim();
+                    const countryMap = {
+                        'ROMANIA': 'RO', 'ROMÂNIA': 'RO', 'RO': 'RO',
+                        'GERMANY': 'DE', 'DEUTSCHLAND': 'DE', 'DE': 'DE',
+                        'AUSTRIA': 'AT', 'ÖSTERREICH': 'AT', 'AT': 'AT',
+                        'HUNGARY': 'HU', 'MAGYARORSZÁG': 'HU', 'HU': 'HU',
+                        'ITALY': 'IT', 'ITALIA': 'IT', 'IT': 'IT',
+                        'SPAIN': 'ES', 'ESPAÑA': 'ES', 'ES': 'ES',
+                        'FRANCE': 'FR', 'FR': 'FR',
+                        'UNITED KINGDOM': 'GB', 'UK': 'GB', 'GB': 'GB',
+                        'NETHERLANDS': 'NL', 'NL': 'NL',
+                        'BELGIUM': 'BE', 'BE': 'BE',
+                        'POLAND': 'PL', 'PL': 'PL',
+                        'CZECH REPUBLIC': 'CZ', 'CZ': 'CZ',
+                        'SLOVAKIA': 'SK', 'SK': 'SK',
+                        'CROATIA': 'HR', 'HR': 'HR',
+                        'SLOVENIA': 'SI', 'SI': 'SI',
+                        'BULGARIA': 'BG', 'BG': 'BG',
+                        'GREECE': 'GR', 'GR': 'GR',
+                        'PORTUGAL': 'PT', 'PT': 'PT'
+                    };
+                    country = countryMap[country] || (country.length === 2 ? country : 'RO');
+
+                    // City: Also should not be empty
+                    let city = clean(o.city || o.locality || '');
+                    if (!city && o.state) city = clean(o.state);
+                    if (!city) city = 'Unknown';
+
+                    return [
+                        isCOD && total > 0 ? Math.round(total).toString() : '',  // 1. Amount of CoD (integer, no decimals)
+                        clean(o.customerName || 'Unknown'),                       // 2. Name
+                        streetAddress,                                            // 3. Address (NEVER empty!)
+                        city,                                                     // 4. City (NEVER empty!)
+                        clean(o.zip || o.postalcode || ''),                       // 5. ZIP Code
+                        country,                                                  // 6. Country (ISO 2-letter ONLY)
+                        clean(o.email || ''),                                     // 7. E-mail
+                        clean(o.phone || ''),                                     // 8. Phone
+                        String(o.id || ''),                                       // 9. Client reference
+                        isCOD ? String(o.id || '') : '',                          // 10. CoD reference
+                        '',                                                       // 11. Comment
+                        '1',                                                      // 12. Count (must be "1" as string)
+                        clean(o.customerName || 'Unknown'),                       // 13. Contact
+                        ''                                                        // 14. Services
+                    ].join(';');
+                } catch (err) {
+                    console.error('Error exporting order:', o.id, err);
+                    // Error fallback - still populate mandatory fields
+                    return `0;Error;See notes;Unknown;;RO;;;${o.id || ''};;;1;Error;`;
+                }
             });
-            downloadCSV([header, ...rows].join('\n'), `gls_orders_${new Date().toISOString().split('T')[0]}.csv`);
-            alert(`Exported ${orders.length} orders to GLS format with parsed addresses`);
+
+            // Add BOM for Excel UTF-8 compatibility
+            const bom = '\uFEFF';
+            const filename = `gls_orders_${new Date().toISOString().split('T')[0]}.csv`;
+            downloadCSV(bom + [header, ...rows].join('\n'), filename);
+
+            // Show summary with validation warnings
+            const emptyStreets = toExport.filter(o => !o.address && !o.city).length;
+            let msg = `✅ Exported ${toExport.length} orders to GLS format (v8.4)\n\nFile: ${filename}`;
+            if (emptyStreets > 0) {
+                msg += `\n\n⚠️ Warning: ${emptyStreets} orders have no address data - marked as "See notes"`;
+            }
+            alert(msg);
         }
 
         // ===== BACKGROUND VALIDATION =====
