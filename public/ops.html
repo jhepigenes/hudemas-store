@@ -507,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.4</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.5</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -825,7 +825,9 @@
                                 <th>Items</th>
                                 <th class="sortable" style="text-align:right" onclick="sortOrders('total')">Total</th>
                                 <th>Status</th>
-                                <th>Address</th>
+                                <th>Street</th>
+                                <th>No.</th>
+                                <th>City</th>
                                 <th>Phone</th>
                             </tr>
                         </thead>
@@ -2068,6 +2070,9 @@ Phone:0726192421"></textarea>
             tbody.innerHTML = display.map((o, i) => {
                 const idx = orders.indexOf(o);
                 const statusBadge = getOrderStatusBadge(o.status_name || o.status);
+                // Parse address for split display
+                const parsed = parseAddress(o.address);
+                const numberParts = [parsed.houseNo, parsed.building ? 'bl.' + parsed.building : '', parsed.apartment ? 'ap.' + parsed.apartment : ''].filter(Boolean).join(' ');
                 return `<tr class="${!o.address ? 'missing-row' : ''}">
                     <td><input type="checkbox" class="order-checkbox" data-idx="${idx}" ${o.selected ? 'checked' : ''} onchange="toggleOrderSelect(${idx}, this.checked)"></td>
                     <td><b>${o.id}</b></td>
@@ -2076,13 +2081,15 @@ Phone:0726192421"></textarea>
                     <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;font-size:0.75rem">${o.products || '-'}</td>
                     <td style="text-align:right"><b>${o.total.toFixed(2)}</b> RON</td>
                     <td>${statusBadge}</td>
-                    <td style="max-width:120px"><input type="text" value="${o.address || ''}" onchange="orders[${idx}].address=this.value" style="width:100%;padding:4px" placeholder="Address"></td>
-                    <td><input type="text" value="${o.phone || ''}" onchange="orders[${idx}].phone=this.value" style="width:85px;padding:4px" placeholder="Phone"></td>
+                    <td style="max-width:150px;font-size:0.75rem" title="${parsed.full}">${parsed.street || '-'}</td>
+                    <td style="font-size:0.75rem">${numberParts || '-'}</td>
+                    <td style="font-size:0.8rem">${o.city || '-'}</td>
+                    <td style="font-size:0.8rem;font-family:monospace">${o.phone || '-'}</td>
                 </tr>`;
             }).join('');
 
             if (display.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">No orders. Click "Pull All Orders" to load.</td></tr>';;
+                tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--muted)">No orders. Click "Pull All Orders" to load.</td></tr>';;
             }
 
             updateOrderStats();
