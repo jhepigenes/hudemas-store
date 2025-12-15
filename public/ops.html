@@ -11,7 +11,7 @@
         rel="stylesheet">
     <style>
         /* ═══════════════════════════════════════════════════════════════
-           DIGITAL ATELIER THEME v8.4 - "Midnight Gallery" Palette
+           DIGITAL ATELIER THEME v8.5 - "Midnight Gallery" Palette
            Designed for Hudemas - Where Data Becomes Art
            ═══════════════════════════════════════════════════════════════ */
 
@@ -780,7 +780,7 @@
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
                     <h1><span class="brand">HUDEMAS</span> Operations Center <span class="badge"
-                            onclick="showChangelog()" style="cursor:pointer" title="Click for changelog">v8.4</span>
+                            onclick="showChangelog()" style="cursor:pointer" title="Click for changelog">v8.5</span>
                         <span id="cloudStatus"
                             style="font-size:0.7rem;padding:5px 12px;border-radius:12px;margin-left:8px;background:rgba(75,127,82,0.2);border:1px solid rgba(75,127,82,0.3)">⏳
                             Connecting...</span>
@@ -2628,21 +2628,18 @@ Phone:0726192421"></textarea>
 
             const rows = toExport.map(o => {
                 try {
-                    const addr = parseAddress(o.address || '');
                     const total = typeof o.total === 'number' ? o.total : parseFloat(o.total) || 0;
                     const isCOD = o.isCOD !== false;
 
-                    // CRITICAL: Street MUST NOT be empty - GLS will reject with MissingMandatoryData
-                    // Priority: 1) Parsed street, 2) Raw address, 3) City as fallback, 4) "See notes"
-                    let streetAddress = clean(addr.street);
-                    if (!streetAddress) streetAddress = clean(o.address);
+                    // v8.5: Use RAW address directly - parseAddress() strips too much
+                    // GLS just needs a full street address, not parsed components
+                    let streetAddress = clean(o.address);
                     if (!streetAddress) streetAddress = clean(o.city || o.locality);
-                    if (!streetAddress) streetAddress = 'See notes';
+                    if (!streetAddress) streetAddress = 'See customer notes';
 
-                    // Add house number if available
-                    if (addr.houseNo) streetAddress += ' ' + addr.houseNo;
-                    if (addr.building) streetAddress += ' bl.' + addr.building;
-                    if (addr.apartment) streetAddress += ' ap.' + addr.apartment;
+                    // Debug log for troubleshooting
+                    console.log(`GLS Export [${o.id}]: address="${o.address}" => "${streetAddress}"`);
+
 
                     // Country: MUST be ISO 2-letter code - GLS rejects full names
                     let country = (o.country || 'Romania').toUpperCase().trim();
