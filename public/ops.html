@@ -507,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.7</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.8</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -964,25 +964,52 @@ Phone:0726192421"></textarea>
                     </div>
                 </div>
 
+                <!-- Batch Size Selector + Time Estimate -->
+                <div
+                    style="display:flex;gap:16px;align-items:center;margin-bottom:12px;padding:12px;background:#0a0a0a;border-radius:8px">
+                    <div>
+                        <label style="font-size:0.7rem;color:var(--muted);display:block;margin-bottom:4px">Batch
+                            Size</label>
+                        <select id="validationBatchSize"
+                            style="padding:8px 12px;background:#1a1a1a;border:1px solid var(--border);border-radius:6px;color:var(--text);min-width:80px"
+                            onchange="updateBatchEstimate()">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                    <div style="flex:1">
+                        <label style="font-size:0.7rem;color:var(--muted);display:block;margin-bottom:4px">Estimated
+                            Time</label>
+                        <div id="batchTimeEstimate" style="font-size:0.9rem;font-weight:600;color:var(--blue)">~8
+                            seconds</div>
+                    </div>
+                    <div style="text-align:right">
+                        <button class="btn btn-primary" onclick="runValidationBatch()" style="padding:10px 20px">
+                            🚀 Run Batch Now
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Control Buttons -->
                 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
                     <button id="validationStartBtn" class="btn" style="background:var(--green)"
                         onclick="controlValidation('start')">
-                        ▶️ Enable Cron
+                        ▶️ Enable Daily Cron
                     </button>
                     <button id="validationStopBtn" class="btn" style="background:var(--red);display:none"
                         onclick="controlValidation('stop')">
-                        ⏹️ Disable
+                        ⏹️ Disable Cron
                     </button>
-                    <button class="btn btn-primary" onclick="runValidationBatch()">🚀 Run Batch Now</button>
                     <button class="btn btn-secondary" onclick="controlValidation('reset')">🔄 Reset Stats</button>
                     <span id="validationLastRun" style="font-size:0.75rem;color:var(--muted);margin-left:auto">Last run:
                         Never</span>
                 </div>
 
                 <p style="font-size:0.7rem;color:var(--muted);margin-top:12px">
-                    Validates 5 addresses per batch using Nominatim geocoding. Daily cron (3 AM) runs automatically when
-                    enabled. Click "Run Batch Now" for on-demand processing.
+                    ☁️ Runs on Vercel servers - you can close your browser after starting. Daily cron runs at 3 AM
+                    automatically when enabled.
                 </p>
             </div>
 
@@ -2356,10 +2383,11 @@ Phone:0726192421"></textarea>
 
         async function runValidationBatch() {
             try {
+                const batchSize = document.getElementById('validationBatchSize')?.value || 5;
                 const statusEl = document.getElementById('validationLastRun');
-                statusEl.textContent = '⏳ Running batch...';
+                statusEl.textContent = `⏳ Validating ${batchSize} addresses...`;
 
-                const res = await fetch('https://hudemas-store.vercel.app/api/validate/batch');
+                const res = await fetch(`https://hudemas-store.vercel.app/api/validate/batch?limit=${batchSize}`);
                 const data = await res.json();
 
                 if (data.success) {
@@ -2370,6 +2398,20 @@ Phone:0726192421"></textarea>
                 }
             } catch (err) {
                 alert('Failed to run batch: ' + err.message);
+            }
+        }
+
+        function updateBatchEstimate() {
+            const batchSize = parseInt(document.getElementById('validationBatchSize')?.value || 5);
+            // ~1.5 seconds per address due to Nominatim rate limiting
+            const seconds = Math.ceil(batchSize * 1.5);
+            const el = document.getElementById('batchTimeEstimate');
+            if (el) {
+                if (seconds < 60) {
+                    el.textContent = `~${seconds} seconds`;
+                } else {
+                    el.textContent = `~${Math.ceil(seconds / 60)}m ${seconds % 60}s`;
+                }
             }
         }
 

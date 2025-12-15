@@ -103,17 +103,23 @@ function calculateAddressQuality(customer: Customer, geoResult: { geo_lat: numbe
 }
 
 export async function GET(request: Request) {
+    // Parse query parameters
+    const url = new URL(request.url);
+    const limitParam = url.searchParams.get('limit');
+    const isManual = limitParam !== null; // Manual run if limit is specified
+    const limit = Math.min(Math.max(parseInt(limitParam || '5'), 1), 50); // Clamp 1-50
+
     // Verify cron secret (Vercel sends this)
     const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
 
     // Allow without secret for manual testing, but log a warning
     if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-        console.log('Warning: Request without valid cron secret');
+        console.log('Warning: Request without valid cron secret (manual run)');
     }
 
     try {
-        // Check if validation is enabled
+        // Check if validation is enabled (only block cron runs, not manual)
         const { data: config, error: configError } = await supabase
             .from('validation_config')
             .select('*')
@@ -130,20 +136,21 @@ export async function GET(request: Request) {
             });
         }
 
-        if (!config?.is_enabled) {
+        // Only block if cron run AND not enabled
+        if (!isManual && !config?.is_enabled) {
             return NextResponse.json({
                 success: true,
-                message: 'Validation paused',
+                message: 'Cron validation paused (enable via UI)',
                 processed: 0
             });
         }
 
-        // Get batch of unvalidated customers (5 per run)
+        // Get batch of unvalidated customers
         const { data: customers, error: fetchError } = await supabase
             .from('customers')
             .select('id, address, locality, state, postalcode, country')
             .is('geo_lat', null)
-            .limit(5);
+            .limit(limit);
 
         if (fetchError) {
             throw new Error(`Failed to fetch customers: ${fetchError.message}`);
