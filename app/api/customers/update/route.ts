@@ -12,7 +12,8 @@ const supabase = createClient(
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { id, geo_lat, geo_lon, geo_confidence, address_quality_score } = body;
+        const { id, geo_lat, geo_lon, geo_confidence, address_quality_score,
+            address, locality, state, postalcode, country } = body;
 
         if (!id) {
             return NextResponse.json({
@@ -27,6 +28,12 @@ export async function POST(request: NextRequest) {
         if (geo_lon !== undefined) updates.geo_lon = geo_lon;
         if (geo_confidence !== undefined) updates.geo_confidence = geo_confidence;
         if (address_quality_score !== undefined) updates.address_quality_score = address_quality_score;
+        // Address fields
+        if (address !== undefined) updates.address = address;
+        if (locality !== undefined) updates.locality = locality;
+        if (state !== undefined) updates.state = state;
+        if (postalcode !== undefined) updates.postalcode = postalcode;
+        if (country !== undefined) updates.country = country;
         updates.updated_at = new Date().toISOString();
 
         // Update customer in Supabase

@@ -499,7 +499,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.2</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.3</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -575,6 +575,8 @@
                         International</button>
                     <button class="pill" data-filter="recent" onclick="setCustomerFilter('recent')">🕐 Recent
                         (90d)</button>
+                    <button class="pill" data-filter="needs_geo" onclick="setCustomerFilter('needs_geo')">❓ Needs
+                        Validation</button>
                 </div>
 
                 <!-- Search + Advanced Filters -->
@@ -1172,6 +1174,7 @@ Phone:0726192421"></textarea>
                     case 'lapsed': return c.is_lapsed_vip;
                     case 'intl': return c.is_international;
                     case 'recent': return c.last_order_date && (new Date() - new Date(c.last_order_date)) < 90 * 24 * 60 * 60 * 1000;
+                    case 'needs_geo': return !c.geo_lat || !c.address_quality_score;
                     default: return true;
                 }
             });
@@ -1192,7 +1195,7 @@ Phone:0726192421"></textarea>
                 const geoStatus = getGeoStatusBadge(c);
                 return `<tr>
                 <td><input type="checkbox" class="customer-checkbox" data-idx="${globalIdx}" ${c.selected ? 'checked' : ''} onchange="toggleCustomerSelect(${globalIdx}, this.checked)"></td>
-                <td><b>${c.name || 'Unknown'}</b>${c.is_b2b ? ' <span style="color:var(--blue)">🏢</span>' : ''}</td>
+                <td style="cursor:pointer" onclick="showCustomerDetail(${c.id})"><b style="color:var(--primary)">${c.name || 'Unknown'}</b>${c.is_b2b ? ' <span style="color:var(--blue)">🏢</span>' : ''}</td>
                 <td style="font-size:0.75rem">${c.email || ''}<br><span style="font-family:monospace">${c.phone || ''}</span></td>
                 <td>${c.locality || ''} ${c.is_international ? '🌍' : ''}</td>
                 <td class="col-address" style="display:${cols.address ? 'table-cell' : 'none'};font-size:0.75rem">${c.address || ''}</td>
@@ -1339,17 +1342,39 @@ Phone:0726192421"></textarea>
         function getGeoStatusBadge(customer) {
             const score = customer.address_quality_score;
             const hasGeo = customer.geo_lat && customer.geo_lon;
+            const issues = getAddressIssues(customer);
+            const issueText = issues.length > 0 ? '\n⚠️ Issues: ' + issues.join(', ') : '';
+            const tooltip = `Quality: ${score || 0}/100${issueText}`;
 
             if (hasGeo && score >= 80) {
-                return `<span class="badge-tier" style="background:var(--green);color:white" title="Quality: ${score}/100">✅ ${score}</span>`;
+                return `<span class="badge-tier geo-badge" style="background:var(--green);color:white" title="${tooltip}" onclick="showCustomerDetail(${customer.id})">✅ ${score}</span>`;
             } else if (hasGeo && score >= 50) {
-                return `<span class="badge-tier" style="background:#d97706;color:white" title="Quality: ${score}/100">⚠️ ${score}</span>`;
+                return `<span class="badge-tier geo-badge" style="background:#d97706;color:white" title="${tooltip}" onclick="showCustomerDetail(${customer.id})">⚠️ ${score}</span>`;
             } else if (hasGeo) {
-                return `<span class="badge-tier" style="background:var(--red);color:white" title="Quality: ${score}/100">❌ ${score}</span>`;
+                return `<span class="badge-tier geo-badge" style="background:var(--red);color:white" title="${tooltip}" onclick="showCustomerDetail(${customer.id})">❌ ${score}</span>`;
             } else if (score) {
-                return `<span class="badge-tier" style="background:#333" title="Quality: ${score}/100 (no coords)">${score}</span>`;
+                return `<span class="badge-tier geo-badge" style="background:#333" title="${tooltip} (not geocoded)" onclick="showCustomerDetail(${customer.id})">${score}</span>`;
             }
-            return '<span class="badge-tier" style="background:#1a1a2e;color:var(--muted)" title="Not validated yet">❓</span>';
+            return `<span class="badge-tier geo-badge" style="background:#1a1a2e;color:var(--muted);cursor:pointer" title="Click to view details" onclick="showCustomerDetail(${customer.id})">❓</span>`;
+        }
+
+        function getAddressIssues(customer) {
+            const issues = [];
+            const addr = customer.address || '';
+            const city = customer.locality || '';
+            const county = customer.state || '';
+            const postal = customer.postalcode || '';
+
+            if (!addr || addr.length < 5) issues.push('Missing address');
+            else if (addr.length < 10) issues.push('Short address');
+            if (!/\d+/.test(addr)) issues.push('No street number');
+            if (!city) issues.push('Missing city');
+            if (!county) issues.push('Missing county');
+            if (!postal) issues.push('Missing postal code');
+            else if (postal.length < 5) issues.push('Invalid postal code');
+            if (!customer.geo_lat) issues.push('Not geocoded');
+
+            return issues;
         }
 
         // Customer selection for validation
@@ -2057,12 +2082,177 @@ Phone:0726192421"></textarea>
             link.click();
         }
 
+        // ===== CUSTOMER DETAIL MODAL =====
+        let currentDetailCustomer = null;
+
+        function showCustomerDetail(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) {
+                alert('Customer not found');
+                return;
+            }
+            currentDetailCustomer = customer;
+
+            const issues = getAddressIssues(customer);
+            const issueHtml = issues.length > 0
+                ? `<div style="background:#7f1d1d;padding:8px 12px;border-radius:6px;margin-bottom:16px;font-size:0.85rem">
+                    ⚠️ <b>Issues:</b> ${issues.join(', ')}
+                   </div>`
+                : `<div style="background:#14532d;padding:8px 12px;border-radius:6px;margin-bottom:16px;font-size:0.85rem">
+                    ✅ Address looks complete
+                   </div>`;
+
+            const geoInfo = customer.geo_lat
+                ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:8px">
+                    📍 Geocoded: ${customer.geo_lat?.toFixed(4)}, ${customer.geo_lon?.toFixed(4)} 
+                    (${customer.geo_confidence || 'unknown'} confidence)
+                   </div>`
+                : '';
+
+            document.getElementById('customerDetailContent').innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:20px">
+                    <div>
+                        <h2 style="margin:0">${customer.name || 'Unknown'}</h2>
+                        <p style="color:var(--muted);margin:4px 0">${customer.email || 'No email'} • ${customer.phone || 'No phone'}</p>
+                    </div>
+                    <div style="text-align:right">
+                        ${getTierBadge(customer.ltv_tier)}
+                        <div style="font-size:0.85rem;margin-top:4px"><b>${(customer.total_spent || 0).toLocaleString()}</b> RON • ${customer.order_count || 0} orders</div>
+                    </div>
+                </div>
+                
+                ${issueHtml}
+                
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Address</label>
+                        <input type="text" id="detailAddress" value="${customer.address || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">City</label>
+                        <input type="text" id="detailCity" value="${customer.locality || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">County</label>
+                        <input type="text" id="detailCounty" value="${customer.state || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Postal Code</label>
+                        <input type="text" id="detailPostal" value="${customer.postalcode || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Country</label>
+                        <input type="text" id="detailCountry" value="${customer.country || 'Romania'}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Quality Score</label>
+                        <div style="padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;font-size:1.2rem;font-weight:bold">
+                            ${customer.address_quality_score || '❓ Not validated'}
+                        </div>
+                    </div>
+                </div>
+                
+                ${geoInfo}
+                
+                <div style="display:flex;gap:12px;margin-top:20px;justify-content:flex-end">
+                    <button class="btn btn-secondary" onclick="closeCustomerDetail()">Close</button>
+                    <button class="btn" style="background:#059669" onclick="validateSingleCustomer(${customer.id})">🌍 Validate Address</button>
+                    <button class="btn btn-primary" onclick="saveCustomerDetail()">💾 Save Changes</button>
+                </div>
+            `;
+
+            document.getElementById('customerDetailModal').style.display = 'flex';
+        }
+
+        function closeCustomerDetail() {
+            document.getElementById('customerDetailModal').style.display = 'none';
+            currentDetailCustomer = null;
+        }
+
+        async function saveCustomerDetail() {
+            if (!currentDetailCustomer) return;
+
+            // Update local data
+            currentDetailCustomer.address = document.getElementById('detailAddress').value;
+            currentDetailCustomer.locality = document.getElementById('detailCity').value;
+            currentDetailCustomer.state = document.getElementById('detailCounty').value;
+            currentDetailCustomer.postalcode = document.getElementById('detailPostal').value;
+            currentDetailCustomer.country = document.getElementById('detailCountry').value;
+
+            // Update Supabase
+            try {
+                const res = await fetch('https://hudemas-store.vercel.app/api/customers/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: currentDetailCustomer.id,
+                        address: currentDetailCustomer.address,
+                        locality: currentDetailCustomer.locality,
+                        state: currentDetailCustomer.state,
+                        postalcode: currentDetailCustomer.postalcode,
+                        country: currentDetailCustomer.country
+                    })
+                });
+                if (res.ok) {
+                    alert('✅ Customer updated successfully!');
+                    renderCustomerTable();
+                    closeCustomerDetail();
+                } else {
+                    throw new Error('Update failed');
+                }
+            } catch (e) {
+                alert('❌ Failed to save: ' + e.message);
+            }
+        }
+
+        async function validateSingleCustomer(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) return;
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '⏳ Validating...';
+
+            const geoResult = await geocodeAddress(customer);
+            if (geoResult) {
+                customer.geo_lat = geoResult.geo_lat;
+                customer.geo_lon = geoResult.geo_lon;
+                customer.geo_confidence = geoResult.geo_confidence;
+            }
+            customer.address_quality_score = calculateAddressQuality(customer, geoResult);
+
+            // Update Supabase
+            await updateCustomerGeoInSupabase(customer);
+
+            btn.disabled = false;
+            btn.textContent = '🌍 Validate Address';
+
+            // Refresh modal
+            showCustomerDetail(customerId);
+            renderCustomerTable();
+        }
+
+        // Close modal on background click
+        document.addEventListener('click', e => {
+            const modal = document.getElementById('customerDetailModal');
+            if (e.target === modal) closeCustomerDetail();
+        });
+
         // Init
         renderCustomerTable(); renderOrderTable(); updateSyncStats();
 
         // Auto-load from Supabase on page load
         loadFromSupabase();
     </script>
+
+    <!-- Customer Detail Modal -->
+    <div id="customerDetailModal"
+        style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:1000;align-items:center;justify-content:center">
+        <div
+            style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:600px;width:90%;max-height:90vh;overflow:auto">
+            <div id="customerDetailContent"></div>
+        </div>
+    </div>
 </body>
 
 </html>
