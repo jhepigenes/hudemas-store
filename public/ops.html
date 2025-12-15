@@ -507,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.0</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.1</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -603,16 +603,8 @@
                             </label>
                             <label
                                 style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
-                                <input type="checkbox" id="colHouseNo" onchange="updateVisibleColumns()"> House No
-                            </label>
-                            <label
-                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
-                                <input type="checkbox" id="colBuilding" onchange="updateVisibleColumns()">
-                                Building/Block
-                            </label>
-                            <label
-                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
-                                <input type="checkbox" id="colApartment" onchange="updateVisibleColumns()"> Apartment
+                                <input type="checkbox" id="colNumber" onchange="updateVisibleColumns()"> Number
+                                (nr/bl/ap)
                             </label>
                             <label
                                 style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
@@ -700,9 +692,7 @@
                                 <th>Phone</th>
                                 <th class="sortable" onclick="sortCustomers('locality')">City</th>
                                 <th class="col-street" style="display:none">Street</th>
-                                <th class="col-houseno" style="display:none">No.</th>
-                                <th class="col-building" style="display:none">Bl.</th>
-                                <th class="col-apartment" style="display:none">Ap.</th>
+                                <th class="col-number" style="display:none">Number</th>
                                 <th class="col-address" style="display:table-cell">Address</th>
                                 <th class="col-county" style="display:none">County</th>
                                 <th class="col-country" style="display:none">Country</th>
@@ -1038,9 +1028,7 @@ Phone:0726192421"></textarea>
         function updateVisibleColumns() {
             visibleColumns = {
                 street: document.getElementById('colStreet')?.checked || false,
-                houseNo: document.getElementById('colHouseNo')?.checked || false,
-                building: document.getElementById('colBuilding')?.checked || false,
-                apartment: document.getElementById('colApartment')?.checked || false,
+                number: document.getElementById('colNumber')?.checked || false,
                 address: document.getElementById('colAddress')?.checked || false,
                 county: document.getElementById('colCounty')?.checked || false,
                 country: document.getElementById('colCountry')?.checked || false,
@@ -1051,9 +1039,7 @@ Phone:0726192421"></textarea>
 
             // Update header visibility
             document.querySelectorAll('.col-street').forEach(el => el.style.display = visibleColumns.street ? 'table-cell' : 'none');
-            document.querySelectorAll('.col-houseno').forEach(el => el.style.display = visibleColumns.houseNo ? 'table-cell' : 'none');
-            document.querySelectorAll('.col-building').forEach(el => el.style.display = visibleColumns.building ? 'table-cell' : 'none');
-            document.querySelectorAll('.col-apartment').forEach(el => el.style.display = visibleColumns.apartment ? 'table-cell' : 'none');
+            document.querySelectorAll('.col-number').forEach(el => el.style.display = visibleColumns.number ? 'table-cell' : 'none');
             document.querySelectorAll('.col-address').forEach(el => el.style.display = visibleColumns.address ? 'table-cell' : 'none');
             document.querySelectorAll('.col-county').forEach(el => el.style.display = visibleColumns.county ? 'table-cell' : 'none');
             document.querySelectorAll('.col-country').forEach(el => el.style.display = visibleColumns.country ? 'table-cell' : 'none');
@@ -1313,9 +1299,7 @@ Phone:0726192421"></textarea>
                 <td style="font-size:0.8rem;font-family:monospace">${c.phone || '<span style="color:#888">—</span>'}</td>
                 <td>${c.locality || ''} ${c.is_international ? '🌍' : ''}</td>
                 <td class="col-street" style="display:${cols.street ? 'table-cell' : 'none'};font-size:0.75rem">${parsed.street || ''}</td>
-                <td class="col-houseno" style="display:${cols.houseNo ? 'table-cell' : 'none'};font-size:0.75rem">${parsed.houseNo || ''}</td>
-                <td class="col-building" style="display:${cols.building ? 'table-cell' : 'none'};font-size:0.75rem">${parsed.building || ''}</td>
-                <td class="col-apartment" style="display:${cols.apartment ? 'table-cell' : 'none'};font-size:0.75rem">${parsed.apartment || ''}</td>
+                <td class="col-number" style="display:${cols.number ? 'table-cell' : 'none'};font-size:0.75rem">${[parsed.houseNo, parsed.building ? 'bl.' + parsed.building : '', parsed.staircase ? 'sc.' + parsed.staircase : '', parsed.apartment ? 'ap.' + parsed.apartment : ''].filter(Boolean).join(' ') || ''}</td>
                 <td class="col-address" style="display:${cols.address ? 'table-cell' : 'none'};font-size:0.75rem">${c.address || ''}</td>
                 <td class="col-county" style="display:${cols.county ? 'table-cell' : 'none'}">${c.state || ''}</td>
                 <td class="col-country" style="display:${cols.country ? 'table-cell' : 'none'}">${c.country || ''}</td>
@@ -1909,7 +1893,8 @@ Phone:0726192421"></textarea>
 
             try {
                 // For 'all' option (9999 days), use high limit; otherwise limit to 500
-                const limit = days >= 9999 ? 5000 : 500;
+                const daysNum = parseInt(days);
+                const limit = daysNum >= 9999 ? 5000 : 500;
                 const url = `${ORDERS_API_URL}?action=${action}&days=${days}&limit=${limit}&source=legacy`;
                 const res = await fetch(url);
                 if (!res.ok) throw new Error(`API error: ${res.status}`);
