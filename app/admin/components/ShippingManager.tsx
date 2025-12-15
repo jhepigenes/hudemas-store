@@ -48,8 +48,8 @@ export default function ShippingManager() {
                                 onClick={() => setSelectedCarrier(carrier.id)}
                                 className={clsx(
                                     "flex items-center justify-between rounded-lg border p-3 text-sm transition-all",
-                                    selectedCarrier === carrier.id 
-                                        ? "border-stone-900 bg-stone-50 ring-1 ring-stone-900 dark:border-white dark:bg-stone-800 dark:ring-white" 
+                                    selectedCarrier === carrier.id
+                                        ? "border-stone-900 bg-stone-50 ring-1 ring-stone-900 dark:border-white dark:bg-stone-800 dark:ring-white"
                                         : "border-stone-200 hover:border-stone-300 dark:border-stone-700 dark:hover:border-stone-600"
                                 )}
                             >
@@ -66,25 +66,25 @@ export default function ShippingManager() {
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="text-xs text-stone-500">Weight (kg)</label>
-                            <input 
-                                type="number" 
-                                value={dimensions.weight} 
-                                onChange={e => setDimensions({...dimensions, weight: e.target.value})}
-                                className="mt-1 block w-full rounded-md border-stone-300 text-sm shadow-sm focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700" 
+                            <input
+                                type="number"
+                                value={dimensions.weight}
+                                onChange={e => setDimensions({ ...dimensions, weight: e.target.value })}
+                                className="mt-1 block w-full rounded-md border-stone-300 text-sm shadow-sm focus:border-stone-500 focus:ring-stone-500 dark:bg-stone-800 dark:border-stone-700"
                             />
                         </div>
                         <div className="grid grid-cols-3 gap-2">
                             <div>
                                 <label className="text-xs text-stone-500">L (cm)</label>
-                                <input type="number" value={dimensions.length} className="mt-1 block w-full rounded-md border-stone-300 text-sm shadow-sm dark:bg-stone-800 dark:border-stone-700" />
+                                <input type="number" value={dimensions.length} onChange={e => setDimensions({ ...dimensions, length: e.target.value })} className="mt-1 block w-full rounded-md border-stone-300 text-sm shadow-sm dark:bg-stone-800 dark:border-stone-700" />
                             </div>
                             <div>
                                 <label className="text-xs text-stone-500">W (cm)</label>
-                                <input type="number" value={dimensions.width} className="mt-1 block w-full rounded-md border-stone-300 text-sm shadow-sm dark:bg-stone-800 dark:border-stone-700" />
+                                <input type="number" value={dimensions.width} onChange={e => setDimensions({ ...dimensions, width: e.target.value })} className="mt-1 block w-full rounded-md border-stone-300 text-sm shadow-sm dark:bg-stone-800 dark:border-stone-700" />
                             </div>
                             <div>
                                 <label className="text-xs text-stone-500">H (cm)</label>
-                                <input type="number" value={dimensions.height} className="mt-1 block w-full rounded-md border-stone-300 text-sm shadow-sm dark:bg-stone-800 dark:border-stone-700" />
+                                <input type="number" value={dimensions.height} onChange={e => setDimensions({ ...dimensions, height: e.target.value })} className="mt-1 block w-full rounded-md border-stone-300 text-sm shadow-sm dark:bg-stone-800 dark:border-stone-700" />
                             </div>
                         </div>
                     </div>
@@ -96,13 +96,13 @@ export default function ShippingManager() {
                             <p className="text-lg font-bold text-stone-900 dark:text-white">{cost || '---'}</p>
                         </div>
                         <div className="flex gap-2">
-                            <button 
+                            <button
                                 onClick={handleCalculate}
                                 className="rounded-md border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-stone-700 hover:bg-stone-50 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-300"
                             >
                                 Calculate
                             </button>
-                            <button 
+                            <button
                                 onClick={handleGenerate}
                                 disabled={status === 'generated'}
                                 className={clsx(
@@ -115,9 +115,9 @@ export default function ShippingManager() {
                         </div>
                     </div>
                     {status === 'generated' && (
-                         <p className="mt-2 flex items-center gap-2 text-xs text-green-600">
+                        <p className="mt-2 flex items-center gap-2 text-xs text-green-600">
                             <CheckCircle className="h-3 w-3" /> Label ready for print. Tracking code: AWB-8829102
-                         </p>
+                        </p>
                     )}
                 </div>
             </div>

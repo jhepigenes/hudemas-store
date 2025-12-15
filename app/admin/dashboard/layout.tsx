@@ -70,17 +70,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (!isAuthorized) return null;
 
     const navItems = [
-        { name: 'Overview', href: '/admin/dashboard', icon: LayoutDashboard },
-        { name: 'Analytics', href: '/admin/dashboard/analytics', icon: BarChart },
-        { name: 'Daily Operations', href: '/admin/dashboard/operations', icon: ClipboardList },
-        { name: 'Financials', href: '/admin/dashboard/financials', icon: Landmark },
-        { name: 'CRM', href: '/admin/dashboard/crm', icon: Contact },
-        { name: 'Inventory & Bundles', href: '/admin/dashboard/inventory', icon: Package },
-        { name: 'Marketplace & Fees', href: '/admin/dashboard/marketplace', icon: Users },
-        { name: 'The Atelier (Blog)', href: '/admin/dashboard/blog', icon: FileText },
-        { name: 'Automations', href: '/admin/dashboard/automations', icon: Zap },
-        { name: 'Marketing & SEO', href: '/admin/dashboard/marketing', icon: TrendingUp },
-        { name: 'Platform Settings', href: '/admin/dashboard/settings', icon: Settings },
+        { name: 'Overview', href: '/admin/dashboard', icon: LayoutDashboard, comingSoon: true },
+        { name: 'Analytics', href: '/admin/dashboard/analytics', icon: BarChart, comingSoon: true },
+        { name: 'Daily Operations', href: '/admin/dashboard/operations', icon: ClipboardList, comingSoon: false },
+        { name: 'Financials', href: '/admin/dashboard/financials', icon: Landmark, comingSoon: true },
+        { name: 'CRM', href: '/admin/dashboard/crm', icon: Contact, comingSoon: true },
+        { name: 'Inventory & Bundles', href: '/admin/dashboard/inventory', icon: Package, comingSoon: true },
+        { name: 'Marketplace & Fees', href: '/admin/dashboard/marketplace', icon: Users, comingSoon: true },
+        { name: 'The Atelier (Blog)', href: '/admin/dashboard/blog', icon: FileText, comingSoon: true },
+        { name: 'Automations', href: '/admin/dashboard/automations', icon: Zap, comingSoon: true },
+        { name: 'Marketing & SEO', href: '/admin/dashboard/marketing', icon: TrendingUp, comingSoon: true },
+        { name: 'Platform Settings', href: '/admin/dashboard/settings', icon: Settings, comingSoon: true },
     ];
 
     return (
@@ -124,13 +124,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 ${isActive
+                                className={`flex items-center justify-between gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 ${item.comingSoon ? 'opacity-50' : ''} ${isActive
                                     ? 'bg-stone-900 text-white shadow-md dark:bg-white dark:text-stone-900'
                                     : 'text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-white'
                                     }`}
                             >
-                                <Icon className="h-4 w-4" />
-                                {item.name}
+                                <span className="flex items-center gap-3">
+                                    <Icon className="h-4 w-4" />
+                                    {item.name}
+                                </span>
+                                {item.comingSoon && (
+                                    <span className="text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 rounded">Soon</span>
+                                )}
                             </Link>
                         );
                     })}

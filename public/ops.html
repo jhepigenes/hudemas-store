@@ -666,6 +666,8 @@
                     <table>
                         <thead id="customerTableHead">
                             <tr>
+                                <th style="width:30px"><input type="checkbox" id="selectAllCustomers"
+                                        onchange="toggleSelectAllCustomers(this.checked)" title="Select All"></th>
                                 <th class="sortable" onclick="sortCustomers('name')">Customer</th>
                                 <th>Contact</th>
                                 <th class="sortable" onclick="sortCustomers('locality')">Location</th>
@@ -680,6 +682,8 @@
                                 <th class="col-lastorder" style="display:none">Last Order</th>
                                 <th class="col-firstorder" style="display:none">First Order</th>
                                 <th>Tier</th>
+                                <th class="col-geo sortable" onclick="sortCustomers('address_quality_score')"
+                                    title="Address Validation Status">Geo</th>
                             </tr>
                         </thead>
                         <tbody id="customerTable"></tbody>
@@ -701,6 +705,9 @@
                         <option value="500">500 per page</option>
                     </select>
                     <button class="btn btn-primary" onclick="loadFromSupabase()">☁️ Refresh</button>
+                    <button class="btn" style="background:#059669" onclick="validateSelectedCustomers()"
+                        id="validateBtn" title="Validate addresses via Nominatim geocoding">🌍 Validate
+                        Selected</button>
                     <label class="btn btn-secondary" style="cursor:pointer"><input type="file" class="file-input"
                             accept=".csv" onchange="loadCustomerCSV(this)">📁 CSV</label>
                     <div class="dropdown">
@@ -713,6 +720,7 @@
                             <div class="dropdown-item" onclick="exportCustomers('google')">🔍 Google Ads</div>
                         </div>
                     </div>
+                    <span id="validateStatus" style="font-size:0.75rem;color:var(--muted)"></span>
                     <span id="customerInfo" class="footer-info"></span>
                 </div>
             </div>
@@ -1179,7 +1187,11 @@ Phone:0726192421"></textarea>
             const display = filteredCustomers.slice(start, end);
 
             const cols = visibleColumns;
-            tbody.innerHTML = display.map(c => `<tr>
+            tbody.innerHTML = display.map((c, idx) => {
+                const globalIdx = start + idx;
+                const geoStatus = getGeoStatusBadge(c);
+                return `<tr>
+                <td><input type="checkbox" class="customer-checkbox" data-idx="${globalIdx}" ${c.selected ? 'checked' : ''} onchange="toggleCustomerSelect(${globalIdx}, this.checked)"></td>
                 <td><b>${c.name || 'Unknown'}</b>${c.is_b2b ? ' <span style="color:var(--blue)">🏢</span>' : ''}</td>
                 <td style="font-size:0.75rem">${c.email || ''}<br><span style="font-family:monospace">${c.phone || ''}</span></td>
                 <td>${c.locality || ''} ${c.is_international ? '🌍' : ''}</td>
@@ -1192,10 +1204,12 @@ Phone:0726192421"></textarea>
                 <td class="col-lastorder" style="display:${cols.lastOrder ? 'table-cell' : 'none'}">${c.last_order || ''}</td>
                 <td class="col-firstorder" style="display:${cols.firstOrder ? 'table-cell' : 'none'}">${c.first_order || ''}</td>
                 <td>${getTierBadge(c.ltv_tier)}</td>
-            </tr>`).join('');
+                <td class="col-geo">${geoStatus}</td>
+            </tr>`;
+            }).join('');
 
             if (filteredCustomers.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted)">No customers found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;padding:40px;color:var(--muted)">No customers found</td></tr>';
             }
 
             // Update pagination UI
@@ -1320,6 +1334,201 @@ Phone:0726192421"></textarea>
             if (tier.includes('GOLD')) return '<span class="badge-tier badge-gold">Gold</span>';
             return '<span class="badge-tier" style="background:var(--blue);color:white">' + tier.replace(/_/g, ' ') + '</span>';
         }
+
+        // ===== GEO VALIDATION FUNCTIONS =====
+        function getGeoStatusBadge(customer) {
+            const score = customer.address_quality_score;
+            const hasGeo = customer.geo_lat && customer.geo_lon;
+
+            if (hasGeo && score >= 80) {
+                return `<span class="badge-tier" style="background:var(--green);color:white" title="Quality: ${score}/100">✅ ${score}</span>`;
+            } else if (hasGeo && score >= 50) {
+                return `<span class="badge-tier" style="background:#d97706;color:white" title="Quality: ${score}/100">⚠️ ${score}</span>`;
+            } else if (hasGeo) {
+                return `<span class="badge-tier" style="background:var(--red);color:white" title="Quality: ${score}/100">❌ ${score}</span>`;
+            } else if (score) {
+                return `<span class="badge-tier" style="background:#333" title="Quality: ${score}/100 (no coords)">${score}</span>`;
+            }
+            return '<span class="badge-tier" style="background:#1a1a2e;color:var(--muted)" title="Not validated yet">❓</span>';
+        }
+
+        // Customer selection for validation
+        function toggleCustomerSelect(idx, checked) {
+            filteredCustomers[idx].selected = checked;
+            updateSelectedCount();
+        }
+
+        function toggleSelectAllCustomers(checked) {
+            filteredCustomers.forEach(c => c.selected = checked);
+            renderCustomerTable();
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            const count = filteredCustomers.filter(c => c.selected).length;
+            const statusEl = document.getElementById('validateStatus');
+            if (statusEl) {
+                statusEl.textContent = count > 0 ? `${count} selected` : '';
+            }
+        }
+
+        // Nominatim geocoding with rate limiting
+        const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search';
+        const GEOCODE_DELAY_MS = 1100; // Nominatim requires max 1 req/sec
+
+        async function geocodeAddress(customer) {
+            const addr = customer.address || '';
+            const city = customer.locality || '';
+            const county = customer.state || '';
+            const country = customer.country || 'Romania';
+
+            // Clean address for geocoding
+            let cleanAddr = addr
+                .replace(/\b(bl\.?|bloc)\s*\S+/gi, ' ')
+                .replace(/\b(sc\.?|scara)\s*\S+/gi, ' ')
+                .replace(/\b(ap\.?|apt\.?|apartament)\s*\S+/gi, ' ')
+                .replace(/\b(et\.?|etaj)\s*\S+/gi, ' ')
+                .replace(/\S+@\S+/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            const query = `${cleanAddr}, ${city}, ${county}, ${country}`;
+
+            try {
+                const params = new URLSearchParams({
+                    q: query,
+                    format: 'json',
+                    addressdetails: '1',
+                    limit: '1',
+                    countrycodes: 'ro,it,de,es,uk,us,ca,fr,at,bg,hu,be'
+                });
+
+                const res = await fetch(`${NOMINATIM_URL}?${params}`, {
+                    headers: { 'User-Agent': 'Hudemas_OpsCenter/1.0' }
+                });
+
+                if (!res.ok) throw new Error('Geocoding failed');
+
+                const data = await res.json();
+
+                if (data && data.length > 0) {
+                    const result = data[0];
+                    return {
+                        geo_lat: parseFloat(result.lat),
+                        geo_lon: parseFloat(result.lon),
+                        geo_confidence: result.importance > 0.3 ? 'high' : 'medium',
+                        geo_country: result.address?.country || '',
+                        geo_city: result.address?.city || result.address?.town || result.address?.village || ''
+                    };
+                }
+            } catch (e) {
+                console.warn('Geocode error:', e.message);
+            }
+            return null;
+        }
+
+        function calculateAddressQuality(customer, geoResult) {
+            let score = 0;
+            const addr = customer.address || '';
+            const city = customer.locality || '';
+            const county = customer.state || '';
+            const postal = customer.postalcode || '';
+
+            // Address completeness (40 points)
+            if (addr && addr.length >= 10) score += 20;
+            else if (addr) score += 10;
+
+            if (/\d+/.test(addr)) score += 10; // Has street number
+            if (city) score += 10;
+
+            // County validation (20 points)
+            if (county) score += 20;
+
+            // Postal code (10 points)
+            if (postal && postal.length >= 5) score += 10;
+            else if (postal) score += 5;
+
+            // Geocoding result (30 points)
+            if (geoResult) {
+                score += 20;
+                if (geoResult.geo_confidence === 'high') score += 10;
+            }
+
+            return Math.min(100, Math.max(0, score));
+        }
+
+        async function validateSelectedCustomers() {
+            const selected = filteredCustomers.filter(c => c.selected);
+            if (selected.length === 0) {
+                return alert('Select customers to validate (use checkboxes)');
+            }
+
+            if (selected.length > 50) {
+                if (!confirm(`Validate ${selected.length} customers? This will take ~${Math.ceil(selected.length * 1.1 / 60)} minutes due to rate limiting.`)) {
+                    return;
+                }
+            }
+
+            const btn = document.getElementById('validateBtn');
+            const statusEl = document.getElementById('validateStatus');
+            btn.disabled = true;
+
+            let validated = 0, success = 0;
+
+            for (const customer of selected) {
+                validated++;
+                statusEl.textContent = `⏳ Validating ${validated}/${selected.length}...`;
+
+                // Geocode
+                const geoResult = await geocodeAddress(customer);
+
+                if (geoResult) {
+                    customer.geo_lat = geoResult.geo_lat;
+                    customer.geo_lon = geoResult.geo_lon;
+                    customer.geo_confidence = geoResult.geo_confidence;
+                    success++;
+                }
+
+                // Calculate quality score
+                customer.address_quality_score = calculateAddressQuality(customer, geoResult);
+                customer.selected = false;
+
+                // Update Supabase (fire and forget)
+                if (customer.id) {
+                    updateCustomerGeoInSupabase(customer).catch(e => console.warn('Supabase update failed:', e));
+                }
+
+                // Rate limiting
+                await new Promise(r => setTimeout(r, GEOCODE_DELAY_MS));
+            }
+
+            btn.disabled = false;
+            statusEl.textContent = `✅ Validated ${success}/${validated} addresses`;
+            renderCustomerTable();
+
+            // Clear status after 5 seconds
+            setTimeout(() => { statusEl.textContent = ''; }, 5000);
+        }
+
+        async function updateCustomerGeoInSupabase(customer) {
+            try {
+                const res = await fetch('https://hudemas-store.vercel.app/api/customers/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: customer.id,
+                        geo_lat: customer.geo_lat,
+                        geo_lon: customer.geo_lon,
+                        geo_confidence: customer.geo_confidence,
+                        address_quality_score: customer.address_quality_score
+                    })
+                });
+                return res.ok;
+            } catch (e) {
+                return false;
+            }
+        }
+
 
         function loadCustomerCSV(input) {
             const file = input.files[0]; if (!file) return;

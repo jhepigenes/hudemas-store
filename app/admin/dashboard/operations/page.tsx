@@ -2,13 +2,19 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Printer, FileText, PackageCheck, Truck, Building2, User, Filter, Calendar, Download } from 'lucide-react';
+import { Printer, FileText, PackageCheck, Truck, Building2, User, Calendar, Download, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '@/app/context/LanguageContext';
 import { createClient } from '@/lib/supabase';
 import OrderDetailsModal, { Order, generateAWB, generateInvoice } from '../components/OrderDetailsModal';
+import LegacyGLSExport from './LegacyGLSExport';
+import CustomerLookup from './CustomerLookup';
+import { Badge } from '@/components/ui/badge';
+
+type Tab = 'legacy' | 'customers' | 'new';
 
 function OperationsContent() {
     const searchParams = useSearchParams();
+    const [activeTab, setActiveTab] = useState<Tab>('legacy');
     const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
     const [orders, setOrders] = useState<Order[]>([]);
     const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
@@ -19,8 +25,10 @@ function OperationsContent() {
     const supabase = createClient();
 
     useEffect(() => {
-        fetchOrders();
-    }, [selectedDate]);
+        if (activeTab === 'new') {
+            fetchOrders();
+        }
+    }, [selectedDate, activeTab]);
 
     useEffect(() => {
         if (orders.length > 0) {
@@ -31,7 +39,7 @@ function OperationsContent() {
     const applyFilters = () => {
         const status = searchParams.get('status');
         const filter = searchParams.get('filter');
-        
+
         let result = [...orders];
 
         if (status) {
@@ -48,10 +56,7 @@ function OperationsContent() {
         try {
             const { data, error } = await supabase
                 .from('orders')
-                .select(`
-                    *,
-                    items:order_items(*)
-                `)
+                .select(`*, items:order_items(*)`)
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
@@ -63,8 +68,6 @@ function OperationsContent() {
             setLoading(false);
         }
     };
-
-    // ... (keep existing handlers: toggleOrder, toggleAll, etc.)
 
     const toggleOrder = (id: string) => {
         setSelectedOrders(prev =>
@@ -129,21 +132,12 @@ function OperationsContent() {
 
             if (!res.ok) throw new Error('API call failed');
 
-            const data = await res.json();
-
-            // Optimistic update
-            setOrders(prevOrders =>
-                prevOrders.map(order =>
-                    ids.includes(order.id)
-                        ? { ...order, status: 'completed' }
-                        : order
-                )
-            );
-            // Also update filtered list
+            setOrders(prev => prev.map(order =>
+                ids.includes(order.id) ? { ...order, status: 'completed' } : order
+            ));
             setFilteredOrders(prev => prev.map(order =>
                 ids.includes(order.id) ? { ...order, status: 'completed' } : order
             ));
-
             setSelectedOrders([]);
             alert(`${t.admin.operations.markShipped} (${ids.length}) - Emails Sent!`);
         } catch (error) {
@@ -157,7 +151,6 @@ function OperationsContent() {
             generateAccountantExport();
             return;
         }
-
         if (selectedOrders.length === 0) return;
         const ordersToProcess = filteredOrders.filter(o => selectedOrders.includes(o.id));
 
@@ -192,7 +185,6 @@ function OperationsContent() {
             if (!res.ok) throw new Error('Update failed');
 
             const updateFn = (list: Order[]) => list.map(o => o.id === orderId ? { ...o, status: status as any } : o);
-            
             setOrders(prev => updateFn(prev));
             setFilteredOrders(prev => updateFn(prev));
 
@@ -207,185 +199,102 @@ function OperationsContent() {
     };
 
     return (
-        <div className="space-y-8 pb-20">
-            {/* Header and Date Picker... (same as before) */}
-             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 className="font-serif text-3xl font-medium text-stone-900 dark:text-white">{t.admin.operations.title}</h2>
-                    <p className="text-stone-500">{t.admin.operations.subtitle}</p>
-                    {/* Active Filter Badge */}
-                    {(searchParams.get('status') || searchParams.get('filter')) && (
-                        <span className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            Filter: {searchParams.get('status') || searchParams.get('filter')}
-                        </span>
-                    )}
-                </div>
-
-                {/* Date Picker */}
-                <div className="flex items-center gap-2 bg-white dark:bg-stone-900 p-2 rounded-lg border border-stone-200 dark:border-stone-800 shadow-sm">
-                    <Calendar className="h-4 w-4 text-stone-500" />
-                    <input
-                        type="date"
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        className="bg-transparent border-none text-sm font-medium focus:ring-0 p-0 text-stone-900 dark:text-white"
-                    />
-                </div>
-            </div>
-
-            {/* Bulk Actions Toolbar ... (same as before) */}
-             <div className="sticky top-28 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md p-4 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm flex flex-wrap gap-4 items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                        <input
-                            type="checkbox"
-                            checked={filteredOrders.length > 0 && selectedOrders.length === filteredOrders.length}
-                            onChange={toggleAll}
-                            className="rounded border-stone-300 text-stone-900 focus:ring-stone-900"
-                        />
-                        <span className="text-sm font-medium text-stone-600 dark:text-stone-300">
-                            {selectedOrders.length} Selected
-                        </span>
-                    </div>
-                    <div className="h-6 w-px bg-stone-200 dark:bg-stone-700" />
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => handleBulkAction('label')}
-                            disabled={selectedOrders.length === 0}
-                            className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md bg-stone-100 hover:bg-stone-200 text-stone-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        >
-                            <Truck className="h-3.5 w-3.5" /> {t.admin.operations.labels}
-                        </button>
-                        <button
-                            onClick={() => handleBulkAction('invoice')}
-                            disabled={selectedOrders.length === 0}
-                            className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md bg-stone-100 hover:bg-stone-200 text-stone-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        >
-                            <FileText className="h-3.5 w-3.5" /> {t.admin.operations.invoices}
-                        </button>
-                        <button
-                            onClick={() => handleBulkAction('export')}
-                            className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-colors"
-                        >
-                            <Download className="h-3.5 w-3.5" /> {t.admin.operations.export}
-                        </button>
-                    </div>
-                </div>
+        <div className="space-y-6 pb-20">
+            {/* Tab Selector */}
+            <div className="flex gap-4 border-b border-stone-200 dark:border-stone-800">
                 <button
-                    onClick={() => handleBulkAction('shipped')}
-                    disabled={selectedOrders.length === 0}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-stone-900 text-white hover:bg-stone-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                    onClick={() => setActiveTab('legacy')}
+                    className={`pb-3 px-1 text-sm font-medium border-b-2 transition-colors ${activeTab === 'legacy'
+                        ? 'border-stone-900 text-stone-900 dark:border-white dark:text-white'
+                        : 'border-transparent text-stone-500 hover:text-stone-700'
+                        }`}
                 >
-                    <PackageCheck className="h-4 w-4" /> {t.admin.operations.markShipped}
+                    GLS Export
+                </button>
+                <button
+                    onClick={() => setActiveTab('customers')}
+                    className={`pb-3 px-1 text-sm font-medium border-b-2 transition-colors ${activeTab === 'customers'
+                        ? 'border-stone-900 text-stone-900 dark:border-white dark:text-white'
+                        : 'border-transparent text-stone-500 hover:text-stone-700'
+                        }`}
+                >
+                    Customer Database
+                </button>
+                <button
+                    onClick={() => setActiveTab('new')}
+                    className={`pb-3 px-1 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'new'
+                        ? 'border-stone-900 text-stone-900 dark:border-white dark:text-white'
+                        : 'border-transparent text-stone-500 hover:text-stone-700'
+                        }`}
+                >
+                    New Store Orders
+                    <Badge variant="outline" className="text-xs">Coming Soon</Badge>
                 </button>
             </div>
 
-            {/* Orders List (Using filteredOrders now) */}
-            {loading ? (
-                <div className="flex justify-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-stone-900 dark:border-white"></div>
-                </div>
-            ) : (
-                <div className="space-y-4">
-                    {filteredOrders.length === 0 && (
-                        <div className="text-center py-12 text-stone-500 bg-stone-50 dark:bg-stone-800/50 rounded-xl border border-stone-100 dark:border-stone-800">
-                            No orders found matching criteria.
+            {/* Legacy Tab */}
+            {activeTab === 'legacy' && (
+                <LegacyGLSExport />
+            )}
+
+            {/* Customer Database Tab */}
+            {activeTab === 'customers' && (
+                <CustomerLookup />
+            )}
+
+            {/* New Store Tab - Coming Soon */}
+            {activeTab === 'new' && (
+                <div className="space-y-8">
+                    {/* Coming Soon Banner */}
+                    <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-6 flex items-start gap-4">
+                        <AlertTriangle className="h-6 w-6 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <div>
+                            <h3 className="font-semibold text-amber-800 dark:text-amber-400">New Store Integration - Coming Soon</h3>
+                            <p className="text-amber-700 dark:text-amber-500 text-sm mt-1">
+                                This section will manage orders from the new Next.js store after migration.
+                                For now, use the <strong>Legacy GLS Export</strong> tab for hudemas.ro orders.
+                            </p>
                         </div>
-                    )}
-                    {filteredOrders.map((order) => {
-                        const customerName = `${order.customer_details.firstName} ${order.customer_details.lastName}`;
-                        const shippingCost = order.shipping_method === 'easybox' ? 12 : 19;
+                    </div>
 
-                        return (
-                            <div
-                                key={order.id}
-                                className={`group relative rounded-xl border bg-white dark:bg-stone-900 p-6 transition-all duration-200 hover:shadow-md ${selectedOrders.includes(order.id) ? 'border-stone-900 dark:border-stone-50 ring-1 ring-stone-900 dark:ring-stone-50' : 'border-stone-200 dark:border-stone-800'}`}
-                            >
-                                <div className="flex items-start gap-4">
-                                    <div className="pt-1">
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedOrders.includes(order.id)}
-                                            onChange={() => toggleOrder(order.id)}
-                                            className="rounded border-stone-300 text-stone-900 focus:ring-stone-900 h-5 w-5 cursor-pointer"
-                                        />
-                                    </div>
+                    {/* Header */}
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 opacity-50 pointer-events-none">
+                        <div>
+                            <h2 className="font-serif text-3xl font-medium text-stone-900 dark:text-white">{t.admin.operations.title}</h2>
+                            <p className="text-stone-500">{t.admin.operations.subtitle}</p>
+                        </div>
+                        <div className="flex items-center gap-2 bg-white dark:bg-stone-900 p-2 rounded-lg border border-stone-200 dark:border-stone-800 shadow-sm">
+                            <Calendar className="h-4 w-4 text-stone-500" />
+                            <input
+                                type="date"
+                                value={selectedDate}
+                                onChange={(e) => setSelectedDate(e.target.value)}
+                                className="bg-transparent border-none text-sm font-medium focus:ring-0 p-0 text-stone-900 dark:text-white"
+                                disabled
+                            />
+                        </div>
+                    </div>
 
-                                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6">
-                                        {/* Customer Info */}
-                                        <div className="lg:col-span-4 space-y-1">
-                                            <div className="flex items-center gap-2">
-                                                <h3 className="font-medium text-stone-900 dark:text-white text-lg">
-                                                    {order.customer_details.customerType === 'company' ? order.customer_details.companyName : customerName}
-                                                </h3>
-                                                {order.customer_details.customerType === 'company' ? (
-                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-purple-100 text-purple-700 text-[10px] font-bold uppercase tracking-wide border border-purple-200">
-                                                        <Building2 className="h-3 w-3" /> Company
-                                                    </span>
-                                                ) : (
-                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wide border border-gray-200">
-                                                        <User className="h-3 w-3" /> Private
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <p className="text-sm text-stone-500">{order.id.slice(0, 8)}... • {order.items?.length || 0} Items</p>
-                                            {order.customer_details.customerType === 'company' && (
-                                                <p className="text-xs font-mono text-stone-400">VAT: {order.customer_details.vatId}</p>
-                                            )}
-                                        </div>
-
-                                        {/* Shipping Info */}
-                                        <div className="lg:col-span-4">
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-xs font-medium uppercase text-stone-400 tracking-wider">Shipping Method</span>
-                                                <div className="flex items-center gap-2">
-                                                    <Truck className="h-4 w-4 text-stone-600" />
-                                                    <span className="text-sm font-medium text-stone-700 dark:text-stone-300">{order.shipping_method === 'easybox' ? 'Sameday Easybox' : 'FanCourier'}</span>
-                                                </div>
-                                                <span className="text-xs text-stone-500">Cost: {shippingCost} RON</span>
-                                            </div>
-                                        </div>
-
-                                        {/* Status & Total */}
-                                        <div className="lg:col-span-4 flex flex-col lg:items-end justify-between gap-2">
-                                            <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(order.status)}`}>
-                                                {order.status.toUpperCase()}
-                                            </span>
-                                            <div className="text-right">
-                                                <p className="text-2xl font-serif text-stone-900 dark:text-white">
-                                                    {(order.total + shippingCost).toFixed(2)} <span className="text-sm text-stone-500">RON</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Quick Actions for Individual Order */}
-                                <div className="mt-6 pt-4 border-t border-stone-100 dark:border-stone-800 flex justify-end gap-3">
-                                    <button
-                                        onClick={() => setViewOrder(order)}
-                                        className="text-xs font-medium text-blue-600 hover:text-blue-800 hover:underline underline-offset-4 decoration-blue-300 dark:text-blue-400 dark:hover:text-blue-300"
-                                    >
-                                        {t.admin.operations.viewOrder}
+                    {/* Disabled Order List Preview */}
+                    <div className="opacity-50 pointer-events-none">
+                        <div className="sticky top-28 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md p-4 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm flex flex-wrap gap-4 items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <span className="text-sm font-medium text-stone-600 dark:text-stone-300">0 Selected</span>
+                                <div className="h-6 w-px bg-stone-200 dark:bg-stone-700" />
+                                <div className="flex gap-2">
+                                    <button disabled className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md bg-stone-100 text-stone-900 cursor-not-allowed">
+                                        <Truck className="h-3.5 w-3.5" /> Labels
                                     </button>
-                                    <span className="text-stone-300">|</span>
-                                    <button
-                                        onClick={() => generateInvoice(order)}
-                                        className="text-xs font-medium text-stone-500 hover:text-stone-900 hover:underline underline-offset-4 decoration-stone-300 dark:text-stone-400 dark:hover:text-white"
-                                    >
-                                        Invoice PDF
-                                    </button>
-                                    <span className="text-xs text-stone-300">|</span>
-                                    <button
-                                        onClick={() => generateAWB(order)}
-                                        className="text-xs font-medium text-stone-500 hover:text-stone-900 hover:underline underline-offset-4 decoration-stone-300 dark:text-stone-400 dark:hover:text-white"
-                                    >
-                                        AWB Label
+                                    <button disabled className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md bg-stone-100 text-stone-900 cursor-not-allowed">
+                                        <FileText className="h-3.5 w-3.5" /> Invoices
                                     </button>
                                 </div>
                             </div>
-                        );
-                    })}
+                        </div>
+                        <div className="text-center py-12 text-stone-500 bg-stone-50 dark:bg-stone-800/50 rounded-xl border border-stone-100 dark:border-stone-800 mt-4">
+                            No orders in new store yet. Orders will appear here after migration.
+                        </div>
+                    </div>
                 </div>
             )}
 

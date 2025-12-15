@@ -1,9 +1,19 @@
 {
-  "version": "v2025.12.02-3a046fc",
-  "lastUpdated": "2025-12-02T18:49:40.598Z",
-  "commit": "3a046fc",
-  "note": "Feature: Add Rework status, fix feedback export, improve UI/UX, and enhance Admin features",
+  "version": "v2025.12.15-020639d",
+  "lastUpdated": "2025-12-15T02:14:43.861Z",
+  "commit": "020639d",
+  "note": "Security: Upgrade Next.js to 16.0.7 (Fix CVE-2025-55182)",
   "history": [
+    {
+      "hash": "020639d",
+      "date": "2025-12-06T16:34:23+01:00",
+      "message": "Security: Upgrade Next.js to 16.0.7 (Fix CVE-2025-55182)"
+    },
+    {
+      "hash": "1af8412",
+      "date": "2025-12-02T20:37:36+01:00",
+      "message": "Feature: Customer Analytics, Automations, and Feedback Implementation"
+    },
     {
       "hash": "3a046fc",
       "date": "2025-12-02T14:37:33+01:00",
@@ -43,16 +53,6 @@
       "hash": "07bb20b",
       "date": "2025-12-02T07:27:17+01:00",
       "message": "Fix: Improve scrolling and layout on Feedback page"
-    },
-    {
-      "hash": "ff12b99",
-      "date": "2025-12-02T07:17:58+01:00",
-      "message": "Improvement: Add status/section filters to Feedback page and fix build error"
-    },
-    {
-      "hash": "c570bf2",
-      "date": "2025-12-02T07:00:12+01:00",
-      "message": "Fix: Address all beta feedback (UX, Admin, CRM, Profile, Orders)"
     }
   ]
 }
