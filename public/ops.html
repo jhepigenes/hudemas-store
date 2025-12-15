@@ -507,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.6</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.7</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -753,7 +753,7 @@
                             <option value="14">Last 14 days</option>
                             <option value="30">Last 30 days</option>
                             <option value="90">Last 90 days</option>
-                            <option value="365">All orders (1 year)</option>
+                            <option value="9999">All orders (no limit)</option>
                         </select>
                         <button class="btn btn-primary" onclick="pullLiveOrders('recent')" id="pullPendingBtn">🔄 Pull
                             Orders</button>
@@ -1711,7 +1711,9 @@ Phone:0726192421"></textarea>
             statusEl.innerHTML = '⏳ Fetching orders from legacy database...';
 
             try {
-                const url = `${ORDERS_API_URL}?action=${action}&days=${days}&source=legacy`;
+                // For 'all' option (9999 days), use high limit; otherwise limit to 500
+                const limit = days >= 9999 ? 5000 : 500;
+                const url = `${ORDERS_API_URL}?action=${action}&days=${days}&limit=${limit}&source=legacy`;
                 const res = await fetch(url);
                 if (!res.ok) throw new Error(`API error: ${res.status}`);
 
