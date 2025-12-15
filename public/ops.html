@@ -507,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.8</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.9</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -725,7 +725,9 @@
                         <button class="btn btn-success" onclick="toggleExportMenu('customerExport')">⬇️ Export
                             ▼</button>
                         <div class="dropdown-menu" id="customerExport">
-                            <div class="dropdown-item" onclick="exportCustomers('gls')">📦 GLS Shipping</div>
+                            <div class="dropdown-item" onclick="exportCustomers('gls')">📦 GLS Standard</div>
+                            <div class="dropdown-item" onclick="exportCustomers('gls-detailed')">📦 GLS Detailed (Split
+                                Address)</div>
                             <div class="dropdown-item" onclick="exportCustomers('mailchimp')">📧 Mailchimp</div>
                             <div class="dropdown-item" onclick="exportCustomers('meta')">📱 Meta Ads</div>
                             <div class="dropdown-item" onclick="exportCustomers('google')">🔍 Google Ads</div>
@@ -1692,14 +1694,114 @@ Phone:0726192421"></textarea>
         function toggleExportMenu(id) { document.getElementById(id).classList.toggle('show'); }
         document.addEventListener('click', e => { if (!e.target.closest('.dropdown')) document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show')); });
 
+        // Parse addresses into components (supports Romanian, German, Italian, Spanish, generic formats)
+        function parseAddress(addr) {
+            if (!addr) return { street: '', houseNo: '', building: '', staircase: '', apartment: '', full: '' };
+
+            const full = String(addr).trim();
+            let street = full, houseNo = '', building = '', staircase = '', apartment = '';
+
+            // Multi-language street prefixes
+            const streetPrefixes = /^(str\.?|strada|bd\.?|bdul\.?|bulevardul|calea|sos\.?|soseaua|aleea|piata|p-ta|via|viale|corso|piazza|calle|avenida|avda\.?|carrer|rue|avenue|ave\.?|strasse|straße|weg|platz|road|rd\.?|street|st\.?|lane|ln\.?|drive|dr\.?)\s*/i;
+
+            // Multi-language patterns
+            const patterns = {
+                // Romanian: nr. 5, numar 5
+                roHouseNo: /\b(nr\.?|numar)\s*(\d+[A-Za-z]?)/i,
+                // German: Hausnummer or just number at end (Hauptstraße 15)
+                deHouseNo: /\b(hausnr\.?|hausnummer|hn\.?)?\s*(\d+[A-Za-z]?)(\s*[-\/]\s*\d+)?$/i,
+                // Italian: n. 5, numero 5
+                itHouseNo: /\b(n\.?|numero)\s*(\d+[A-Za-z]?)/i,
+                // Spanish: número, núm., no.
+                esHouseNo: /\b(n[úu]m\.?|n[úu]mero|no\.?)\s*(\d+[A-Za-z]?)/i,
+                // Generic: just a number in address
+                genericNo: /\b(\d+[A-Za-z]?)\s*([-\/]\s*\d+)?$/,
+                // Building/Block
+                building: /\b(bl\.?|bloc|block|building|bldg\.?|edificio|gebäude)\s*([A-Za-z0-9]+)/i,
+                // Staircase
+                staircase: /\b(sc\.?|scara|scala|escalera|stiege|staircase)\s*([A-Za-z0-9]+)/i,
+                // Apartment
+                apartment: /\b(ap\.?|apartament|apt\.?|apartment|appartamento|piso|wohnung|wng\.?|unit)\s*(\d+)/i,
+                // Floor
+                floor: /\b(et\.?|etaj|piano|piso|stock|floor|fl\.?)\s*(\d+)/i
+            };
+
+            // Try Romanian first
+            let noMatch = full.match(patterns.roHouseNo);
+            // Try Italian
+            if (!noMatch) noMatch = full.match(patterns.itHouseNo);
+            // Try Spanish
+            if (!noMatch) noMatch = full.match(patterns.esHouseNo);
+            // Try German (number at end)
+            if (!noMatch) {
+                const deMatch = full.match(patterns.deHouseNo);
+                if (deMatch && deMatch[2]) {
+                    houseNo = deMatch[2] + (deMatch[3] || '');
+                }
+            }
+            // Fallback: generic number at end
+            if (!noMatch && !houseNo) {
+                const genMatch = full.match(patterns.genericNo);
+                if (genMatch) houseNo = genMatch[1] + (genMatch[2] || '');
+            }
+            if (noMatch) houseNo = noMatch[2];
+
+            // Extract building
+            const blMatch = full.match(patterns.building);
+            if (blMatch) building = blMatch[2];
+
+            // Extract staircase
+            const scMatch = full.match(patterns.staircase);
+            if (scMatch) staircase = scMatch[2];
+
+            // Extract apartment
+            const apMatch = full.match(patterns.apartment);
+            if (apMatch) apartment = apMatch[2];
+
+            // Extract street name (everything before number/building markers)
+            const streetEnd = full.search(/\b(nr\.?|n\.?|bl\.?|hausnr|,|\d+\s*$)/i);
+            if (streetEnd > 0) {
+                street = full.substring(0, streetEnd).replace(streetPrefixes, '').trim();
+            } else if (noMatch) {
+                street = full.substring(0, noMatch.index).replace(streetPrefixes, '').trim();
+            } else {
+                street = full.replace(streetPrefixes, '').replace(/\s*\d+[A-Za-z]?\s*$/, '').trim();
+            }
+
+            // Clean up street (remove trailing commas/semicolons)
+            street = street.replace(/[,;]+$/, '').trim();
+
+            return { street, houseNo, building, staircase, apartment, full };
+        }
+
         function exportCustomers(format) {
             if (filteredCustomers.length === 0) return alert('No customers to export');
             document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
             const clean = s => String(s || '').replace(/[";]/g, ' ').trim();
             let header, rows;
             switch (format) {
-                case 'gls': header = 'Amount of CoD;Name;Address;City;ZIP Code;Country;E-mail;Phone;Client reference';
-                    rows = filteredCustomers.map(c => ['0', clean(c.name), clean(c.address), clean(c.locality), clean(c.postalcode), c.country || 'Romania', clean(c.email), clean(c.phone), ''].join(';')); break;
+                case 'gls':
+                    // Standard GLS format with full address
+                    header = 'Amount of CoD;Name;Address;City;ZIP Code;Country;E-mail;Phone;Client reference';
+                    rows = filteredCustomers.map(c => {
+                        const addr = parseAddress(c.address);
+                        // Combine street + nr + bl + ap into address field
+                        let fullAddr = addr.street;
+                        if (addr.houseNo) fullAddr += ' nr.' + addr.houseNo;
+                        if (addr.building) fullAddr += ' bl.' + addr.building;
+                        if (addr.staircase) fullAddr += ' sc.' + addr.staircase;
+                        if (addr.apartment) fullAddr += ' ap.' + addr.apartment;
+                        return ['0', clean(c.name), clean(fullAddr || c.address), clean(c.locality), clean(c.postalcode), c.country || 'Romania', clean(c.email), clean(c.phone), ''].join(';');
+                    });
+                    break;
+                case 'gls-detailed':
+                    // Detailed GLS format with separate street/number/building columns
+                    header = 'Amount of CoD;Name;Street;House No;Building;Apartment;City;County;ZIP Code;Country;E-mail;Phone;Reference';
+                    rows = filteredCustomers.map(c => {
+                        const addr = parseAddress(c.address);
+                        return ['0', clean(c.name), clean(addr.street), clean(addr.houseNo), clean(addr.building), clean(addr.apartment), clean(c.locality), clean(c.state), clean(c.postalcode), c.country || 'Romania', clean(c.email), clean(c.phone), c.id || ''].join(';');
+                    });
+                    break;
                 case 'mailchimp': header = 'Email Address,First Name,Last Name,Phone,Total Spent,LTV Tier';
                     rows = filteredCustomers.filter(c => c.email).map(c => { const p = (c.name || '').split(' '); return [c.email, p[0] || '', p.slice(1).join(' ') || '', c.phone || '', c.total_spent || 0, c.ltv_tier || ''].map(v => `"${v}"`).join(','); }); break;
                 case 'meta': header = 'email,phone,fn,ln,ct,st,zip,country';
