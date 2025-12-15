@@ -507,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.1</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.2</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -923,6 +923,66 @@ Phone:0726192421"></textarea>
                 </div>
             </div>
 
+            <!-- Background Validation Panel -->
+            <div class="card" style="margin-bottom:20px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                    <h2>🔄 Background Address Validation</h2>
+                    <span id="validationStatus"
+                        style="padding:6px 12px;border-radius:12px;font-size:0.75rem;font-weight:600;background:#333">
+                        ⏸️ Paused
+                    </span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div style="background:#1a1a1a;border-radius:8px;height:24px;margin-bottom:16px;overflow:hidden">
+                    <div id="validationProgress"
+                        style="width:0%;height:100%;background:linear-gradient(90deg,var(--green),#4ade80);transition:width 0.5s;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:600">
+                        0%
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
+                    <div style="background:#0a0a0a;padding:12px;border-radius:8px;text-align:center">
+                        <div id="validationValidated" style="font-size:1.2rem;font-weight:700;color:var(--green)">0
+                        </div>
+                        <div style="font-size:0.7rem;color:var(--muted)">Validated</div>
+                    </div>
+                    <div style="background:#0a0a0a;padding:12px;border-radius:8px;text-align:center">
+                        <div id="validationRemaining" style="font-size:1.2rem;font-weight:700;color:var(--blue)">-</div>
+                        <div style="font-size:0.7rem;color:var(--muted)">Remaining</div>
+                    </div>
+                    <div style="background:#0a0a0a;padding:12px;border-radius:8px;text-align:center">
+                        <div id="validationErrors" style="font-size:1.2rem;font-weight:700;color:var(--red)">0</div>
+                        <div style="font-size:0.7rem;color:var(--muted)">Errors</div>
+                    </div>
+                    <div style="background:#0a0a0a;padding:12px;border-radius:8px;text-align:center">
+                        <div id="validationETA" style="font-size:1rem;font-weight:700;color:var(--muted)">-</div>
+                        <div style="font-size:0.7rem;color:var(--muted)">ETA</div>
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div style="display:flex;gap:12px;align-items:center">
+                    <button id="validationStartBtn" class="btn" style="background:var(--green)"
+                        onclick="controlValidation('start')">
+                        ▶️ Start Validation
+                    </button>
+                    <button id="validationStopBtn" class="btn" style="background:var(--red);display:none"
+                        onclick="controlValidation('stop')">
+                        ⏹️ Stop
+                    </button>
+                    <button class="btn btn-secondary" onclick="controlValidation('reset')">🔄 Reset Stats</button>
+                    <span id="validationLastRun" style="font-size:0.75rem;color:var(--muted);margin-left:auto">Last run:
+                        Never</span>
+                </div>
+
+                <p style="font-size:0.7rem;color:var(--muted);margin-top:12px">
+                    Validates ~150 addresses/hour using Nominatim geocoding. Runs automatically via Vercel cron every 2
+                    minutes when enabled.
+                </p>
+            </div>
+
             <!-- Sync Controls -->
             <div class="grid grid-3" style="margin-top:20px">
                 <div class="card">
@@ -1211,6 +1271,13 @@ Phone:0726192421"></textarea>
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
             document.getElementById(`tab-${tab}`).classList.add('active');
+
+            // Start/stop validation polling based on tab
+            if (tab === 'sync') {
+                startValidationPolling();
+            } else {
+                stopValidationPolling();
+            }
         }
 
         // ===== CUSTOMER TAB =====
@@ -2151,6 +2218,107 @@ Phone:0726192421"></textarea>
             const clean = s => String(s || '').replace(/;/g, ',').replace(/\n/g, ' ').trim();
             const rows = orders.map(o => [clean(o.isCOD ? o.total.toFixed(2) : ''), clean(o.customerName), clean(o.address), clean(o.city), clean(o.zip), 'RO', clean(o.email), clean(o.phone), clean(o.id), clean(o.isCOD ? o.id : ''), clean(o.products?.substring(0, 50) || ''), 1, clean(o.customerName), ''].join(';'));
             downloadCSV([header, ...rows].join('\n'), `gls_export_${new Date().toISOString().split('T')[0]}.csv`);
+        }
+
+        // ===== BACKGROUND VALIDATION =====
+        const VALIDATION_API_URL = 'https://hudemas-store.vercel.app/api/validate/control';
+        let validationPollInterval = null;
+
+        async function getValidationStatus() {
+            try {
+                const res = await fetch(VALIDATION_API_URL);
+                const data = await res.json();
+                updateValidationUI(data);
+                return data;
+            } catch (err) {
+                console.error('Failed to get validation status:', err);
+            }
+        }
+
+        function updateValidationUI(data) {
+            if (!data) return;
+
+            const statusEl = document.getElementById('validationStatus');
+            const progressEl = document.getElementById('validationProgress');
+            const startBtn = document.getElementById('validationStartBtn');
+            const stopBtn = document.getElementById('validationStopBtn');
+
+            // Update status badge
+            if (data.is_enabled) {
+                statusEl.innerHTML = '🟢 Running';
+                statusEl.style.background = 'var(--green)';
+                startBtn.style.display = 'none';
+                stopBtn.style.display = 'inline-block';
+            } else {
+                statusEl.innerHTML = '⏸️ Paused';
+                statusEl.style.background = '#333';
+                startBtn.style.display = 'inline-block';
+                stopBtn.style.display = 'none';
+            }
+
+            // Update progress
+            const percent = data.progress_percent || 0;
+            progressEl.style.width = percent + '%';
+            progressEl.textContent = percent + '%';
+
+            // Update stats
+            document.getElementById('validationValidated').textContent = (data.total_customers - data.unvalidated_remaining).toLocaleString();
+            document.getElementById('validationRemaining').textContent = (data.unvalidated_remaining || 0).toLocaleString();
+            document.getElementById('validationErrors').textContent = (data.errors_count || 0).toLocaleString();
+
+            // Calculate ETA (~150/hour)
+            const remaining = data.unvalidated_remaining || 0;
+            if (remaining > 0 && data.is_enabled) {
+                const hours = Math.ceil(remaining / 150);
+                if (hours < 24) {
+                    document.getElementById('validationETA').textContent = hours + 'h';
+                } else {
+                    document.getElementById('validationETA').textContent = Math.ceil(hours / 24) + ' days';
+                }
+            } else {
+                document.getElementById('validationETA').textContent = remaining === 0 ? 'Done!' : '-';
+            }
+
+            // Update last run
+            if (data.last_run_at) {
+                const ago = Math.round((Date.now() - new Date(data.last_run_at).getTime()) / 60000);
+                document.getElementById('validationLastRun').textContent =
+                    ago < 1 ? 'Last run: Just now' : `Last run: ${ago}m ago`;
+            }
+        }
+
+        async function controlValidation(action) {
+            try {
+                const res = await fetch(VALIDATION_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert(data.message);
+                    getValidationStatus();
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Failed to control validation: ' + err.message);
+            }
+        }
+
+        // Poll validation status when on Sync tab
+        function startValidationPolling() {
+            if (!validationPollInterval) {
+                getValidationStatus();
+                validationPollInterval = setInterval(getValidationStatus, 30000);
+            }
+        }
+
+        function stopValidationPolling() {
+            if (validationPollInterval) {
+                clearInterval(validationPollInterval);
+                validationPollInterval = null;
+            }
         }
 
         // ===== SYNC TAB (LIVE SYNC) =====
