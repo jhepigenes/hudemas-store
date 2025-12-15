@@ -170,6 +170,14 @@
             color: var(--blue);
         }
 
+        .stat-yellow .stat-value {
+            color: #eab308;
+        }
+
+        .stat-orange .stat-value {
+            color: #f97316;
+        }
+
         /* Cards */
         .card {
             background: var(--card);
@@ -499,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.5</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.6</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -540,21 +548,21 @@
                     <div class="stat-value" id="c-total">0</div>
                     <div class="stat-label">Total Customers</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-value" id="c-showing">0</div>
-                    <div class="stat-label">Showing</div>
+                <div class="stat stat-green">
+                    <div class="stat-value" id="c-complete">0</div>
+                    <div class="stat-label">Complete Profiles</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-value" id="c-ltv">0K</div>
-                    <div class="stat-label">LTV (RON)</div>
+                <div class="stat stat-yellow">
+                    <div class="stat-value" id="c-missing-email">0</div>
+                    <div class="stat-label">Missing Email</div>
                 </div>
-                <div class="stat stat-purple">
-                    <div class="stat-value" id="c-vip">0</div>
-                    <div class="stat-label">VIP</div>
+                <div class="stat stat-orange">
+                    <div class="stat-value" id="c-missing-addr">0</div>
+                    <div class="stat-label">Incomplete Address</div>
                 </div>
-                <div class="stat stat-blue">
-                    <div class="stat-value" id="c-b2b">0</div>
-                    <div class="stat-label">B2B</div>
+                <div class="stat stat-red">
+                    <div class="stat-value" id="c-needs-geo">0</div>
+                    <div class="stat-label">Needs Validation</div>
                 </div>
             </div>
 
@@ -671,8 +679,9 @@
                                 <th style="width:30px"><input type="checkbox" id="selectAllCustomers"
                                         onchange="toggleSelectAllCustomers(this.checked)" title="Select All"></th>
                                 <th class="sortable" onclick="sortCustomers('name')">Customer</th>
-                                <th>Contact</th>
-                                <th class="sortable" onclick="sortCustomers('locality')">Location</th>
+                                <th class="sortable" onclick="sortCustomers('email')">Email</th>
+                                <th>Phone</th>
+                                <th class="sortable" onclick="sortCustomers('locality')">City</th>
                                 <th class="col-address" style="display:table-cell">Address</th>
                                 <th class="col-county" style="display:none">County</th>
                                 <th class="col-country" style="display:none">Country</th>
@@ -1129,11 +1138,22 @@ Phone:0726192421"></textarea>
 
         // ===== CUSTOMER TAB =====
         function updateCustomerStats() {
-            document.getElementById('c-total').textContent = customers.length.toLocaleString();
-            document.getElementById('c-showing').textContent = filteredCustomers.length.toLocaleString();
-            document.getElementById('c-ltv').textContent = (filteredCustomers.reduce((s, c) => s + (c.total_spent || 0), 0) / 1000).toFixed(0) + 'K';
-            document.getElementById('c-vip').textContent = customers.filter(c => c.ltv_tier?.includes('VIP')).length;
-            document.getElementById('c-b2b').textContent = customers.filter(c => c.is_b2b).length;
+            // Check address completeness: has address + city + country
+            const hasCompleteAddress = c => c.address && c.locality && c.country;
+            const hasCompleteProfile = c => c.email && c.phone && hasCompleteAddress(c);
+
+            const totalCount = customers.length;
+            const completeCount = customers.filter(hasCompleteProfile).length;
+            const missingEmailCount = customers.filter(c => !c.email).length;
+            const incompleteAddrCount = customers.filter(c => !hasCompleteAddress(c)).length;
+            const needsGeoCount = customers.filter(c => !c.geo_lat && !c.address_quality_score).length;
+
+            document.getElementById('c-total').textContent = totalCount.toLocaleString();
+            document.getElementById('c-complete').textContent = completeCount.toLocaleString();
+            document.getElementById('c-missing-email').textContent = missingEmailCount.toLocaleString();
+            document.getElementById('c-missing-addr').textContent = incompleteAddrCount.toLocaleString();
+            document.getElementById('c-needs-geo').textContent = needsGeoCount.toLocaleString();
+
             document.getElementById('customerInfo').textContent = `${filteredCustomers.length} of ${customers.length} customers`;
         }
 
@@ -1196,7 +1216,8 @@ Phone:0726192421"></textarea>
                 return `<tr>
                 <td><input type="checkbox" class="customer-checkbox" data-idx="${globalIdx}" ${c.selected ? 'checked' : ''} onchange="toggleCustomerSelect(${globalIdx}, this.checked)"></td>
                 <td style="cursor:pointer" onclick="showCustomerDetail(${c.id})"><b style="color:var(--primary)">${c.name || 'Unknown'}</b>${c.is_b2b ? ' <span style="color:var(--blue)">🏢</span>' : ''}</td>
-                <td style="font-size:0.75rem">${c.email || ''}<br><span style="font-family:monospace">${c.phone || ''}</span></td>
+                <td style="font-size:0.8rem">${c.email || '<span style="color:#ef4444">—</span>'}</td>
+                <td style="font-size:0.8rem;font-family:monospace">${c.phone || '<span style="color:#888">—</span>'}</td>
                 <td>${c.locality || ''} ${c.is_international ? '🌍' : ''}</td>
                 <td class="col-address" style="display:${cols.address ? 'table-cell' : 'none'};font-size:0.75rem">${c.address || ''}</td>
                 <td class="col-county" style="display:${cols.county ? 'table-cell' : 'none'}">${c.state || ''}</td>
@@ -1212,7 +1233,7 @@ Phone:0726192421"></textarea>
             }).join('');
 
             if (filteredCustomers.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;padding:40px;color:var(--muted)">No customers found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="15" style="text-align:center;padding:40px;color:var(--muted)">No customers found</td></tr>';
             }
 
             // Update pagination UI
