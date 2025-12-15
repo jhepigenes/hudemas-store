@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hudemas Operations Center</title>
+    <style>
+        :root {
+            --bg: #0f0f0f;
+            --card: #1a1a1a;
+            --border: #333;
+            --text: #fff;
+            --muted: #888;
+            --accent: #8b5cf6;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #eab308;
+            --blue: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(139, 92, 246, 0.15);
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: var(--green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            background: var(--card);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Stats Row */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .stat-purple .stat-value {
+            color: var(--accent);
+        }
+
+        .stat-green .stat-value {
+            color: var(--green);
+        }
+
+        .stat-red .stat-value {
+            color: var(--red);
+        }
+
+        .stat-blue .stat-value {
+            color: var(--blue);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card h2 .num {
+            background: var(--accent);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .card p {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .grid-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .grid-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        /* Forms */
+        textarea,
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        textarea:focus,
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .search-box {
+            padding: 12px 16px;
+            font-size: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #7c3aed;
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: #222;
+        }
+
+        .btn-success {
+            background: var(--green);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        /* Filter Pills */
+        .filter-pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .pill {
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pill:hover {
+            border-color: var(--accent);
+        }
+
+        .pill.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Table */
+        .table-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        th,
+        td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: #111;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th.sortable:hover {
+            background: #1a1a1a;
+        }
+
+        th.sortable::after {
+            content: ' ↕';
+            opacity: 0.3;
+            font-size: 0.7em;
+        }
+
+        th.sort-asc::after {
+            content: ' ↑';
+            opacity: 1;
+        }
+
+        th.sort-desc::after {
+            content: ' ↓';
+            opacity: 1;
+        }
+
+        tr:hover {
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .missing-row {
+            background: rgba(239, 68, 68, 0.1) !important;
+        }
+
+        /* Badges */
+        .badge-tier {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-platinum {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            color: white;
+        }
+
+        .badge-gold {
+            background: linear-gradient(135deg, #d97706, #fbbf24);
+            color: white;
+        }
+
+        .badge-vip {
+            background: var(--blue);
+            color: white;
+        }
+
+        .badge-new {
+            background: var(--red);
+            color: white;
+        }
+
+        .badge-existing {
+            background: var(--blue);
+            color: white;
+        }
+
+        /* Footer */
+        .table-footer {
+            padding: 12px 16px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .footer-info {
+            margin-left: auto;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            margin-bottom: 8px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            min-width: 180px;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 100;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            display: block;
+            font-size: 0.85rem;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .dropdown-item small {
+            color: var(--muted);
+            display: block;
+            font-size: 0.7rem;
+        }
+    </style>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
+                <div>
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.1</span> <span id="cloudStatus"
+                            style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
+                            Connecting...</span></h1>
+                    <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
+                        Supabase ☁️</p>
+                </div>
+                <!-- Quick Stats -->
+                <div id="quickStats" style="display:flex;gap:16px">
+                    <div
+                        style="text-align:center;padding:8px 16px;background:rgba(255,255,255,0.1);border-radius:10px;min-width:80px">
+                        <div style="font-size:1.5rem;font-weight:700;color:#4ade80" id="qs-ordersToday">—</div>
+                        <div style="font-size:0.65rem;color:#888;text-transform:uppercase">Today</div>
+                    </div>
+                    <div
+                        style="text-align:center;padding:8px 16px;background:rgba(255,255,255,0.1);border-radius:10px;min-width:100px">
+                        <div style="font-size:1.5rem;font-weight:700;color:#8b5cf6" id="qs-weekRevenue">—</div>
+                        <div style="font-size:0.65rem;color:#888;text-transform:uppercase">This Week</div>
+                    </div>
+                    <div
+                        style="text-align:center;padding:8px 16px;background:rgba(255,255,255,0.1);border-radius:10px;min-width:80px">
+                        <div style="font-size:1.5rem;font-weight:700;color:#3b82f6" id="qs-processing">—</div>
+                        <div style="font-size:0.65rem;color:#888;text-transform:uppercase">Processing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('customers')">👥 Customers</button>
+            <button class="tab" onclick="switchTab('orders')">📦 Orders</button>
+            <button class="tab" onclick="switchTab('sync')">🔄 Sync & Merge</button>
+        </div>
+
+        <!-- ==================== CUSTOMERS TAB ==================== -->
+        <div id="tab-customers" class="tab-content active">
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="c-total">0</div>
+                    <div class="stat-label">Total Customers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="c-showing">0</div>
+                    <div class="stat-label">Showing</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="c-ltv">0K</div>
+                    <div class="stat-label">LTV (RON)</div>
+                </div>
+                <div class="stat stat-purple">
+                    <div class="stat-value" id="c-vip">0</div>
+                    <div class="stat-label">VIP</div>
+                </div>
+                <div class="stat stat-blue">
+                    <div class="stat-value" id="c-b2b">0</div>
+                    <div class="stat-label">B2B</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <!-- Preset Filters -->
+                <div class="filter-pills">
+                    <button class="pill active" data-filter="all" onclick="setCustomerFilter('all')">👥 All</button>
+                    <button class="pill" data-filter="vip_platinum" onclick="setCustomerFilter('vip_platinum')">👑 VIP
+                        Platinum</button>
+                    <button class="pill" data-filter="vip_gold" onclick="setCustomerFilter('vip_gold')">⭐ VIP
+                        Gold</button>
+                    <button class="pill" data-filter="high_value" onclick="setCustomerFilter('high_value')">💎 High
+                        Value (500+)</button>
+                    <button class="pill" data-filter="b2b" onclick="setCustomerFilter('b2b')">🏢 B2B</button>
+                    <button class="pill" data-filter="lapsed" onclick="setCustomerFilter('lapsed')">⚠️ Lapsed
+                        VIP</button>
+                    <button class="pill" data-filter="intl" onclick="setCustomerFilter('intl')">🌍
+                        International</button>
+                    <button class="pill" data-filter="recent" onclick="setCustomerFilter('recent')">🕐 Recent
+                        (90d)</button>
+                </div>
+
+                <!-- Search + Advanced Filters -->
+                <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+                    <input type="text" class="search-box" id="customerSearch" style="flex:1;min-width:200px"
+                        placeholder="Search by name, email, phone, city..." oninput="filterCustomers()">
+                    <button class="btn btn-secondary" onclick="toggleAdvancedFilters()">🔧 Advanced</button>
+                    <div style="position:relative">
+                        <button class="btn btn-secondary" onclick="toggleColumnPicker()">📊 Columns</button>
+                        <div id="columnPicker"
+                            style="display:none;position:absolute;top:100%;right:0;margin-top:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;min-width:200px;z-index:100">
+                            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:8px">Show/Hide Columns</div>
+                            <label
+                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
+                                <input type="checkbox" id="colAddress" onchange="updateVisibleColumns()" checked> Street
+                                Address
+                            </label>
+                            <label
+                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
+                                <input type="checkbox" id="colCounty" onchange="updateVisibleColumns()"> State / County
+                            </label>
+                            <label
+                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
+                                <input type="checkbox" id="colCountry" onchange="updateVisibleColumns()"> Country
+                            </label>
+                            <label
+                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
+                                <input type="checkbox" id="colPostal" onchange="updateVisibleColumns()"> Postal / ZIP
+                                Code
+                            </label>
+                            <hr style="border:none;border-top:1px solid var(--border);margin:8px 0">
+                            <label
+                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
+                                <input type="checkbox" id="colLastOrder" onchange="updateVisibleColumns()"> Last Order
+                                Date
+                            </label>
+                            <label style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer">
+                                <input type="checkbox" id="colFirstOrder" onchange="updateVisibleColumns()"> First Order
+                                Date
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Filters (hidden by default) -->
+                <div id="advancedFilters"
+                    style="display:none;margin-top:16px;padding:16px;background:#0a0a0a;border-radius:8px">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+                        <div>
+                            <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Min LTV
+                                (RON)</label>
+                            <input type="number" id="minLTV" placeholder="0" style="padding:8px"
+                                onchange="filterCustomers()">
+                        </div>
+                        <div>
+                            <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Max LTV
+                                (RON)</label>
+                            <input type="number" id="maxLTV" placeholder="999999" style="padding:8px"
+                                onchange="filterCustomers()">
+                        </div>
+                        <div>
+                            <label
+                                style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">City</label>
+                            <input type="text" id="cityFilter" placeholder="București" style="padding:8px"
+                                onchange="filterCustomers()">
+                        </div>
+                        <div>
+                            <label
+                                style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">County</label>
+                            <input type="text" id="countyFilter" placeholder="Cluj" style="padding:8px"
+                                onchange="filterCustomers()">
+                        </div>
+                        <div style="display:flex;align-items:flex-end;gap:16px">
+                            <label style="font-size:0.8rem;display:flex;align-items:center;gap:4px;cursor:pointer">
+                                <input type="checkbox" id="hasEmail" onchange="filterCustomers()"> Has Email
+                            </label>
+                            <label style="font-size:0.8rem;display:flex;align-items:center;gap:4px;cursor:pointer">
+                                <input type="checkbox" id="hasPhone" onchange="filterCustomers()"> Has Phone
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" style="margin-top:12px" onclick="clearAdvancedFilters()">Clear
+                        Advanced Filters</button>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead id="customerTableHead">
+                            <tr>
+                                <th class="sortable" onclick="sortCustomers('name')">Customer</th>
+                                <th>Contact</th>
+                                <th class="sortable" onclick="sortCustomers('locality')">Location</th>
+                                <th class="col-address" style="display:table-cell">Address</th>
+                                <th class="col-county" style="display:none">County</th>
+                                <th class="col-country" style="display:none">Country</th>
+                                <th class="col-postal" style="display:none">Postal</th>
+                                <th class="sortable" style="text-align:right" onclick="sortCustomers('total_spent')">LTV
+                                </th>
+                                <th class="sortable" style="text-align:center" onclick="sortCustomers('order_count')">
+                                    Orders</th>
+                                <th class="col-lastorder" style="display:none">Last Order</th>
+                                <th class="col-firstorder" style="display:none">First Order</th>
+                                <th>Tier</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTable"></tbody>
+                    </table>
+                </div>
+                <div class="table-footer">
+                    <!-- Pagination Controls -->
+                    <div style="display:flex;align-items:center;gap:8px">
+                        <button class="btn btn-secondary" onclick="prevPage()" id="prevBtn" disabled>◀ Prev</button>
+                        <span id="pageInfo" style="font-size:0.8rem;color:var(--muted)">Page 1</span>
+                        <button class="btn btn-secondary" onclick="nextPage()" id="nextBtn">Next ▶</button>
+                    </div>
+                    <select id="perPageSelect" onchange="changePerPage()"
+                        style="padding:8px 12px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
+                        <option value="25">25 per page</option>
+                        <option value="50">50 per page</option>
+                        <option value="100" selected>100 per page</option>
+                        <option value="250">250 per page</option>
+                        <option value="500">500 per page</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="loadFromSupabase()">☁️ Refresh</button>
+                    <label class="btn btn-secondary" style="cursor:pointer"><input type="file" class="file-input"
+                            accept=".csv" onchange="loadCustomerCSV(this)">📁 CSV</label>
+                    <div class="dropdown">
+                        <button class="btn btn-success" onclick="toggleExportMenu('customerExport')">⬇️ Export
+                            ▼</button>
+                        <div class="dropdown-menu" id="customerExport">
+                            <div class="dropdown-item" onclick="exportCustomers('gls')">📦 GLS Shipping</div>
+                            <div class="dropdown-item" onclick="exportCustomers('mailchimp')">📧 Mailchimp</div>
+                            <div class="dropdown-item" onclick="exportCustomers('meta')">📱 Meta Ads</div>
+                            <div class="dropdown-item" onclick="exportCustomers('google')">🔍 Google Ads</div>
+                        </div>
+                    </div>
+                    <span id="customerInfo" class="footer-info"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ORDERS TAB ==================== -->
+        <div id="tab-orders" class="tab-content">
+            <!-- New: Quick Actions Bar -->
+            <div class="card"
+                style="background:linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%);border-color:#3b82f6;margin-bottom:20px">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+                    <div>
+                        <h2 style="color:#60a5fa;margin-bottom:4px">📦 Live Orders</h2>
+                    </div>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap">
+                        <button class="btn btn-primary" onclick="pullLiveOrders('recent')" id="pullPendingBtn">🔄 Pull
+                            All Orders</button>
+                        <button class="btn btn-secondary" id="daysBtn" onclick="pullLiveOrders('recent')">📅 Last 7
+                            Days</button>
+                        <select id="orderDaysSelect" onchange="updateDaysButton()"
+                            style="padding:8px 12px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
+                            <option value="7">7 days</option>
+                            <option value="14">14 days</option>
+                            <option value="30">30 days</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="orderLoadStatus" style="margin-top:12px;font-size:0.8rem;color:var(--muted)"></div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="o-count">0</div>
+                    <div class="stat-label">Orders</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="o-total">0</div>
+                    <div class="stat-label">Total RON</div>
+                </div>
+                <div class="stat stat-green">
+                    <div class="stat-value" id="o-shipped">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat stat-blue">
+                    <div class="stat-value" id="o-pending">0</div>
+                    <div class="stat-label">Processing</div>
+                </div>
+                <div class="stat stat-purple">
+                    <div class="stat-value" id="o-vip">0</div>
+                    <div class="stat-label">VIP Orders</div>
+                </div>
+            </div>
+
+            <!-- Filter Pills for Orders -->
+            <div class="filter-pills" style="margin-bottom:16px">
+                <button class="pill active" data-order-filter="all" onclick="setOrderFilter('all')">📦 All</button>
+                <button class="pill" data-order-filter="processing" onclick="setOrderFilter('processing')">🔄
+                    Processing</button>
+                <button class="pill" data-order-filter="completed" onclick="setOrderFilter('completed')">✅
+                    Completed</button>
+                <button class="pill" data-order-filter="cancelled" onclick="setOrderFilter('cancelled')">❌
+                    Cancelled</button>
+                <button class="pill" data-order-filter="vip" onclick="setOrderFilter('vip')">👑 VIP</button>
+                <button class="pill" data-order-filter="missing" onclick="setOrderFilter('missing')">⚠️ Missing
+                    Address</button>
+            </div>
+
+            <div class="table-card">
+                <div class="table-wrapper" style="max-height:450px">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAllOrders"
+                                        onchange="toggleSelectAllOrders(this.checked)"></th>
+                                <th class="sortable" onclick="sortOrders('id')">Order ID</th>
+                                <th class="sortable" onclick="sortOrders('date')">Date</th>
+                                <th class="sortable" onclick="sortOrders('customerName')">Customer</th>
+                                <th>Items</th>
+                                <th class="sortable" style="text-align:right" onclick="sortOrders('total')">Total</th>
+                                <th>Status</th>
+                                <th>Address</th>
+                                <th>Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTable"></tbody>
+                    </table>
+                </div>
+                <div class="table-footer">
+                    <button class="btn btn-secondary" onclick="autoFillOrders()"
+                        title="Match orders to customer database to fill missing addresses">🔍 Match Customers</button>
+                    <button class="btn btn-secondary" disabled
+                        title="Read-only mode - use legacy admin to change order status"
+                        style="opacity:0.5;cursor:not-allowed">🔒 Mark Shipped (Disabled)</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success" onclick="toggleExportMenu('orderExport')">⬇️ Export ▼</button>
+                        <div class="dropdown-menu" id="orderExport">
+                            <div class="dropdown-item" onclick="exportGLS()">📦 GLS Shipping CSV</div>
+                            <div class="dropdown-item" onclick="exportOrdersCSV()">📊 Full Orders CSV</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="clearOrders()">🗑️ Clear</button>
+                    <span id="orderInfo" class="footer-info"></span>
+                </div>
+            </div>
+
+            <!-- Collapsible: Manual Entry (Legacy Fallback) -->
+            <details style="margin-top:20px">
+                <summary
+                    style="cursor:pointer;padding:12px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
+                    📝 Manual Order Entry (Legacy Fallback)
+                </summary>
+                <div class="grid grid-2" style="margin-top:16px">
+                    <div class="card">
+                        <h2><span class="num">1</span> Paste Order Table</h2>
+                        <p style="font-size:0.8rem;color:var(--muted)">Copy from legacy Orders page if API unavailable
+                        </p>
+                        <textarea id="orderTableInput"
+                            placeholder="26025&#9;14.12.2025&#9;Lucica Rasinariu&#9;1 x Flori(088)&#9;56.23&#9;35.00&#9;91.23&#9;Lei&#9;Processing"></textarea>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="parseOrderTable()">Parse Orders</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2><span class="num">2</span> Add Order Details</h2>
+                        <p style="font-size:0.8rem;color:var(--muted)">Paste full order details to fill missing address
+                        </p>
+                        <textarea id="orderDetailsInput" placeholder="Name and surname:Lucica Rasinariu
+Address:Nicolae Balcescu Street No. 94
+Locality:New Moldova
+County/region:Caras Severin
+Phone:0726192421"></textarea>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="parseOrderDetails()">Add/Update Order</button>
+                        </div>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <!-- ==================== SYNC TAB ==================== -->
+        <div id="tab-sync" class="tab-content">
+            <!-- Sync Status Header -->
+            <div class="card"
+                style="background:linear-gradient(135deg, #1d4d1f 0%, #1a1a2e 100%);border-color:#22c55e;margin-bottom:20px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <h2 style="color:#4ade80;margin-bottom:8px">☁️ Supabase Sync</h2>
+                        <p style="color:var(--muted);font-size:0.85rem">Customer data syncs automatically from the
+                            legacy
+                            MySQL database to Supabase.</p>
+                    </div>
+                    <div id="syncConnectionStatus"
+                        style="padding:8px 16px;background:var(--green);border-radius:20px;font-size:0.8rem;font-weight:600">
+                        ✅ Connected
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sync Stats -->
+            <div class="stats">
+                <div class="stat stat-green">
+                    <div class="stat-value" id="sync-supabase">-</div>
+                    <div class="stat-label">Supabase Customers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="sync-legacy">-</div>
+                    <div class="stat-label">Legacy Users</div>
+                </div>
+                <div class="stat stat-blue">
+                    <div class="stat-value" id="sync-processing">-</div>
+                    <div class="stat-label">Processing Orders</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="sync-last-order">-</div>
+                    <div class="stat-label">Latest Order</div>
+                </div>
+            </div>
+
+            <!-- Sync Controls -->
+            <div class="grid grid-3" style="margin-top:20px">
+                <div class="card">
+                    <h2>🔄 Sync Now</h2>
+                    <p>Pull latest customers from legacy MySQL database.</p>
+                    <button class="btn btn-success" style="width:100%;justify-content:center" onclick="runLegacySync()"
+                        id="syncNowBtn">
+                        🔄 Sync from Legacy
+                    </button>
+                    <p id="syncStatus" style="margin-top:12px;font-size:0.8rem;color:var(--muted)">
+                        Click to sync latest customer data
+                    </p>
+                </div>
+                <div class="card">
+                    <h2>📊 Sync Details</h2>
+                    <p>Last sync information</p>
+                    <div style="background:#0a0a0a;padding:12px;border-radius:8px;font-size:0.8rem">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                            <span style="color:var(--muted)">Last Sync:</span>
+                            <span id="lastSyncTime">-</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                            <span style="color:var(--muted)">Duration:</span>
+                            <span id="lastSyncDuration">-</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between">
+                            <span style="color:var(--muted)">Synced:</span>
+                            <span id="lastSyncCount">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>⚙️ Settings</h2>
+                    <p>Sync configuration</p>
+                    <div style="background:#0a0a0a;padding:12px;border-radius:8px;font-size:0.8rem">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                            <span style="color:var(--muted)">Sync Endpoint:</span>
+                            <span style="color:var(--green)">✓ Active</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                            <span style="color:var(--muted)">Geo Preserved:</span>
+                            <span>✓ Yes</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between">
+                            <span style="color:var(--muted)">Auto-Sync:</span>
+                            <span style="color:var(--muted)">Manual</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sync Log -->
+            <div class="card" style="margin-top:20px">
+                <h2>📋 Sync Log</h2>
+                <div id="syncLog"
+                    style="height:150px;overflow-y:auto;font-family:monospace;font-size:0.8rem;background:#0a0a0a;padding:12px;border-radius:8px;color:var(--muted)">
+                    Ready to sync. Click "Sync from Legacy" to pull latest customer data.<br>
+                    Sync preserves existing geo-validated addresses in Supabase.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== SUPABASE CONFIG =====
+        const SUPABASE_URL = 'https://msepwdbzrzqotapgesnd.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zZXB3ZGJ6cnpxb3RhcGdlc25kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzMzI1MjcsImV4cCI6MjA3OTkwODUyN30.Ys09sv3Kkg9SksiV4W5ajhjoF65fQlFogGN8et0ePWA';
+
+        // Init Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ===== GLOBAL STATE =====
+        let customers = [];
+        let filteredCustomers = [];
+        let customerFilter = 'all';
+        let orders = [];
+        let masterDB = new Map();
+        let nameCollisions = new Map(); // Track customers with duplicate names
+        let newData = [];
+        let mergeStats = { new: 0, updated: 0, conflicts: 0 };
+        let isCloudConnected = false;
+
+        // Pagination state
+        let currentPage = 1;
+        let perPage = 100;
+
+        // Column visibility state
+        let visibleColumns = {
+            address: true,
+            county: false,
+            country: false,
+            postal: false,
+            lastOrder: false,
+            firstOrder: false
+        };
+
+        // Column visibility functions
+        function toggleColumnPicker() {
+            const el = document.getElementById('columnPicker');
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function updateVisibleColumns() {
+            visibleColumns = {
+                address: document.getElementById('colAddress')?.checked || false,
+                county: document.getElementById('colCounty')?.checked || false,
+                country: document.getElementById('colCountry')?.checked || false,
+                postal: document.getElementById('colPostal')?.checked || false,
+                lastOrder: document.getElementById('colLastOrder')?.checked || false,
+                firstOrder: document.getElementById('colFirstOrder')?.checked || false
+            };
+
+            // Update header visibility
+            document.querySelectorAll('.col-address').forEach(el => el.style.display = visibleColumns.address ? 'table-cell' : 'none');
+            document.querySelectorAll('.col-county').forEach(el => el.style.display = visibleColumns.county ? 'table-cell' : 'none');
+            document.querySelectorAll('.col-country').forEach(el => el.style.display = visibleColumns.country ? 'table-cell' : 'none');
+            document.querySelectorAll('.col-postal').forEach(el => el.style.display = visibleColumns.postal ? 'table-cell' : 'none');
+            document.querySelectorAll('.col-lastorder').forEach(el => el.style.display = visibleColumns.lastOrder ? 'table-cell' : 'none');
+            document.querySelectorAll('.col-firstorder').forEach(el => el.style.display = visibleColumns.firstOrder ? 'table-cell' : 'none');
+
+            renderCustomerTable();
+        }
+
+        // Close column picker when clicking outside
+        document.addEventListener('click', function (e) {
+            const picker = document.getElementById('columnPicker');
+            const btn = e.target.closest('[onclick="toggleColumnPicker()"]');
+            if (picker && !picker.contains(e.target) && !btn) {
+                picker.style.display = 'none';
+            }
+        });
+
+        // ===== AUTO-FETCH VIA VERCEL API =====
+        // Try Vercel first, fallback to localhost for development
+        let CUSTOMERS_API_URL = 'https://hudemas-store.vercel.app/api/customers/list';
+
+        async function loadFromSupabase() {
+            const statusEl = document.getElementById('cloudStatus');
+            statusEl.textContent = '⏳ Loading...';
+            statusEl.style.background = '#333';
+
+            try {
+                // Fetch customers via Vercel API (bypasses RLS)
+                const BATCH_SIZE = 5000;
+                let allData = [];
+                let offset = 0;
+                let total = 0;
+
+                while (true) {
+                    statusEl.textContent = `⏳ Loading ${allData.length.toLocaleString()}...`;
+
+                    const res = await fetch(`${CUSTOMERS_API_URL}?limit=${BATCH_SIZE}&offset=${offset}`);
+                    if (!res.ok) throw new Error(`API error: ${res.status}`);
+
+                    const data = await res.json();
+                    if (!data.success) throw new Error(data.error || 'Load failed');
+
+                    const batch = data.customers || [];
+                    allData = allData.concat(batch);
+                    total = data.total || allData.length;
+
+                    // Stop if we got all data OR batch was empty
+                    if (batch.length === 0 || allData.length >= total) break;
+
+                    // Increment by actual batch size (handles API limits)
+                    offset += batch.length;
+                }
+
+                customers = allData.map(c => ({
+                    ...c,
+                    is_b2b: c.is_b2b === true || /\b(srl|s\.r\.l|pfa|sa|ltd|gmbh|inc|llc)\b/i.test(c.name || ''),
+                    is_international: c.is_international === true || (c.country && !c.country.toLowerCase().includes('romania') && !c.country.toLowerCase().includes('ro')),
+                    is_lapsed_vip: c.is_lapsed_vip === true,
+                    last_order_date: c.last_order_date || c.last_order
+                }));
+
+                // Build masterDB with name collision detection
+                masterDB = new Map();
+                nameCollisions = new Map();
+                customers.forEach(c => {
+                    if (c.name) {
+                        if (masterDB.has(c.name)) {
+                            if (!nameCollisions.has(c.name)) {
+                                nameCollisions.set(c.name, [masterDB.get(c.name)]);
+                            }
+                            nameCollisions.get(c.name).push(c);
+                        }
+                        masterDB.set(c.name, c);
+                    }
+                });
+
+                filteredCustomers = [...customers];
+                renderCustomerTable();
+                updateSyncStats();
+
+                isCloudConnected = true;
+                statusEl.textContent = `☁️ ${customers.length.toLocaleString()} customers`;
+                statusEl.style.background = 'var(--green)';
+
+                document.getElementById('customerInfo').textContent =
+                    `Loaded ${customers.length.toLocaleString()} from Supabase` +
+                    (nameCollisions.size ? ` (${nameCollisions.size} duplicate names)` : '');
+                console.log(`✅ Loaded ${customers.length} customers via API`);
+
+            } catch (err) {
+                console.error('API error:', err);
+                statusEl.textContent = '❌ Offline';
+                statusEl.style.background = 'var(--red)';
+                document.getElementById('customerInfo').textContent = 'API unavailable - upload CSV instead';
+            }
+        }
+
+        // ===== UPDATE SYNC STATS =====
+        function updateSyncStats() {
+            // Update customer stats display
+            updateCustomerStats();
+        }
+
+        // ===== TAB SWITCHING =====
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        // ===== CUSTOMER TAB =====
+        function updateCustomerStats() {
+            document.getElementById('c-total').textContent = customers.length.toLocaleString();
+            document.getElementById('c-showing').textContent = filteredCustomers.length.toLocaleString();
+            document.getElementById('c-ltv').textContent = (filteredCustomers.reduce((s, c) => s + (c.total_spent || 0), 0) / 1000).toFixed(0) + 'K';
+            document.getElementById('c-vip').textContent = customers.filter(c => c.ltv_tier?.includes('VIP')).length;
+            document.getElementById('c-b2b').textContent = customers.filter(c => c.is_b2b).length;
+            document.getElementById('customerInfo').textContent = `${filteredCustomers.length} of ${customers.length} customers`;
+        }
+
+        function setCustomerFilter(f) {
+            customerFilter = f;
+            document.querySelectorAll('#tab-customers .pill').forEach(p => p.classList.remove('active'));
+            document.querySelector(`[data-filter="${f}"]`).classList.add('active');
+            filterCustomers();
+        }
+
+        function filterCustomers() {
+            const q = document.getElementById('customerSearch').value.toLowerCase();
+            const minLTV = parseFloat(document.getElementById('minLTV')?.value) || 0;
+            const maxLTV = parseFloat(document.getElementById('maxLTV')?.value) || 999999999;
+            const cityFilter = document.getElementById('cityFilter')?.value?.toLowerCase() || '';
+            const countyFilter = document.getElementById('countyFilter')?.value?.toLowerCase() || '';
+            const hasEmail = document.getElementById('hasEmail')?.checked || false;
+            const hasPhone = document.getElementById('hasPhone')?.checked || false;
+
+            filteredCustomers = customers.filter(c => {
+                // Text search
+                if (q && !(c.name?.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q) || c.phone?.includes(q) || c.locality?.toLowerCase().includes(q))) return false;
+
+                // Advanced filters
+                const ltv = c.total_spent || 0;
+                if (ltv < minLTV || ltv > maxLTV) return false;
+                if (cityFilter && !c.locality?.toLowerCase().includes(cityFilter)) return false;
+                if (countyFilter && !c.state?.toLowerCase().includes(countyFilter)) return false;
+                if (hasEmail && !c.email) return false;
+                if (hasPhone && !c.phone) return false;
+
+                // Preset filters
+                switch (customerFilter) {
+                    case 'vip_platinum': return c.ltv_tier?.includes('PLATINUM');
+                    case 'vip_gold': return c.ltv_tier?.includes('GOLD');
+                    case 'high_value': return (c.total_spent || 0) >= 500;
+                    case 'b2b': return c.is_b2b;
+                    case 'lapsed': return c.is_lapsed_vip;
+                    case 'intl': return c.is_international;
+                    case 'recent': return c.last_order_date && (new Date() - new Date(c.last_order_date)) < 90 * 24 * 60 * 60 * 1000;
+                    default: return true;
+                }
+            });
+            currentPage = 1; // Reset to page 1 when filters change
+            renderCustomerTable();
+        }
+
+        function renderCustomerTable() {
+            const tbody = document.getElementById('customerTable');
+            const totalPages = Math.ceil(filteredCustomers.length / perPage);
+            const start = (currentPage - 1) * perPage;
+            const end = start + perPage;
+            const display = filteredCustomers.slice(start, end);
+
+            const cols = visibleColumns;
+            tbody.innerHTML = display.map(c => `<tr>
+                <td><b>${c.name || 'Unknown'}</b>${c.is_b2b ? ' <span style="color:var(--blue)">🏢</span>' : ''}</td>
+                <td style="font-size:0.75rem">${c.email || ''}<br><span style="font-family:monospace">${c.phone || ''}</span></td>
+                <td>${c.locality || ''} ${c.is_international ? '🌍' : ''}</td>
+                <td class="col-address" style="display:${cols.address ? 'table-cell' : 'none'};font-size:0.75rem">${c.address || ''}</td>
+                <td class="col-county" style="display:${cols.county ? 'table-cell' : 'none'}">${c.state || ''}</td>
+                <td class="col-country" style="display:${cols.country ? 'table-cell' : 'none'}">${c.country || ''}</td>
+                <td class="col-postal" style="display:${cols.postal ? 'table-cell' : 'none'}">${c.postalcode || ''}</td>
+                <td style="text-align:right"><b>${(c.total_spent || 0).toLocaleString()}</b> RON</td>
+                <td style="text-align:center">${c.order_count || 0}</td>
+                <td class="col-lastorder" style="display:${cols.lastOrder ? 'table-cell' : 'none'}">${c.last_order || ''}</td>
+                <td class="col-firstorder" style="display:${cols.firstOrder ? 'table-cell' : 'none'}">${c.first_order || ''}</td>
+                <td>${getTierBadge(c.ltv_tier)}</td>
+            </tr>`).join('');
+
+            if (filteredCustomers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted)">No customers found</td></tr>';
+            }
+
+            // Update pagination UI
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages || 1}`;
+            document.getElementById('prevBtn').disabled = currentPage <= 1;
+            document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+
+            updateCustomerStats();
+        }
+
+        // Pagination functions
+        function prevPage() { if (currentPage > 1) { currentPage--; renderCustomerTable(); } }
+        function nextPage() { const totalPages = Math.ceil(filteredCustomers.length / perPage); if (currentPage < totalPages) { currentPage++; renderCustomerTable(); } }
+        function changePerPage() { perPage = parseInt(document.getElementById('perPageSelect').value); currentPage = 1; renderCustomerTable(); }
+
+        // ===== SORTING FUNCTIONS =====
+        let customerSortField = null;
+        let customerSortAsc = true;
+        let orderSortField = null;
+        let orderSortAsc = true;
+
+        function sortCustomers(field) {
+            // Toggle direction if same field
+            if (customerSortField === field) {
+                customerSortAsc = !customerSortAsc;
+            } else {
+                customerSortField = field;
+                customerSortAsc = true;
+            }
+
+            // Update header classes
+            document.querySelectorAll('#customerTableHead th.sortable').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            const header = document.querySelector(`#customerTableHead th[onclick="sortCustomers('${field}')"]`);
+            if (header) header.classList.add(customerSortAsc ? 'sort-asc' : 'sort-desc');
+
+            // Sort the filtered customers
+            filteredCustomers.sort((a, b) => {
+                let valA = a[field];
+                let valB = b[field];
+
+                // Handle different types
+                if (typeof valA === 'number' || typeof valB === 'number') {
+                    valA = valA || 0;
+                    valB = valB || 0;
+                } else {
+                    valA = (valA || '').toString().toLowerCase();
+                    valB = (valB || '').toString().toLowerCase();
+                }
+
+                if (valA < valB) return customerSortAsc ? -1 : 1;
+                if (valA > valB) return customerSortAsc ? 1 : -1;
+                return 0;
+            });
+
+            currentPage = 1;
+            renderCustomerTable();
+        }
+
+        function sortOrders(field) {
+            // Toggle direction if same field
+            if (orderSortField === field) {
+                orderSortAsc = !orderSortAsc;
+            } else {
+                orderSortField = field;
+                orderSortAsc = true;
+            }
+
+            // Update header classes
+            document.querySelectorAll('#tab-orders thead th.sortable').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            const header = document.querySelector(`#tab-orders th[onclick="sortOrders('${field}')"]`);
+            if (header) header.classList.add(orderSortAsc ? 'sort-asc' : 'sort-desc');
+
+            // Sort orders
+            const sortArray = filteredOrders.length ? filteredOrders : orders;
+            sortArray.sort((a, b) => {
+                let valA = a[field];
+                let valB = b[field];
+
+                // Handle special cases
+                if (field === 'date') {
+                    // Convert DD.MM.YYYY to sortable format
+                    valA = valA ? valA.split('.').reverse().join('-') : '';
+                    valB = valB ? valB.split('.').reverse().join('-') : '';
+                } else if (field === 'total') {
+                    valA = valA || 0;
+                    valB = valB || 0;
+                } else if (field === 'id') {
+                    valA = parseInt(valA) || 0;
+                    valB = parseInt(valB) || 0;
+                } else {
+                    valA = (valA || '').toString().toLowerCase();
+                    valB = (valB || '').toString().toLowerCase();
+                }
+
+                if (valA < valB) return orderSortAsc ? -1 : 1;
+                if (valA > valB) return orderSortAsc ? 1 : -1;
+                return 0;
+            });
+
+            renderOrderTable();
+        }
+
+        // Advanced filter functions
+        function toggleAdvancedFilters() { const el = document.getElementById('advancedFilters'); el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+        function clearAdvancedFilters() {
+            document.getElementById('minLTV').value = '';
+            document.getElementById('maxLTV').value = '';
+            document.getElementById('cityFilter').value = '';
+            document.getElementById('countyFilter').value = '';
+            document.getElementById('hasEmail').checked = false;
+            document.getElementById('hasPhone').checked = false;
+            filterCustomers();
+        }
+
+        function getTierBadge(tier) {
+            if (!tier) return '<span class="badge-tier" style="background:#333">N/A</span>';
+            if (tier.includes('PLATINUM')) return '<span class="badge-tier badge-platinum">Platinum</span>';
+            if (tier.includes('GOLD')) return '<span class="badge-tier badge-gold">Gold</span>';
+            return '<span class="badge-tier" style="background:var(--blue);color:white">' + tier.replace(/_/g, ' ') + '</span>';
+        }
+
+        function loadCustomerCSV(input) {
+            const file = input.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                customers = parseCSV(e.target.result);
+                customers.sort((a, b) => (b.total_spent || 0) - (a.total_spent || 0));
+                masterDB = new Map(customers.map(c => [c.name, c]));
+                filteredCustomers = [...customers];
+                renderCustomerTable();
+                updateSyncStats();
+            };
+            reader.readAsText(file);
+        }
+
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            const headers = lines[0].toLowerCase().split(',').map(h => h.trim().replace(/"/g, ''));
+            const getIdx = names => headers.findIndex(h => names.includes(h));
+            const b2bPattern = /\b(srl|s\.r\.l|pfa|sa|ltd|gmbh|inc|llc)\b/i;
+
+            return lines.slice(1).map(line => {
+                const cols = parseCSVLine(line);
+                const name = cols[getIdx(['name', 'customer_name'])];
+                if (!name) return null;
+                const country = cols[getIdx(['country'])] || 'Romania';
+                return {
+                    name, email: cols[getIdx(['email', 'e-mail'])] || '', phone: cols[getIdx(['phone', 'telephone', 'phone_normalized'])] || '',
+                    address: cols[getIdx(['address', 'street'])] || '', locality: cols[getIdx(['locality', 'city'])] || '',
+                    state: cols[getIdx(['state', 'county', 'region'])] || '', postalcode: cols[getIdx(['postalcode', 'zip', 'postal_code'])] || '', country,
+                    total_spent: parseFloat(cols[getIdx(['total_spent', 'ltv', 'revenue'])]) || 0,
+                    order_count: parseInt(cols[getIdx(['order_count', 'orders'])]) || 1,
+                    ltv_tier: cols[getIdx(['ltv_tier', 'tier', 'segment'])] || '',
+                    is_b2b: cols[getIdx(['is_b2b'])] === 'true' || b2bPattern.test(name),
+                    is_international: cols[getIdx(['is_international'])] === 'true' || !country.toLowerCase().includes('romania'),
+                    is_lapsed_vip: cols[getIdx(['is_lapsed_vip'])] === 'true'
+                };
+            }).filter(Boolean);
+        }
+
+        function parseCSVLine(line) {
+            const result = []; let current = '', inQuotes = false;
+            for (const char of line) {
+                if (char === '"') inQuotes = !inQuotes;
+                else if (char === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
+                else current += char;
+            }
+            result.push(current.trim());
+            return result;
+        }
+
+        function toggleExportMenu(id) { document.getElementById(id).classList.toggle('show'); }
+        document.addEventListener('click', e => { if (!e.target.closest('.dropdown')) document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show')); });
+
+        function exportCustomers(format) {
+            if (filteredCustomers.length === 0) return alert('No customers to export');
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+            const clean = s => String(s || '').replace(/[";]/g, ' ').trim();
+            let header, rows;
+            switch (format) {
+                case 'gls': header = 'Amount of CoD;Name;Address;City;ZIP Code;Country;E-mail;Phone;Client reference';
+                    rows = filteredCustomers.map(c => ['0', clean(c.name), clean(c.address), clean(c.locality), clean(c.postalcode), c.country || 'Romania', clean(c.email), clean(c.phone), ''].join(';')); break;
+                case 'mailchimp': header = 'Email Address,First Name,Last Name,Phone,Total Spent,LTV Tier';
+                    rows = filteredCustomers.filter(c => c.email).map(c => { const p = (c.name || '').split(' '); return [c.email, p[0] || '', p.slice(1).join(' ') || '', c.phone || '', c.total_spent || 0, c.ltv_tier || ''].map(v => `"${v}"`).join(','); }); break;
+                case 'meta': header = 'email,phone,fn,ln,ct,st,zip,country';
+                    rows = filteredCustomers.map(c => { const p = (c.name || '').split(' '); const ph = (c.phone || '').replace(/^0/, '+40'); return [c.email || '', ph, p[0]?.toLowerCase() || '', p.slice(1).join(' ')?.toLowerCase() || '', c.locality?.toLowerCase() || '', c.state?.toLowerCase() || '', c.postalcode || '', 'ro'].join(','); }); break;
+                case 'google': header = 'Email,Phone,First Name,Last Name,Country,Zip';
+                    rows = filteredCustomers.map(c => { const p = (c.name || '').split(' '); const ph = (c.phone || '').replace(/^0/, '+40'); return [c.email || '', ph, p[0] || '', p.slice(1).join(' ') || '', 'RO', c.postalcode || ''].map(v => `"${v}"`).join(','); }); break;
+            }
+            downloadCSV([header, ...rows].join('\n'), `customers_${format}_${customerFilter}_${new Date().toISOString().split('T')[0]}.csv`);
+            alert(`Exported ${filteredCustomers.length} customers (${format.toUpperCase()})`);
+        }
+
+        // ===== ORDERS TAB =====
+        const ORDERS_API_URL = 'https://hudemas-store.vercel.app/api/orders/list';
+        let orderFilter = 'all';
+        let filteredOrders = [];
+
+        function updateOrderStats() {
+            const processingCount = orders.filter(o => o.status_name === 'Processing' || o.status_id === 1).length;
+            const completedCount = orders.filter(o => o.status_name === 'Completed' || o.status_id === 2).length;
+            const vipCount = orders.filter(o => o.isVip).length;
+
+            document.getElementById('o-count').textContent = orders.length;
+            document.getElementById('o-total').textContent = orders.reduce((s, o) => s + (o.total || 0), 0).toFixed(0);
+            document.getElementById('o-shipped').textContent = completedCount;
+            document.getElementById('o-pending').textContent = processingCount;
+            document.getElementById('o-vip').textContent = vipCount;
+
+            // Show filtered count - use filteredOrders which is always populated by applyOrderFilter
+            const displayCount = filteredOrders.length;
+            document.getElementById('orderInfo').textContent = `${displayCount} of ${orders.length} orders`;
+            // Update processing stats in header and sync tab
+            if (typeof updateProcessingStats === 'function') updateProcessingStats();
+        }
+
+        function setOrderFilter(filter) {
+            orderFilter = filter;
+            document.querySelectorAll('[data-order-filter]').forEach(p => p.classList.remove('active'));
+            document.querySelector(`[data-order-filter="${filter}"]`)?.classList.add('active');
+            applyOrderFilter();
+        }
+
+        function applyOrderFilter() {
+            filteredOrders = orders.filter(o => {
+                switch (orderFilter) {
+                    case 'processing': return o.status_name === 'Processing' || o.status_id === 1;
+                    case 'completed': return o.status_name === 'Completed' || o.status_id === 2;
+                    case 'cancelled': return o.status_name === 'Cancelled' || o.status_id === 3;
+                    case 'vip': return o.isVip;
+                    case 'missing': return !o.address;
+                    default: return true;
+                }
+            });
+            renderOrderTable();
+        }
+
+        // Update the "Last X Days" button text when dropdown changes
+        function updateDaysButton() {
+            const days = document.getElementById('orderDaysSelect')?.value || '7';
+            const btn = document.getElementById('daysBtn');
+            if (btn) btn.textContent = `📅 Last ${days} Days`;
+        }
+
+        async function pullLiveOrders(action = 'pending') {
+            const statusEl = document.getElementById('orderLoadStatus');
+            const btn = document.getElementById('pullPendingBtn');
+            const days = document.getElementById('orderDaysSelect')?.value || '7';
+
+            btn.disabled = true;
+            statusEl.innerHTML = '⏳ Fetching orders from legacy database...';
+
+            try {
+                const url = `${ORDERS_API_URL}?action=${action}&days=${days}&source=legacy`;
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`API error: ${res.status}`);
+
+                const data = await res.json();
+                if (!data.success && !data.orders) throw new Error(data.error || 'Failed to load orders');
+
+                // Transform orders for display
+                const newOrders = (data.orders || []).map(o => {
+                    // Check if customer is VIP
+                    const customer = masterDB.get(o.customer?.name);
+                    const isVip = customer?.ltv_tier?.includes('VIP') || false;
+
+                    return {
+                        id: o.order_id,
+                        date: new Date(o.order_date).toLocaleDateString('ro-RO'),
+                        customerName: o.customer?.name || o.ship_name || 'Unknown',
+                        products: o.items?.map(i => `${i.quantity}x ${i.name}`).join(', ') || '',
+                        total: o.total || 0,
+                        status: o.status || 'pending',
+                        status_id: o.status_id,
+                        status_name: o.status_name || 'Processing',
+                        address: o.shipping_address?.address || o.ship_address || '',
+                        city: o.shipping_address?.locality || o.ship_locality || '',
+                        state: o.shipping_address?.state || o.ship_state || '',
+                        zip: o.shipping_address?.postalcode || o.ship_postalcode || '',
+                        country: o.shipping_address?.country || o.ship_country || 'Romania',
+                        phone: o.shipping_address?.phone || o.customer?.phone || o.ship_phone || '',
+                        email: o.customer?.email || '',
+                        isCOD: true,
+                        isVip,
+                        selected: false
+                    };
+                });
+
+                // Merge with existing (avoid duplicates)
+                const existingIds = new Set(orders.map(o => o.id));
+                const toAdd = newOrders.filter(o => !existingIds.has(o.id));
+                orders = [...orders, ...toAdd];
+
+                // Sort by date descending
+                orders.sort((a, b) => new Date(b.date.split('.').reverse().join('-')) - new Date(a.date.split('.').reverse().join('-')));
+
+                // Apply current filter to new orders
+                applyOrderFilter();
+
+                statusEl.innerHTML = `✅ Loaded ${newOrders.length} orders (${toAdd.length} new, ${newOrders.length - toAdd.length} already in list)`;
+
+            } catch (e) {
+                console.error('Order pull error:', e);
+                statusEl.innerHTML = `❌ Failed: ${e.message}. Try manual entry below.`;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function renderOrderTable() {
+            const tbody = document.getElementById('orderTable');
+            // If filteredOrders is empty but we haven't filtered yet, initialize with all orders
+            if (filteredOrders.length === 0 && orders.length > 0 && orderFilter === 'all') {
+                filteredOrders = [...orders];
+            }
+            const display = filteredOrders;
+
+            tbody.innerHTML = display.map((o, i) => {
+                const idx = orders.indexOf(o);
+                const statusBadge = getOrderStatusBadge(o.status_name || o.status);
+                return `<tr class="${!o.address ? 'missing-row' : ''}">
+                    <td><input type="checkbox" class="order-checkbox" data-idx="${idx}" ${o.selected ? 'checked' : ''} onchange="toggleOrderSelect(${idx}, this.checked)"></td>
+                    <td><b>${o.id}</b></td>
+                    <td>${o.date}</td>
+                    <td>${o.customerName} ${o.isVip ? '👑' : ''}</td>
+                    <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;font-size:0.75rem">${o.products || '-'}</td>
+                    <td style="text-align:right"><b>${o.total.toFixed(2)}</b> RON</td>
+                    <td>${statusBadge}</td>
+                    <td style="max-width:120px"><input type="text" value="${o.address || ''}" onchange="orders[${idx}].address=this.value" style="width:100%;padding:4px" placeholder="Address"></td>
+                    <td><input type="text" value="${o.phone || ''}" onchange="orders[${idx}].phone=this.value" style="width:85px;padding:4px" placeholder="Phone"></td>
+                </tr>`;
+            }).join('');
+
+            if (display.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">No orders. Click "Pull All Orders" to load.</td></tr>';;
+            }
+
+            updateOrderStats();
+        }
+
+        function getOrderStatusBadge(status) {
+            const s = (status || '').toLowerCase();
+            if (s === 'completed' || s.includes('complet')) return '<span class="badge-tier" style="background:var(--green);color:white">Completed</span>';
+            if (s.includes('process') || s === 'pending') return '<span class="badge-tier" style="background:var(--blue);color:white">Processing</span>';
+            if (s.includes('cancel')) return '<span class="badge-tier" style="background:var(--red);color:white">Cancelled</span>';
+            return `<span class="badge-tier" style="background:#333">${status || 'Unknown'}</span>`;
+        }
+
+        function toggleOrderSelect(idx, checked) {
+            orders[idx].selected = checked;
+        }
+
+        function toggleSelectAllOrders(checked) {
+            orders.forEach(o => o.selected = checked);
+            renderOrderTable();
+        }
+
+        async function markSingleShipped(idx) {
+            const order = orders[idx];
+            if (!confirm(`Mark order ${order.id} as shipped?`)) return;
+
+            try {
+                const res = await fetch(ORDERS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_id: order.id, status_id: 3 })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    orders[idx].status_name = 'Shipped';
+                    orders[idx].status = 'shipped';
+                    renderOrderTable();
+                    alert(`✅ Order ${order.id} marked as shipped`);
+                } else {
+                    throw new Error(data.error || 'Update failed');
+                }
+            } catch (e) {
+                alert(`❌ Failed to update: ${e.message}`);
+            }
+        }
+
+        async function markSelectedShipped() {
+            const selected = orders.filter(o => o.selected);
+            if (selected.length === 0) return alert('Select orders to mark as shipped');
+            if (!confirm(`Mark ${selected.length} orders as shipped?`)) return;
+
+            let success = 0, failed = 0;
+            for (const order of selected) {
+                try {
+                    await fetch(ORDERS_API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ order_id: order.id, status_id: 3 })
+                    });
+                    order.status_name = 'Shipped';
+                    order.status = 'shipped';
+                    order.selected = false;
+                    success++;
+                } catch (e) { failed++; }
+            }
+            renderOrderTable();
+            alert(`✅ ${success} marked shipped` + (failed ? `, ${failed} failed` : ''));
+        }
+
+        function exportOrdersCSV() {
+            if (orders.length === 0) return alert('No orders to export');
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+
+            const header = 'Order ID,Date,Customer,Products,Total,Status,Address,City,State,ZIP,Country,Phone,Email';
+            const clean = s => String(s || '').replace(/[",]/g, ' ').trim();
+            const rows = orders.map(o => [
+                o.id, o.date, clean(o.customerName), clean(o.products), o.total.toFixed(2),
+                o.status_name || o.status, clean(o.address), clean(o.city), clean(o.state),
+                clean(o.zip), clean(o.country), clean(o.phone), clean(o.email)
+            ].map(v => `"${v}"`).join(','));
+
+            downloadCSV([header, ...rows].join('\n'), `orders_export_${new Date().toISOString().split('T')[0]}.csv`);
+            alert(`Exported ${orders.length} orders`);
+        }
+
+
+        function parseOrderTable() {
+            const text = document.getElementById('orderTableInput').value.trim();
+            if (!text) return alert('Paste order data first');
+            const lines = text.split('\n').filter(l => l.trim());
+            let count = 0;
+            for (const line of lines) {
+                if (line.startsWith('ID') || line.includes('Date added')) continue;
+                const parts = line.split('\t').map(p => p.trim()).filter(p => p);
+                if (parts.length < 5) continue;
+                const name = parts[2], customer = masterDB.get(name);
+                orders.push({
+                    id: parts[0], date: parts[1], customerName: name, products: parts[3],
+                    total: parseFloat(parts[6]) || parseFloat(parts[4]) || 0,
+                    status: customer ? (customer.ltv_tier?.includes('VIP') ? 'vip' : 'existing') : 'new',
+                    address: customer?.address || '', city: customer?.locality || '', state: customer?.state || '',
+                    zip: customer?.postalcode || '', phone: customer?.phone || '', email: customer?.email || '', isCOD: true
+                });
+                count++;
+            }
+            document.getElementById('orderTableInput').value = '';
+            renderOrderTable();
+            alert(`Added ${count} orders`);
+        }
+
+        function parseOrderDetails() {
+            const text = document.getElementById('orderDetailsInput').value.trim();
+            if (!text) return alert('Paste order details first');
+            const getValue = key => { const m = text.match(new RegExp(`${key}[:\\s]+([^\\n]+)`, 'i')); return m ? m[1].trim() : ''; };
+            const name = getValue('Name and surname') || getValue('Name');
+            if (!name) return alert('Could not find customer name');
+            let orderId = ''; const m = text.match(/Order details no\.\s*(\d{5,})/i); if (m) orderId = m[1];
+            const addr = { address: getValue('Address'), city: getValue('Locality'), state: getValue('County') || getValue('County/region'), zip: getValue('Postal code'), phone: getValue('Phone') };
+            let idx = orderId ? orders.findIndex(o => o.id === orderId) : orders.findIndex(o => o.customerName.toLowerCase().includes(name.toLowerCase()));
+            if (idx >= 0) { orders[idx] = { ...orders[idx], ...addr, status: 'existing' }; alert(`✓ Updated order ${orders[idx].id}`); }
+            else { orders.push({ id: orderId || 'NEW-' + Date.now(), date: new Date().toLocaleDateString('ro-RO'), customerName: name, products: '', total: 0, status: 'new', ...addr, isCOD: true }); alert(`+ Added order for ${name}`); }
+            document.getElementById('orderDetailsInput').value = '';
+            renderOrderTable();
+        }
+
+        function loadOrderSample() {
+            document.getElementById('orderTableInput').value = `26027\t14.12.2025\tBarbu Carmen\t1 x Toamna(750)\t351.46\t0.00\t351.46\tLei\tProcessing\n26026\t14.12.2025\tMaria Popescu\t1 x Panseluțe(534)\t133.21\t25.00\t158.21\tLei\tProcessing`;
+        }
+
+        function autoFillOrders() {
+            let filledCount = 0;
+            let collisionWarnings = [];
+
+            orders = orders.map(o => {
+                const c = masterDB.get(o.customerName);
+                if (c) {
+                    filledCount++;
+                    // Check for name collision
+                    if (nameCollisions.has(o.customerName)) {
+                        const dupes = nameCollisions.get(o.customerName);
+                        collisionWarnings.push(`⚠️ "${o.customerName}" has ${dupes.length} matches in DB`);
+                    }
+                    return {
+                        ...o,
+                        status: c.ltv_tier?.includes('VIP') ? 'vip' : 'existing',
+                        address: o.address || c.address,
+                        city: o.city || c.locality,
+                        state: o.state || c.state,
+                        zip: o.zip || c.postalcode,
+                        phone: o.phone || c.phone
+                    };
+                }
+                return o;
+            });
+            renderOrderTable();
+
+            let msg = `✅ Filled ${filledCount} of ${orders.length} orders from customer database`;
+            if (collisionWarnings.length > 0) {
+                msg += `\n\n⚠️ WARNING: ${collisionWarnings.length} orders have duplicate name matches:\n` +
+                    collisionWarnings.slice(0, 5).join('\n') +
+                    (collisionWarnings.length > 5 ? `\n...and ${collisionWarnings.length - 5} more` : '') +
+                    '\n\nPlease verify these addresses manually!';
+            }
+            alert(msg);
+        }
+
+        function clearOrders() { if (confirm('Clear all orders?')) { orders = []; renderOrderTable(); } }
+
+        function exportGLS() {
+            if (orders.length === 0) return alert('No orders to export');
+            const header = 'Amount of CoD;Name;Address;City;ZIP Code;Country;E-mail;Phone;Client reference;CoD reference;Comment;Count;Contact;Services';
+            const clean = s => String(s || '').replace(/;/g, ',').replace(/\n/g, ' ').trim();
+            const rows = orders.map(o => [clean(o.isCOD ? o.total.toFixed(2) : ''), clean(o.customerName), clean(o.address), clean(o.city), clean(o.zip), 'RO', clean(o.email), clean(o.phone), clean(o.id), clean(o.isCOD ? o.id : ''), clean(o.products?.substring(0, 50) || ''), 1, clean(o.customerName), ''].join(';'));
+            downloadCSV([header, ...rows].join('\n'), `gls_export_${new Date().toISOString().split('T')[0]}.csv`);
+        }
+
+        // ===== SYNC TAB (LIVE SYNC) =====
+        // Try Vercel first, fall back to localhost for development
+        const VERCEL_API_URL = 'https://hudemas-store.vercel.app/api/sync/legacy';
+        const LOCAL_API_URL = 'http://localhost:3000/api/sync/legacy';
+        const LEGACY_API_URL = 'https://www.hudemas.ro/assets/customer_sync.php';
+        const LEGACY_SECRET = '6f35b97e06a1585ee8daa975d7d86ed3';
+        let SYNC_API_URL = VERCEL_API_URL; // Default to Vercel
+        let lastSyncResult = null;
+
+        async function checkSyncStatus() {
+            try {
+                const res = await fetch(`${SYNC_API_URL}?dryRun=true`);
+                if (!res.ok) throw new Error('Sync API not available');
+                const data = await res.json();
+
+                // Update stats (null-safe for missing elements)
+                const supabaseEl = document.getElementById('sync-supabase');
+                const legacyEl = document.getElementById('sync-legacy');
+                const driftEl = document.getElementById('sync-drift');
+                const lastOrderEl = document.getElementById('sync-last-order');
+
+                if (supabaseEl) supabaseEl.textContent = (data.supabase?.customers || 0).toLocaleString();
+                if (legacyEl) legacyEl.textContent = (data.legacy?.user || 0).toLocaleString();
+                if (driftEl) driftEl.textContent = (data.drift?.users || 0).toLocaleString();
+
+                // Format last order date
+                if (data.lastLegacyOrder && lastOrderEl) {
+                    const d = new Date(data.lastLegacyOrder);
+                    lastOrderEl.textContent = d.toLocaleDateString();
+                }
+
+                document.getElementById('syncConnectionStatus').innerHTML = '✅ Connected';
+                document.getElementById('syncConnectionStatus').style.background = 'var(--green)';
+
+            } catch (e) {
+                console.error('Sync status check failed:', e);
+                document.getElementById('syncConnectionStatus').innerHTML = '❌ Offline';
+                document.getElementById('syncConnectionStatus').style.background = 'var(--red)';
+                document.getElementById('syncStatus').innerHTML = 'Sync API not available. Make sure the dev server is running.';
+            }
+        }
+
+        async function runLegacySync() {
+            const btn = document.getElementById('syncNowBtn');
+            const status = document.getElementById('syncStatus');
+
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Syncing...';
+            status.innerHTML = 'Fetching customers from legacy database...';
+            logSync('Starting sync from legacy MySQL...');
+
+            try {
+                const res = await fetch(SYNC_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ batchSize: 500, maxBatches: 100 })
+                });
+
+                const data = await res.json();
+                lastSyncResult = data;
+
+                if (data.success) {
+                    logSync(`✅ Synced ${data.stats.totalSynced.toLocaleString()} customers`, 'green');
+                    logSync(`Duration: ${data.stats.duration}`, 'green');
+                    logSync(`Geo data preserved: ${data.stats.geoPreserved} records`, 'blue');
+
+                    document.getElementById('lastSyncTime').textContent = new Date().toLocaleTimeString();
+                    document.getElementById('lastSyncDuration').textContent = data.stats.duration;
+                    document.getElementById('lastSyncCount').textContent = data.stats.totalSynced.toLocaleString();
+
+                    status.innerHTML = `<span style="color:var(--green)">✅ Synced ${data.stats.totalSynced.toLocaleString()} customers</span>`;
+
+                    // Refresh Supabase data
+                    await loadFromSupabase();
+                    await checkSyncStatus();
+                } else {
+                    throw new Error(data.error || 'Sync failed');
+                }
+
+            } catch (e) {
+                console.error('Sync failed:', e);
+                logSync(`❌ Sync failed: ${e.message}`, 'red');
+                status.innerHTML = `<span style="color:var(--red)">❌ Failed: ${e.message}</span>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🔄 Sync from Legacy';
+            }
+        }
+
+        function logSync(msg, color = 'muted') {
+            const log = document.getElementById('syncLog');
+            if (!log) return;
+            log.innerHTML += `<div style="color:var(--${color === 'red' ? 'red' : color === 'green' ? 'green' : color === 'blue' ? 'blue' : 'muted'})">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // Check sync status on load
+        checkSyncStatus();
+
+        // ===== QUICK STATS =====
+        async function loadQuickStats() {
+            try {
+                // Get order stats from legacy endpoint
+                const res = await fetch(LEGACY_API_URL + '?action=order_stats&secret=' + LEGACY_SECRET);
+                const data = await res.json();
+
+                if (data.success) {
+                    document.getElementById('qs-ordersToday').textContent = data.orders_today || 0;
+                    document.getElementById('qs-weekRevenue').textContent =
+                        (data.week_revenue ? (data.week_revenue / 1000).toFixed(1) + 'K' : '0') + ' RON';
+                }
+                // Processing orders updated by updateProcessingStats() after orders load
+            } catch (e) {
+                console.log('Quick stats not available:', e.message);
+            }
+        }
+
+        // Update Processing Orders stats in QuickStats and Sync tab (called after orders load)
+        function updateProcessingStats() {
+            const processingCount = orders.filter(o => o.status_name === 'Processing' || o.status_id === 1).length;
+            const qsEl = document.getElementById('qs-processing');
+            if (qsEl) qsEl.textContent = processingCount.toLocaleString();
+            const syncEl = document.getElementById('sync-processing');
+            if (syncEl) syncEl.textContent = processingCount.toLocaleString();
+        }
+
+        // Load quick stats on page load
+        loadQuickStats();
+
+        function downloadCSV(content, filename) {
+            const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+
+        // Init
+        renderCustomerTable(); renderOrderTable(); updateSyncStats();
+
+        // Auto-load from Supabase on page load
+        loadFromSupabase();
+    </script>
+</body>
+
+</html>
