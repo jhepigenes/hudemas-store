@@ -507,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.9</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.0</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -595,16 +595,35 @@
                     <div style="position:relative">
                         <button class="btn btn-secondary" onclick="toggleColumnPicker()">📊 Columns</button>
                         <div id="columnPicker"
-                            style="display:none;position:absolute;top:100%;right:0;margin-top:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;min-width:200px;z-index:100">
-                            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:8px">Show/Hide Columns</div>
+                            style="display:none;position:absolute;top:100%;right:0;margin-top:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;min-width:220px;z-index:100;max-height:400px;overflow-y:auto">
+                            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:8px">📍 Address Fields</div>
                             <label
                                 style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
-                                <input type="checkbox" id="colAddress" onchange="updateVisibleColumns()" checked> Street
-                                Address
+                                <input type="checkbox" id="colStreet" onchange="updateVisibleColumns()"> Street Name
                             </label>
                             <label
                                 style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
-                                <input type="checkbox" id="colCounty" onchange="updateVisibleColumns()"> State / County
+                                <input type="checkbox" id="colHouseNo" onchange="updateVisibleColumns()"> House No
+                            </label>
+                            <label
+                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
+                                <input type="checkbox" id="colBuilding" onchange="updateVisibleColumns()">
+                                Building/Block
+                            </label>
+                            <label
+                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
+                                <input type="checkbox" id="colApartment" onchange="updateVisibleColumns()"> Apartment
+                            </label>
+                            <label
+                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
+                                <input type="checkbox" id="colAddress" onchange="updateVisibleColumns()" checked> Full
+                                Address
+                            </label>
+                            <hr style="border:none;border-top:1px solid var(--border);margin:8px 0">
+                            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:8px">📍 Location</div>
+                            <label
+                                style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
+                                <input type="checkbox" id="colCounty" onchange="updateVisibleColumns()"> County
                             </label>
                             <label
                                 style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
@@ -612,18 +631,16 @@
                             </label>
                             <label
                                 style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
-                                <input type="checkbox" id="colPostal" onchange="updateVisibleColumns()"> Postal / ZIP
-                                Code
+                                <input type="checkbox" id="colPostal" onchange="updateVisibleColumns()"> Postal Code
                             </label>
                             <hr style="border:none;border-top:1px solid var(--border);margin:8px 0">
+                            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:8px">📅 Dates</div>
                             <label
                                 style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;margin-bottom:6px">
                                 <input type="checkbox" id="colLastOrder" onchange="updateVisibleColumns()"> Last Order
-                                Date
                             </label>
                             <label style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer">
                                 <input type="checkbox" id="colFirstOrder" onchange="updateVisibleColumns()"> First Order
-                                Date
                             </label>
                         </div>
                     </div>
@@ -682,6 +699,10 @@
                                 <th class="sortable" onclick="sortCustomers('email')">Email</th>
                                 <th>Phone</th>
                                 <th class="sortable" onclick="sortCustomers('locality')">City</th>
+                                <th class="col-street" style="display:none">Street</th>
+                                <th class="col-houseno" style="display:none">No.</th>
+                                <th class="col-building" style="display:none">Bl.</th>
+                                <th class="col-apartment" style="display:none">Ap.</th>
                                 <th class="col-address" style="display:table-cell">Address</th>
                                 <th class="col-county" style="display:none">County</th>
                                 <th class="col-country" style="display:none">Country</th>
@@ -1016,6 +1037,10 @@ Phone:0726192421"></textarea>
 
         function updateVisibleColumns() {
             visibleColumns = {
+                street: document.getElementById('colStreet')?.checked || false,
+                houseNo: document.getElementById('colHouseNo')?.checked || false,
+                building: document.getElementById('colBuilding')?.checked || false,
+                apartment: document.getElementById('colApartment')?.checked || false,
                 address: document.getElementById('colAddress')?.checked || false,
                 county: document.getElementById('colCounty')?.checked || false,
                 country: document.getElementById('colCountry')?.checked || false,
@@ -1025,6 +1050,10 @@ Phone:0726192421"></textarea>
             };
 
             // Update header visibility
+            document.querySelectorAll('.col-street').forEach(el => el.style.display = visibleColumns.street ? 'table-cell' : 'none');
+            document.querySelectorAll('.col-houseno').forEach(el => el.style.display = visibleColumns.houseNo ? 'table-cell' : 'none');
+            document.querySelectorAll('.col-building').forEach(el => el.style.display = visibleColumns.building ? 'table-cell' : 'none');
+            document.querySelectorAll('.col-apartment').forEach(el => el.style.display = visibleColumns.apartment ? 'table-cell' : 'none');
             document.querySelectorAll('.col-address').forEach(el => el.style.display = visibleColumns.address ? 'table-cell' : 'none');
             document.querySelectorAll('.col-county').forEach(el => el.style.display = visibleColumns.county ? 'table-cell' : 'none');
             document.querySelectorAll('.col-country').forEach(el => el.style.display = visibleColumns.country ? 'table-cell' : 'none');
@@ -1275,12 +1304,18 @@ Phone:0726192421"></textarea>
             tbody.innerHTML = display.map((c, idx) => {
                 const globalIdx = start + idx;
                 const geoStatus = getGeoStatusBadge(c);
+                // Parse address for split columns
+                const parsed = parseAddress(c.address);
                 return `<tr>
                 <td><input type="checkbox" class="customer-checkbox" data-idx="${globalIdx}" ${c.selected ? 'checked' : ''} onchange="toggleCustomerSelect(${globalIdx}, this.checked)"></td>
                 <td style="cursor:pointer" onclick="showCustomerDetail(${c.id})"><b style="color:var(--primary)">${c.name || 'Unknown'}</b>${c.is_b2b ? ' <span style="color:var(--blue)">🏢</span>' : ''}</td>
                 <td style="font-size:0.8rem">${c.email || '<span style="color:#ef4444">—</span>'}</td>
                 <td style="font-size:0.8rem;font-family:monospace">${c.phone || '<span style="color:#888">—</span>'}</td>
                 <td>${c.locality || ''} ${c.is_international ? '🌍' : ''}</td>
+                <td class="col-street" style="display:${cols.street ? 'table-cell' : 'none'};font-size:0.75rem">${parsed.street || ''}</td>
+                <td class="col-houseno" style="display:${cols.houseNo ? 'table-cell' : 'none'};font-size:0.75rem">${parsed.houseNo || ''}</td>
+                <td class="col-building" style="display:${cols.building ? 'table-cell' : 'none'};font-size:0.75rem">${parsed.building || ''}</td>
+                <td class="col-apartment" style="display:${cols.apartment ? 'table-cell' : 'none'};font-size:0.75rem">${parsed.apartment || ''}</td>
                 <td class="col-address" style="display:${cols.address ? 'table-cell' : 'none'};font-size:0.75rem">${c.address || ''}</td>
                 <td class="col-county" style="display:${cols.county ? 'table-cell' : 'none'}">${c.state || ''}</td>
                 <td class="col-country" style="display:${cols.country ? 'table-cell' : 'none'}">${c.country || ''}</td>
@@ -1295,7 +1330,7 @@ Phone:0726192421"></textarea>
             }).join('');
 
             if (filteredCustomers.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="15" style="text-align:center;padding:40px;color:var(--muted)">No customers found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="19" style="text-align:center;padding:40px;color:var(--muted)">No customers found</td></tr>';
             }
 
             // Update pagination UI
