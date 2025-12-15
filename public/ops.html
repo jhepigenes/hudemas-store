@@ -507,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.8</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.9</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -2289,10 +2289,32 @@ Phone:0726192421"></textarea>
 
         function exportGLS() {
             if (orders.length === 0) return alert('No orders to export');
-            const header = 'Amount of CoD;Name;Address;City;ZIP Code;Country;E-mail;Phone;Client reference;CoD reference;Comment;Count;Contact;Services';
+            // GLS format with parsed address columns (Street, House No, etc.)
+            const header = 'Amount of CoD;Name;Street;House No;Building;Apt;City;ZIP Code;Country;E-mail;Phone;Order ID;CoD reference;Products;Contact';
             const clean = s => String(s || '').replace(/;/g, ',').replace(/\n/g, ' ').trim();
-            const rows = orders.map(o => [clean(o.isCOD ? o.total.toFixed(2) : ''), clean(o.customerName), clean(o.address), clean(o.city), clean(o.zip), 'RO', clean(o.email), clean(o.phone), clean(o.id), clean(o.isCOD ? o.id : ''), clean(o.products?.substring(0, 50) || ''), 1, clean(o.customerName), ''].join(';'));
-            downloadCSV([header, ...rows].join('\n'), `gls_export_${new Date().toISOString().split('T')[0]}.csv`);
+            const rows = orders.map(o => {
+                const addr = parseAddress(o.address);
+                const houseNo = [addr.houseNo, addr.building ? 'bl.' + addr.building : '', addr.staircase ? 'sc.' + addr.staircase : ''].filter(Boolean).join(' ');
+                return [
+                    clean(o.isCOD ? o.total.toFixed(2) : ''),
+                    clean(o.customerName),
+                    clean(addr.street),
+                    clean(addr.houseNo),
+                    clean(addr.building),
+                    clean(addr.apartment),
+                    clean(o.city),
+                    clean(o.zip),
+                    o.country || 'RO',
+                    clean(o.email),
+                    clean(o.phone),
+                    clean(o.id),
+                    clean(o.isCOD ? o.id : ''),
+                    clean(o.products?.substring(0, 50) || ''),
+                    clean(o.customerName)
+                ].join(';');
+            });
+            downloadCSV([header, ...rows].join('\n'), `gls_orders_${new Date().toISOString().split('T')[0]}.csv`);
+            alert(`Exported ${orders.length} orders to GLS format with parsed addresses`);
         }
 
         // ===== BACKGROUND VALIDATION =====
