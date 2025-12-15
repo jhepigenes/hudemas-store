@@ -499,7 +499,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.4</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.5</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -737,19 +737,17 @@
                     <div>
                         <h2 style="color:#60a5fa;margin-bottom:4px">📦 Live Orders</h2>
                     </div>
-                    <div style="display:flex;gap:12px;flex-wrap:wrap">
-                        <button class="btn btn-primary" onclick="pullLiveOrders('recent')" id="pullPendingBtn">🔄 Pull
-                            All Orders</button>
-                        <button class="btn btn-secondary" id="daysBtn" onclick="pullLiveOrders('recent')">📅 Last 7
-                            Days</button>
-                        <select id="orderDaysSelect" onchange="updateDaysButton()"
-                            style="padding:8px 12px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
-                            <option value="7">7 days</option>
-                            <option value="14">14 days</option>
-                            <option value="30">30 days</option>
-                            <option value="90">90 days</option>
-                            <option value="365">All (1 year)</option>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+                        <select id="orderDaysSelect"
+                            style="padding:10px 16px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem">
+                            <option value="7">Last 7 days</option>
+                            <option value="14">Last 14 days</option>
+                            <option value="30">Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                            <option value="365">All orders (1 year)</option>
                         </select>
+                        <button class="btn btn-primary" onclick="pullLiveOrders('recent')" id="pullPendingBtn">🔄 Pull
+                            Orders</button>
                     </div>
                 </div>
                 <div id="orderLoadStatus" style="margin-top:12px;font-size:0.8rem;color:var(--muted)"></div>
@@ -1461,24 +1459,27 @@ Phone:0726192421"></textarea>
             const county = customer.state || '';
             const postal = customer.postalcode || '';
 
-            // Address completeness (40 points)
-            if (addr && addr.length >= 10) score += 20;
-            else if (addr) score += 10;
+            // Address completeness (30 points)
+            if (addr && addr.length >= 10) score += 15;
+            else if (addr && addr.length >= 5) score += 10;
+            else if (addr) score += 5;
 
             if (/\d+/.test(addr)) score += 10; // Has street number
-            if (city) score += 10;
+            if (city) score += 5;
 
-            // County validation (20 points)
-            if (county) score += 20;
+            // County validation (15 points)
+            if (county) score += 15;
 
             // Postal code (10 points)
             if (postal && postal.length >= 5) score += 10;
             else if (postal) score += 5;
 
-            // Geocoding result (30 points)
-            if (geoResult) {
-                score += 20;
-                if (geoResult.geo_confidence === 'high') score += 10;
+            // Geocoding result (40 points) - main boost
+            if (geoResult || customer.geo_lat) {
+                score += 30; // Base geocoding points
+                const confidence = geoResult?.geo_confidence || customer.geo_confidence;
+                if (confidence === 'high') score += 10;
+                else if (confidence) score += 5;
             }
 
             return Math.min(100, Math.max(0, score));
