@@ -507,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.7</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v5.8</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -1078,13 +1078,38 @@ Phone:0726192421"></textarea>
                     offset += batch.length;
                 }
 
-                customers = allData.map(c => ({
-                    ...c,
-                    is_b2b: c.is_b2b === true || /\b(srl|s\.r\.l|pfa|sa|ltd|gmbh|inc|llc)\b/i.test(c.name || ''),
-                    is_international: c.is_international === true || (c.country && !c.country.toLowerCase().includes('romania') && !c.country.toLowerCase().includes('ro')),
-                    is_lapsed_vip: c.is_lapsed_vip === true,
-                    last_order_date: c.last_order_date || c.last_order
-                }));
+                customers = allData.map(c => {
+                    // Recalculate score client-side for customers with geo data
+                    let recalculatedScore = c.address_quality_score || 0;
+                    if (c.geo_lat && !c.address_quality_score || c.address_quality_score <= 70) {
+                        recalculatedScore = 0;
+                        // Address completeness (30 points)
+                        if (c.address && c.address.length >= 10) recalculatedScore += 15;
+                        else if (c.address && c.address.length >= 5) recalculatedScore += 10;
+                        if (/\d+/.test(c.address || '')) recalculatedScore += 10; // Has number
+                        if (c.locality) recalculatedScore += 5;
+                        // County (15 points)
+                        if (c.state) recalculatedScore += 15;
+                        // Postal (10 points)
+                        if (c.postalcode && c.postalcode.length >= 5) recalculatedScore += 10;
+                        // Geocoding (40 points) - main boost
+                        if (c.geo_lat) {
+                            recalculatedScore += 30;
+                            if (c.geo_confidence === 'high') recalculatedScore += 10;
+                            else if (c.geo_confidence) recalculatedScore += 5;
+                        }
+                        recalculatedScore = Math.min(100, recalculatedScore);
+                    }
+
+                    return {
+                        ...c,
+                        address_quality_score: recalculatedScore,
+                        is_b2b: c.is_b2b === true || /\b(srl|s\.r\.l|pfa|sa|ltd|gmbh|inc|llc)\b/i.test(c.name || ''),
+                        is_international: c.is_international === true || (c.country && !c.country.toLowerCase().includes('romania') && !c.country.toLowerCase().includes('ro')),
+                        is_lapsed_vip: c.is_lapsed_vip === true,
+                        last_order_date: c.last_order_date || c.last_order
+                    };
+                });
 
                 // Build masterDB with name collision detection
                 masterDB = new Map();
@@ -1126,6 +1151,41 @@ Phone:0726192421"></textarea>
         function updateSyncStats() {
             // Update customer stats display
             updateCustomerStats();
+            // Update header quickstats
+            updateHeaderStats();
+        }
+
+        function updateHeaderStats() {
+            // Calculate header quick stats
+            const today = new Date().toDateString();
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+
+            // Orders today (from loaded orders)
+            const ordersToday = orders.filter(o => {
+                const orderDate = new Date(o.date?.split('.').reverse().join('-') || '');
+                return orderDate.toDateString() === today;
+            }).length;
+
+            // This week revenue
+            const weekRevenue = orders.filter(o => {
+                const orderDate = new Date(o.date?.split('.').reverse().join('-') || '');
+                return orderDate >= weekAgo;
+            }).reduce((sum, o) => sum + (o.total || 0), 0);
+
+            // Processing orders
+            const processingCount = orders.filter(o =>
+                o.status_name === 'Processing' || o.status_id === 1
+            ).length;
+
+            // Update DOM
+            const todayEl = document.getElementById('qs-ordersToday');
+            const weekEl = document.getElementById('qs-weekRevenue');
+            const procEl = document.getElementById('qs-processing');
+
+            if (todayEl) todayEl.textContent = ordersToday || '—';
+            if (weekEl) weekEl.textContent = weekRevenue > 0 ? (weekRevenue / 1000).toFixed(1) + 'K RON' : '—';
+            if (procEl) procEl.textContent = processingCount || '—';
         }
 
         // ===== TAB SWITCHING =====
@@ -1670,8 +1730,8 @@ Phone:0726192421"></textarea>
             // Show filtered count - use filteredOrders which is always populated by applyOrderFilter
             const displayCount = filteredOrders.length;
             document.getElementById('orderInfo').textContent = `${displayCount} of ${orders.length} orders`;
-            // Update processing stats in header and sync tab
-            if (typeof updateProcessingStats === 'function') updateProcessingStats();
+            // Update header quickstats
+            updateHeaderStats();
         }
 
         function setOrderFilter(filter) {
