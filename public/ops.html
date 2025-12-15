@@ -507,7 +507,7 @@
         <div class="header">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
                 <div>
-                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.6</span> <span id="cloudStatus"
+                    <h1>🏢 Hudemas Operations Center <span class="badge">v6.7</span> <span id="cloudStatus"
                             style="font-size:0.7rem;padding:4px 10px;border-radius:12px;margin-left:8px;background:#333">⏳
                             Connecting...</span></h1>
                     <p class="subtitle">Customer Database • Order Processing • Exports • Data Sync — Connected to
@@ -2554,21 +2554,34 @@ Phone:0726192421"></textarea>
 
             document.getElementById('customerDetailContent').innerHTML = `
                 <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:20px">
-                    <div>
-                        <h2 style="margin:0">${customer.name || 'Unknown'}</h2>
-                        <p style="color:var(--muted);margin:4px 0">${customer.email || 'No email'} • ${customer.phone || 'No phone'}</p>
-                    </div>
-                    <div style="text-align:right">
-                        ${getTierBadge(customer.ltv_tier)}
-                        <div style="font-size:0.85rem;margin-top:4px"><b>${(customer.total_spent || 0).toLocaleString()}</b> RON • ${customer.order_count || 0} orders</div>
+                    <div style="flex:1">
+                        <h2 style="margin:0">${getTierBadge(customer.ltv_tier)} ${customer.is_b2b ? '🏢 ' : ''}Customer #${customer.id}</h2>
+                        <p style="color:var(--muted);margin:4px 0"><b>${(customer.total_spent || 0).toLocaleString()}</b> RON • ${customer.order_count || 0} orders</p>
                     </div>
                 </div>
                 
                 ${issueHtml}
                 
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <!-- Contact Info -->
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
                     <div>
-                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Address</label>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Name</label>
+                        <input type="text" id="detailName" value="${customer.name || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Email</label>
+                        <input type="email" id="detailEmail" value="${customer.email || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Phone</label>
+                        <input type="text" id="detailPhone" value="${customer.phone || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:monospace">
+                    </div>
+                </div>
+                
+                <!-- Address Fields -->
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:12px">
+                    <div>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Street Address</label>
                         <input type="text" id="detailAddress" value="${customer.address || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
                     </div>
                     <div>
@@ -2576,9 +2589,12 @@ Phone:0726192421"></textarea>
                         <input type="text" id="detailCity" value="${customer.locality || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
                     </div>
                     <div>
-                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">County</label>
+                        <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">County/State</label>
                         <input type="text" id="detailCounty" value="${customer.state || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
                     </div>
+                </div>
+                
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
                     <div>
                         <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Postal Code</label>
                         <input type="text" id="detailPostal" value="${customer.postalcode || ''}" style="width:100%;padding:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;color:var(--text)">
@@ -2616,6 +2632,9 @@ Phone:0726192421"></textarea>
             if (!currentDetailCustomer) return;
 
             // Update local data
+            currentDetailCustomer.name = document.getElementById('detailName').value;
+            currentDetailCustomer.email = document.getElementById('detailEmail').value;
+            currentDetailCustomer.phone = document.getElementById('detailPhone').value;
             currentDetailCustomer.address = document.getElementById('detailAddress').value;
             currentDetailCustomer.locality = document.getElementById('detailCity').value;
             currentDetailCustomer.state = document.getElementById('detailCounty').value;
@@ -2629,6 +2648,9 @@ Phone:0726192421"></textarea>
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         id: currentDetailCustomer.id,
+                        name: currentDetailCustomer.name,
+                        email: currentDetailCustomer.email,
+                        phone: currentDetailCustomer.phone,
                         address: currentDetailCustomer.address,
                         locality: currentDetailCustomer.locality,
                         state: currentDetailCustomer.state,
