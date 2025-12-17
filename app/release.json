@@ -1,58 +1,58 @@
 {
-  "version": "v2025.12.15-020639d",
-  "lastUpdated": "2025-12-15T02:14:43.861Z",
-  "commit": "020639d",
-  "note": "Security: Upgrade Next.js to 16.0.7 (Fix CVE-2025-55182)",
+  "version": "v2025.12.17-17a56f2",
+  "lastUpdated": "2025-12-17T16:56:28.048Z",
+  "commit": "17a56f2",
+  "note": "v8.5: Use raw address for GLS export - parseAddress was stripping too much",
   "history": [
     {
-      "hash": "020639d",
-      "date": "2025-12-06T16:34:23+01:00",
-      "message": "Security: Upgrade Next.js to 16.0.7 (Fix CVE-2025-55182)"
+      "hash": "17a56f2",
+      "date": "2025-12-15T14:18:49+01:00",
+      "message": "v8.5: Use raw address for GLS export - parseAddress was stripping too much"
     },
     {
-      "hash": "1af8412",
-      "date": "2025-12-02T20:37:36+01:00",
-      "message": "Feature: Customer Analytics, Automations, and Feedback Implementation"
+      "hash": "0f4eb76",
+      "date": "2025-12-15T11:51:59+01:00",
+      "message": "v8.4: Fix GLS export - Street never empty, proper ISO country codes"
     },
     {
-      "hash": "3a046fc",
-      "date": "2025-12-02T14:37:33+01:00",
-      "message": "Feature: Add Rework status, fix feedback export, improve UI/UX, and enhance Admin features"
+      "hash": "3f9417d",
+      "date": "2025-12-15T09:36:07+01:00",
+      "message": "feat: v7.0 - added changelog modal with git history (click version badge)"
     },
     {
-      "hash": "fe6354c",
-      "date": "2025-12-02T09:14:39+01:00",
-      "message": "Improvement: Add timestamp to release history and refine modal UI"
+      "hash": "df73f53",
+      "date": "2025-12-15T09:28:06+01:00",
+      "message": "feat: v6.9 - orders GLS export now uses parsed address (Street/HouseNo/Building/Apt)"
     },
     {
-      "hash": "f8674a2",
-      "date": "2025-12-02T09:04:38+01:00",
-      "message": "Fix: Increase z-index of Feedback Modal and improve styling"
+      "hash": "4051fb8",
+      "date": "2025-12-15T09:22:55+01:00",
+      "message": "feat: v6.8 - batch size selector, time estimate, manual runs bypass cron disabled"
     },
     {
-      "hash": "8b67800",
-      "date": "2025-12-02T08:54:27+01:00",
-      "message": "Feature: Add Grid Density toggle to Shop, Clickable Dashboard Stats, and Email History in CRM"
+      "hash": "0af7951",
+      "date": "2025-12-15T09:03:42+01:00",
+      "message": "feat: v6.7 - enhanced customer modal (editable Name/Email/Phone), fixed stats criteria"
     },
     {
-      "hash": "9302351",
-      "date": "2025-12-02T08:30:32+01:00",
-      "message": "Feature: Add release history from git log to feedback page modal"
+      "hash": "d92fc5e",
+      "date": "2025-12-15T09:01:39+01:00",
+      "message": "fix: v6.6 - fixed customer stats (country no longer required for complete profile)"
     },
     {
-      "hash": "dc6ba79",
-      "date": "2025-12-02T08:17:52+01:00",
-      "message": "Feature: Make release info clickable with detailed modal in Feedback Page"
+      "hash": "22b837f",
+      "date": "2025-12-15T08:58:36+01:00",
+      "message": "feat: v6.5 - orders tab now uses parsed address (Street/No/City) like customers tab"
     },
     {
-      "hash": "d1a5834",
-      "date": "2025-12-02T07:43:49+01:00",
-      "message": "Feature: Add 'From' filter and System Overview to Feedback page"
+      "hash": "aca69e1",
+      "date": "2025-12-15T08:55:10+01:00",
+      "message": "feat: v6.4 - improved address parser with North American format support"
     },
     {
-      "hash": "07bb20b",
-      "date": "2025-12-02T07:27:17+01:00",
-      "message": "Fix: Improve scrolling and layout on Feedback page"
+      "hash": "c928736",
+      "date": "2025-12-15T08:51:05+01:00",
+      "message": "fix: v6.3 - improved scoring (requires parsed house#), renamed Geo to Valid"
     }
   ]
 }
