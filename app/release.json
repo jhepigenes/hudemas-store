@@ -1,9 +1,19 @@
 {
-  "version": "v2025.12.17-17a56f2",
-  "lastUpdated": "2025-12-17T16:56:28.048Z",
-  "commit": "17a56f2",
-  "note": "v8.5: Use raw address for GLS export - parseAddress was stripping too much",
+  "version": "v2025.12.18-183ff77",
+  "lastUpdated": "2025-12-17T23:53:59.306Z",
+  "commit": "183ff77",
+  "note": "fix: reduce crons to 2 (Vercel free plan limit)",
   "history": [
+    {
+      "hash": "183ff77",
+      "date": "2025-12-18T00:32:58+01:00",
+      "message": "fix: reduce crons to 2 (Vercel free plan limit)"
+    },
+    {
+      "hash": "cbfb665",
+      "date": "2025-12-18T00:15:23+01:00",
+      "message": "feat: Premium Analytics Dashboard v3.0"
+    },
     {
       "hash": "17a56f2",
       "date": "2025-12-15T14:18:49+01:00",
@@ -43,16 +53,6 @@
       "hash": "22b837f",
       "date": "2025-12-15T08:58:36+01:00",
       "message": "feat: v6.5 - orders tab now uses parsed address (Street/No/City) like customers tab"
-    },
-    {
-      "hash": "aca69e1",
-      "date": "2025-12-15T08:55:10+01:00",
-      "message": "feat: v6.4 - improved address parser with North American format support"
-    },
-    {
-      "hash": "c928736",
-      "date": "2025-12-15T08:51:05+01:00",
-      "message": "fix: v6.3 - improved scoring (requires parsed house#), renamed Geo to Valid"
     }
   ]
 }

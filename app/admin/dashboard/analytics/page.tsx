@@ -11,7 +11,8 @@ import {
     Users, AlertTriangle, RefreshCw, Mail, Calendar, Download,
     ArrowRight, CheckCircle, XCircle, Clock, Eye, MousePointer,
     Percent, CreditCard, UserCheck, UserX, BarChart3, PieChartIcon,
-    Activity, Zap, Award, ChevronDown, ChevronUp, ExternalLink
+    Activity, Zap, Award, ChevronDown, ChevronUp, ExternalLink,
+    Brain, Sparkles, TrendingUp as TrendUp, ArrowUpRight, ArrowDownRight
 } from 'lucide-react';
 
 // Types
@@ -62,6 +63,55 @@ interface DailyTrend {
     meta_purchases: number;
 }
 
+// AI Advice Types
+interface Anomaly {
+    metric: string;
+    current: number;
+    expected: number;
+    deviation_pct: number;
+    severity: 'HIGH' | 'MEDIUM' | 'LOW';
+    message: string;
+    icon: string;
+}
+
+interface DailyDigest {
+    top_actions: Array<{
+        priority: number;
+        action: string;
+        reason: string;
+        impact: string;
+        channel: string;
+    }>;
+    health_score: number;
+    quick_stats: { wins: number; warnings: number; critical: number };
+    generated_at: string;
+}
+
+interface BudgetSuggestion {
+    from_campaign: string;
+    to_campaign: string;
+    amount: number;
+    reason: string;
+    expected_impact: { additional_purchases: number; savings: number };
+}
+
+interface TrendPrediction {
+    metric: string;
+    historical: number[];
+    forecast: number[];
+    forecast_total: number;
+    change_pct: number;
+    confidence: 'HIGH' | 'MEDIUM' | 'LOW';
+}
+
+interface AIAdvice {
+    daily_digest: DailyDigest;
+    anomalies: Anomaly[];
+    budget_suggestions: BudgetSuggestion[];
+    predictions: TrendPrediction[];
+    generated_at: string;
+}
+
 // Premium Color Palette
 const COLORS = {
     primary: '#0f172a',
@@ -100,6 +150,8 @@ export default function PremiumAnalyticsPage() {
     const [lastRun, setLastRun] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [expandedSection, setExpandedSection] = useState<string | null>('overview');
+    const [aiAdvice, setAiAdvice] = useState<AIAdvice | null>(null);
+    const [aiAdviceLoading, setAiAdviceLoading] = useState(false);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
@@ -128,6 +180,26 @@ export default function PremiumAnalyticsPage() {
     useEffect(() => {
         fetchData();
     }, [fetchData]);
+
+    // Fetch AI Advice
+    const fetchAIAdvice = useCallback(async () => {
+        setAiAdviceLoading(true);
+        try {
+            const res = await fetch(`/api/analytics/advice?days=${dateRange}`);
+            const data = await res.json();
+            if (data.success && data.data) {
+                setAiAdvice(data.data);
+            }
+        } catch (err) {
+            console.error('Error fetching AI advice:', err);
+        } finally {
+            setAiAdviceLoading(false);
+        }
+    }, [dateRange]);
+
+    useEffect(() => {
+        fetchAIAdvice();
+    }, [fetchAIAdvice]);
 
     const triggerRun = async (sendEmail: boolean = false) => {
         setRunning(true);
@@ -244,8 +316,8 @@ export default function PremiumAnalyticsPage() {
                                     key={days}
                                     onClick={() => setDateRange(days as '7' | '30' | '90')}
                                     className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${dateRange === days
-                                            ? 'bg-white text-slate-900 shadow-lg'
-                                            : 'text-white/80 hover:bg-white/10'
+                                        ? 'bg-white text-slate-900 shadow-lg'
+                                        : 'text-white/80 hover:bg-white/10'
                                         }`}
                                 >
                                     {days}D
@@ -383,6 +455,201 @@ export default function PremiumAnalyticsPage() {
                     </div>
                 </div>
             )}
+
+            {/* AI Command Center Panel */}
+            <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 p-6 text-white shadow-xl">
+                <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500">
+                            <Brain className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <h2 className="text-xl font-bold">AI Command Center</h2>
+                            <p className="text-purple-200 text-sm">
+                                {aiAdvice ? `Health Score: ${aiAdvice.daily_digest.health_score}/100` : 'Loading insights...'}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        {aiAdvice && (
+                            <div className="flex items-center gap-3 text-sm">
+                                <span className="flex items-center gap-1 text-green-400">
+                                    <CheckCircle className="h-4 w-4" />
+                                    {aiAdvice.daily_digest.quick_stats.wins} wins
+                                </span>
+                                <span className="flex items-center gap-1 text-yellow-400">
+                                    <AlertTriangle className="h-4 w-4" />
+                                    {aiAdvice.daily_digest.quick_stats.warnings} warnings
+                                </span>
+                                {aiAdvice.daily_digest.quick_stats.critical > 0 && (
+                                    <span className="flex items-center gap-1 text-red-400">
+                                        <XCircle className="h-4 w-4" />
+                                        {aiAdvice.daily_digest.quick_stats.critical} critical
+                                    </span>
+                                )}
+                            </div>
+                        )}
+                        <button
+                            onClick={fetchAIAdvice}
+                            disabled={aiAdviceLoading}
+                            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition"
+                        >
+                            <RefreshCw className={`h-4 w-4 ${aiAdviceLoading ? 'animate-spin' : ''}`} />
+                        </button>
+                    </div>
+                </div>
+
+                {aiAdvice && (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Daily Digest - Top 3 Actions */}
+                        <div className="space-y-3">
+                            <h3 className="flex items-center gap-2 text-sm font-semibold text-purple-200 uppercase tracking-wider">
+                                <Sparkles className="h-4 w-4" />
+                                Today's Top Actions
+                            </h3>
+                            {aiAdvice.daily_digest.top_actions.map((action, i) => (
+                                <div
+                                    key={i}
+                                    className={`p-4 rounded-xl backdrop-blur-sm border transition hover:scale-[1.02] ${i === 0 ? 'bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border-amber-500/30' :
+                                            i === 1 ? 'bg-gradient-to-r from-slate-400/20 to-gray-500/20 border-slate-400/30' :
+                                                'bg-gradient-to-r from-orange-600/20 to-amber-700/20 border-orange-600/30'
+                                        }`}
+                                >
+                                    <div className="flex items-start gap-3">
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${i === 0 ? 'bg-amber-500 text-amber-950' :
+                                                i === 1 ? 'bg-slate-400 text-slate-950' :
+                                                    'bg-orange-600 text-orange-950'
+                                            }`}>
+                                            {action.priority}
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="font-medium text-white">{action.action}</p>
+                                            <p className="text-sm text-purple-200 mt-1">{action.reason}</p>
+                                            <div className="flex items-center gap-2 mt-2">
+                                                <span className="text-xs px-2 py-1 rounded-full bg-white/10">
+                                                    {action.channel}
+                                                </span>
+                                                <span className="text-xs text-green-400">
+                                                    {action.impact}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Right Column: Anomalies + Budget */}
+                        <div className="space-y-4">
+                            {/* Anomaly Alerts */}
+                            {aiAdvice.anomalies.length > 0 && (
+                                <div>
+                                    <h3 className="flex items-center gap-2 text-sm font-semibold text-purple-200 uppercase tracking-wider mb-3">
+                                        <AlertTriangle className="h-4 w-4" />
+                                        Anomalies Detected
+                                    </h3>
+                                    <div className="space-y-2">
+                                        {aiAdvice.anomalies.map((anomaly, i) => (
+                                            <div
+                                                key={i}
+                                                className={`p-3 rounded-lg border ${anomaly.severity === 'HIGH' ? 'bg-red-500/20 border-red-500/30' :
+                                                        anomaly.severity === 'MEDIUM' ? 'bg-yellow-500/20 border-yellow-500/30' :
+                                                            'bg-blue-500/20 border-blue-500/30'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-lg">{anomaly.icon}</span>
+                                                    <span className="font-medium">{anomaly.metric}</span>
+                                                    <span className={`text-xs px-2 py-0.5 rounded-full ${anomaly.severity === 'HIGH' ? 'bg-red-500 text-white' :
+                                                            anomaly.severity === 'MEDIUM' ? 'bg-yellow-500 text-black' :
+                                                                'bg-blue-500 text-white'
+                                                        }`}>
+                                                        {anomaly.deviation_pct}% deviation
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm text-white/80 mt-1">{anomaly.message}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Budget Optimizer */}
+                            {aiAdvice.budget_suggestions.length > 0 && (
+                                <div>
+                                    <h3 className="flex items-center gap-2 text-sm font-semibold text-purple-200 uppercase tracking-wider mb-3">
+                                        <DollarSign className="h-4 w-4" />
+                                        Budget Reallocation
+                                    </h3>
+                                    <div className="space-y-2">
+                                        {aiAdvice.budget_suggestions.map((suggestion, i) => (
+                                            <div key={i} className="p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
+                                                <div className="flex items-center gap-2 text-sm">
+                                                    <span className="text-red-400 truncate max-w-[120px]">{suggestion.from_campaign}</span>
+                                                    <ArrowRight className="h-4 w-4 text-white/50" />
+                                                    <span className="text-green-400 truncate max-w-[120px]">{suggestion.to_campaign}</span>
+                                                    <span className="font-bold text-white ml-auto">
+                                                        {suggestion.amount} RON
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs text-white/70 mt-1">{suggestion.reason}</p>
+                                                {suggestion.expected_impact.additional_purchases > 0 && (
+                                                    <p className="text-xs text-green-400 mt-1">
+                                                        Expected: +{suggestion.expected_impact.additional_purchases} purchases, {suggestion.expected_impact.savings} RON saved
+                                                    </p>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* 7-Day Forecast */}
+                            {aiAdvice.predictions.length > 0 && (
+                                <div>
+                                    <h3 className="flex items-center gap-2 text-sm font-semibold text-purple-200 uppercase tracking-wider mb-3">
+                                        <TrendUp className="h-4 w-4" />
+                                        7-Day Forecast
+                                    </h3>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {aiAdvice.predictions.map((prediction, i) => (
+                                            <div key={i} className="p-3 rounded-lg bg-white/10 backdrop-blur-sm">
+                                                <div className="text-xs text-purple-200">{prediction.metric}</div>
+                                                <div className="text-lg font-bold mt-1">
+                                                    {prediction.metric === 'Revenue' || prediction.metric === 'Meta Spend'
+                                                        ? `${prediction.forecast_total.toLocaleString()} RON`
+                                                        : prediction.forecast_total}
+                                                </div>
+                                                <div className={`flex items-center gap-1 text-xs mt-1 ${prediction.change_pct >= 0 ? 'text-green-400' : 'text-red-400'
+                                                    }`}>
+                                                    {prediction.change_pct >= 0 ? (
+                                                        <ArrowUpRight className="h-3 w-3" />
+                                                    ) : (
+                                                        <ArrowDownRight className="h-3 w-3" />
+                                                    )}
+                                                    {Math.abs(prediction.change_pct)}%
+                                                    <span className={`ml-1 px-1.5 py-0.5 rounded text-[10px] ${prediction.confidence === 'HIGH' ? 'bg-green-500/30 text-green-300' :
+                                                            prediction.confidence === 'MEDIUM' ? 'bg-yellow-500/30 text-yellow-300' :
+                                                                'bg-red-500/30 text-red-300'
+                                                        }`}>
+                                                        {prediction.confidence}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {aiAdviceLoading && !aiAdvice && (
+                    <div className="flex items-center justify-center py-12">
+                        <div className="animate-spin rounded-full h-8 w-8 border-2 border-purple-400 border-t-transparent" />
+                    </div>
+                )}
+            </div>
 
             {/* Charts Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -557,17 +824,17 @@ export default function PremiumAnalyticsPage() {
                             <div
                                 key={i}
                                 className={`rounded-lg p-4 border-l-4 ${rec.priority === 'CRITICAL' ? 'bg-red-50 border-red-500 dark:bg-red-900/20' :
-                                        rec.priority === 'HIGH' ? 'bg-orange-50 border-orange-500 dark:bg-orange-900/20' :
-                                            rec.priority === 'MEDIUM' ? 'bg-blue-50 border-blue-500 dark:bg-blue-900/20' :
-                                                'bg-stone-50 border-stone-400 dark:bg-stone-800'
+                                    rec.priority === 'HIGH' ? 'bg-orange-50 border-orange-500 dark:bg-orange-900/20' :
+                                        rec.priority === 'MEDIUM' ? 'bg-blue-50 border-blue-500 dark:bg-blue-900/20' :
+                                            'bg-stone-50 border-stone-400 dark:bg-stone-800'
                                     }`}
                             >
                                 <div className="flex items-start justify-between">
                                     <div>
                                         <span className={`text-xs font-bold uppercase ${rec.priority === 'CRITICAL' ? 'text-red-600' :
-                                                rec.priority === 'HIGH' ? 'text-orange-600' :
-                                                    rec.priority === 'MEDIUM' ? 'text-blue-600' :
-                                                        'text-stone-500'
+                                            rec.priority === 'HIGH' ? 'text-orange-600' :
+                                                rec.priority === 'MEDIUM' ? 'text-blue-600' :
+                                                    'text-stone-500'
                                             }`}>
                                             {rec.priority} • {rec.channel}
                                         </span>
