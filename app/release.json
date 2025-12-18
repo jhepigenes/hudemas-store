@@ -1,9 +1,14 @@
 {
-  "version": "v2025.12.18-2c0438e",
-  "lastUpdated": "2025-12-18T01:36:17.424Z",
-  "commit": "2c0438e",
-  "note": "fix: Add correlations to API error fallback",
+  "version": "v2025.12.18-9ddd0ef",
+  "lastUpdated": "2025-12-18T01:43:43.194Z",
+  "commit": "9ddd0ef",
+  "note": "feat: Add unified tab navigation UI (Phase 2) - Overview, Meta Ads, GA4, Email tabs",
   "history": [
+    {
+      "hash": "9ddd0ef",
+      "date": "2025-12-18T02:36:57+01:00",
+      "message": "feat: Add unified tab navigation UI (Phase 2) - Overview, Meta Ads, GA4, Email tabs"
+    },
     {
       "hash": "2c0438e",
       "date": "2025-12-18T02:19:39+01:00",
@@ -48,11 +53,6 @@
       "hash": "df73f53",
       "date": "2025-12-15T09:28:06+01:00",
       "message": "feat: v6.9 - orders GLS export now uses parsed address (Street/HouseNo/Building/Apt)"
-    },
-    {
-      "hash": "4051fb8",
-      "date": "2025-12-15T09:22:55+01:00",
-      "message": "feat: v6.8 - batch size selector, time estimate, manual runs bypass cron disabled"
     }
   ]
 }
