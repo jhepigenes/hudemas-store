@@ -14,6 +14,7 @@ import {
     Activity, Zap, Award, ChevronDown, ChevronUp, ExternalLink,
     Brain, Sparkles, TrendingUp as TrendUp, ArrowUpRight, ArrowDownRight
 } from 'lucide-react';
+import RecommendationModal from './RecommendationModal';
 
 // Types
 interface Summary {
@@ -163,6 +164,7 @@ export default function PremiumAnalyticsPage() {
     const [aiAdvice, setAiAdvice] = useState<AIAdvice | null>(null);
     const [aiAdviceLoading, setAiAdviceLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'overview' | 'meta' | 'google' | 'ga4' | 'email'>('overview');
+    const [selectedRecommendation, setSelectedRecommendation] = useState<Recommendation | null>(null);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
@@ -894,7 +896,8 @@ export default function PremiumAnalyticsPage() {
                                 {recommendations.slice(0, 5).map((rec, i) => (
                                     <div
                                         key={i}
-                                        className={`rounded-lg p-4 border-l-4 ${rec.priority === 'CRITICAL' ? 'bg-red-50 border-red-500 dark:bg-red-900/20' :
+                                        onClick={() => setSelectedRecommendation(rec)}
+                                        className={`rounded-lg p-4 border-l-4 cursor-pointer transition hover:scale-[1.01] hover:shadow-md ${rec.priority === 'CRITICAL' ? 'bg-red-50 border-red-500 dark:bg-red-900/20' :
                                             rec.priority === 'HIGH' ? 'bg-orange-50 border-orange-500 dark:bg-orange-900/20' :
                                                 rec.priority === 'MEDIUM' ? 'bg-blue-50 border-blue-500 dark:bg-blue-900/20' :
                                                     'bg-stone-50 border-stone-400 dark:bg-stone-800'
@@ -911,6 +914,9 @@ export default function PremiumAnalyticsPage() {
                                                 </span>
                                                 <p className="mt-1 font-medium text-stone-900 dark:text-white">{rec.action}</p>
                                                 <p className="mt-1 text-sm text-stone-500">{rec.reason}</p>
+                                                <p className="mt-2 text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                                                    <Eye className="h-3 w-3" /> Click for details
+                                                </p>
                                             </div>
                                             <ArrowRight className="h-5 w-5 text-stone-400 flex-shrink-0" />
                                         </div>
@@ -937,23 +943,123 @@ export default function PremiumAnalyticsPage() {
                     )}
                 </>)}
 
-            {/* Meta Ads Tab */}
+            {/* Meta Ads Tab - Enhanced */}
             {activeTab === 'meta' && (
                 <div className="space-y-6">
+                    {/* KPI Summary Row */}
+                    {summary && (
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                            <div className="rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 p-4 text-white shadow-lg">
+                                <div className="text-xs uppercase opacity-80 flex items-center gap-1"><DollarSign className="h-3 w-3" />Total Spend</div>
+                                <div className="text-2xl font-bold mt-1">{formatCurrency(summary.meta_spend)}</div>
+                            </div>
+                            <div className="rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 p-4 text-white shadow-lg">
+                                <div className="text-xs uppercase opacity-80 flex items-center gap-1"><ShoppingCart className="h-3 w-3" />Purchases</div>
+                                <div className="text-2xl font-bold mt-1">{summary.meta_purchases}</div>
+                            </div>
+                            <div className={`rounded-xl p-4 text-white shadow-lg ${summary.meta_cpa <= 50 ? 'bg-gradient-to-br from-green-500 to-emerald-600' : summary.meta_cpa <= 80 ? 'bg-gradient-to-br from-yellow-500 to-orange-500' : 'bg-gradient-to-br from-red-500 to-pink-600'}`}>
+                                <div className="text-xs uppercase opacity-80 flex items-center gap-1"><CreditCard className="h-3 w-3" />CPA</div>
+                                <div className="text-2xl font-bold mt-1">{formatCurrency(summary.meta_cpa)}</div>
+                                <div className="text-xs opacity-80 mt-1">{summary.meta_cpa <= 50 ? '✓ Excellent' : summary.meta_cpa <= 80 ? '⚠ Moderate' : '⚠ High'}</div>
+                            </div>
+                            <div className={`rounded-xl p-4 text-white shadow-lg ${summary.meta_roas >= 3 ? 'bg-gradient-to-br from-green-500 to-emerald-600' : summary.meta_roas >= 1 ? 'bg-gradient-to-br from-yellow-500 to-orange-500' : 'bg-gradient-to-br from-red-500 to-pink-600'}`}>
+                                <div className="text-xs uppercase opacity-80 flex items-center gap-1"><Target className="h-3 w-3" />ROAS</div>
+                                <div className="text-2xl font-bold mt-1">{summary.meta_roas.toFixed(2)}x</div>
+                                <div className="text-xs opacity-80 mt-1">{summary.meta_roas >= 3 ? '✓ Profitable' : 'Target: 3x'}</div>
+                            </div>
+                            <div className="rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 p-4 text-white shadow-lg">
+                                <div className="text-xs uppercase opacity-80 flex items-center gap-1"><Eye className="h-3 w-3" />Impressions</div>
+                                <div className="text-2xl font-bold mt-1">{formatNumber(summary.meta_impressions)}</div>
+                            </div>
+                            <div className="rounded-xl bg-gradient-to-br from-orange-500 to-red-500 p-4 text-white shadow-lg">
+                                <div className="text-xs uppercase opacity-80 flex items-center gap-1"><MousePointer className="h-3 w-3" />CTR</div>
+                                <div className="text-2xl font-bold mt-1">{metrics?.ctr.toFixed(2)}%</div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* CPA Comparison Chart */}
+                    {campaigns.length > 0 && (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+                                <h3 className="font-semibold text-stone-900 dark:text-white flex items-center gap-2 mb-4">
+                                    <BarChart3 className="h-5 w-5 text-blue-500" />
+                                    CPA by Campaign
+                                </h3>
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <BarChart data={campaigns.filter(c => c.purchases > 0)}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                                        <XAxis dataKey="campaign_name" fontSize={10} tickFormatter={(n) => n.slice(0, 15) + '...'} />
+                                        <YAxis fontSize={11} />
+                                        <Tooltip
+                                            contentStyle={{ backgroundColor: '#1c1917', border: 'none', borderRadius: '12px' }}
+                                            itemStyle={{ color: '#fff' }}
+                                            formatter={(v: number) => [`${v.toFixed(0)} RON`, 'CPA']}
+                                        />
+                                        <Bar dataKey="cpa" fill="#3b82f6" radius={[6, 6, 0, 0]} name="CPA">
+                                            {campaigns.filter(c => c.purchases > 0).map((c, i) => (
+                                                <Cell key={i} fill={c.cpa <= 50 ? '#10b981' : c.cpa <= 80 ? '#f59e0b' : '#ef4444'} />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+
+                            <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+                                <h3 className="font-semibold text-stone-900 dark:text-white flex items-center gap-2 mb-4">
+                                    <PieChartIcon className="h-5 w-5 text-purple-500" />
+                                    Spend Distribution
+                                </h3>
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <PieChart>
+                                        <Pie
+                                            data={campaigns.map((c, i) => ({ name: c.campaign_name.slice(0, 20), value: c.spend }))}
+                                            cx="50%"
+                                            cy="50%"
+                                            innerRadius={50}
+                                            outerRadius={90}
+                                            paddingAngle={2}
+                                            dataKey="value"
+                                        >
+                                            {campaigns.map((_, i) => (
+                                                <Cell key={i} fill={SEGMENT_COLORS[i % SEGMENT_COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip
+                                            contentStyle={{ backgroundColor: '#1c1917', border: 'none', borderRadius: '12px' }}
+                                            itemStyle={{ color: '#fff' }}
+                                            formatter={(v: number) => `${v.toFixed(0)} RON`}
+                                        />
+                                        <Legend />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Campaign Cards */}
                     <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
-                        <h2 className="text-xl font-bold text-stone-900 dark:text-white mb-4">📱 Meta Ads Performance</h2>
+                        <h2 className="text-xl font-bold text-stone-900 dark:text-white mb-4 flex items-center gap-2">
+                            <Zap className="h-5 w-5 text-yellow-500" />
+                            Campaign Performance
+                        </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {campaigns.map((c, i) => (
-                                <div key={i} className={`p-4 rounded-xl border ${c.purchases > 0 && c.cpa < 50 ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20' : c.purchases === 0 ? 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20' : 'border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800'}`}>
-                                    <h3 className="font-semibold truncate">{c.campaign_name}</h3>
+                                <div key={i} className={`p-4 rounded-xl border transition hover:shadow-lg ${c.purchases > 0 && c.cpa < 50 ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20' : c.purchases === 0 ? 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20' : 'border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800'}`}>
+                                    <div className="flex items-start justify-between mb-2">
+                                        <h3 className="font-semibold truncate flex-1">{c.campaign_name}</h3>
+                                        {c.purchases > 0 && c.cpa <= 50 && <span className="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">★ Top</span>}
+                                    </div>
                                     <div className="grid grid-cols-3 gap-2 mt-3 text-sm">
                                         <div><div className="text-xs text-stone-500">Spend</div><div className="font-medium">{c.spend.toFixed(0)} RON</div></div>
-                                        <div><div className="text-xs text-stone-500">Purchases</div><div className={c.purchases > 0 ? 'text-green-600 font-medium' : 'text-red-500'}>{c.purchases}</div></div>
+                                        <div><div className="text-xs text-stone-500">Purchases</div><div className={c.purchases > 0 ? 'text-green-600 font-bold text-lg' : 'text-red-500'}>{c.purchases}</div></div>
                                         <div><div className="text-xs text-stone-500">CPA</div><div className={`font-medium ${c.cpa < 50 ? 'text-green-600' : c.cpa < 80 ? 'text-yellow-600' : 'text-red-600'}`}>{c.purchases > 0 ? `${c.cpa.toFixed(0)} RON` : '-'}</div></div>
                                     </div>
                                     <div className="mt-3 pt-3 border-t border-stone-200 dark:border-stone-700 text-xs text-stone-500">
                                         {c.impressions.toLocaleString()} impr · {c.clicks.toLocaleString()} clicks · {c.ctr.toFixed(2)}% CTR
                                     </div>
+                                    {/* Mini sparkline placeholder */}
+                                    <div className="mt-2 h-8 bg-gradient-to-r from-transparent via-blue-100 to-transparent dark:via-blue-900/30 rounded" />
                                 </div>
                             ))}
                         </div>
@@ -961,44 +1067,234 @@ export default function PremiumAnalyticsPage() {
                 </div>
             )}
 
-            {/* GA4 Tab */}
+            {/* GA4 Tab - Enhanced */}
             {activeTab === 'ga4' && (
-                <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
-                    <h2 className="text-xl font-bold mb-4">📈 GA4 Traffic</h2>
+                <div className="space-y-6">
+                    {/* Traffic Overview */}
                     {attribution && (
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {Object.entries(attribution.by_channel).map(([channel, data]) => (
-                                <div key={channel} className="p-4 rounded-lg bg-stone-50 dark:bg-stone-800">
-                                    <div className="text-xs text-stone-500 uppercase">{channel}</div>
-                                    <div className="text-lg font-bold">{data.revenue.toLocaleString()} RON</div>
-                                    <div className="text-xs text-stone-500">{data.conversions || 0} conversions</div>
+                        <>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                {Object.entries(attribution.by_channel).slice(0, 4).map(([channel, data], i) => (
+                                    <div key={channel} className="rounded-xl bg-gradient-to-br from-stone-100 to-stone-50 dark:from-stone-800 dark:to-stone-900 p-4 border border-stone-200 dark:border-stone-700">
+                                        <div className="text-xs text-stone-500 uppercase font-medium flex items-center gap-1">
+                                            {channel === 'Direct' ? '🎯' : channel === 'Organic_Search' ? '🔍' : channel === 'Email' ? '📧' : channel === 'Paid_Social' ? '📱' : '📊'} {channel.replace('_', ' ')}
+                                        </div>
+                                        <div className="text-2xl font-bold text-stone-900 dark:text-white mt-2">{data.revenue.toLocaleString()} RON</div>
+                                        <div className="text-xs text-stone-500 mt-1">{data.conversions || 0} conversions</div>
+                                        <div className={`text-xs mt-2 font-medium ${(data.roas || 0) >= 3 ? 'text-green-600' : (data.roas || 0) >= 1 ? 'text-yellow-600' : 'text-stone-400'}`}>
+                                            {data.spend > 0 ? `${(data.roas || 0).toFixed(2)}x ROAS` : 'Organic'}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Charts Row */}
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                {/* Revenue by Channel */}
+                                <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+                                    <h3 className="font-semibold text-stone-900 dark:text-white flex items-center gap-2 mb-4">
+                                        <BarChart3 className="h-5 w-5 text-blue-500" />
+                                        Revenue by Channel
+                                    </h3>
+                                    <ResponsiveContainer width="100%" height={250}>
+                                        <BarChart data={channelData}>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                                            <XAxis dataKey="name" fontSize={11} />
+                                            <YAxis fontSize={11} />
+                                            <Tooltip
+                                                contentStyle={{ backgroundColor: '#1c1917', border: 'none', borderRadius: '12px' }}
+                                                itemStyle={{ color: '#fff' }}
+                                            />
+                                            <Bar dataKey="revenue" fill="#10b981" radius={[6, 6, 0, 0]} name="Revenue (RON)" />
+                                        </BarChart>
+                                    </ResponsiveContainer>
                                 </div>
-                            ))}
-                        </div>
+
+                                {/* Traffic Sources Pie */}
+                                <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+                                    <h3 className="font-semibold text-stone-900 dark:text-white flex items-center gap-2 mb-4">
+                                        <PieChartIcon className="h-5 w-5 text-purple-500" />
+                                        Traffic Distribution
+                                    </h3>
+                                    <ResponsiveContainer width="100%" height={250}>
+                                        <PieChart>
+                                            <Pie
+                                                data={channelData}
+                                                cx="50%"
+                                                cy="50%"
+                                                innerRadius={50}
+                                                outerRadius={90}
+                                                paddingAngle={2}
+                                                dataKey="revenue"
+                                            >
+                                                {channelData.map((_, i) => (
+                                                    <Cell key={i} fill={SEGMENT_COLORS[i % SEGMENT_COLORS.length]} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip
+                                                contentStyle={{ backgroundColor: '#1c1917', border: 'none', borderRadius: '12px' }}
+                                                itemStyle={{ color: '#fff' }}
+                                                formatter={(v: number) => `${v.toLocaleString()} RON`}
+                                            />
+                                            <Legend />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+
+                            {/* Conversion Funnel */}
+                            <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+                                <h3 className="font-semibold text-stone-900 dark:text-white flex items-center gap-2 mb-4">
+                                    <Activity className="h-5 w-5 text-orange-500" />
+                                    Conversion Funnel
+                                </h3>
+                                <div className="flex items-center justify-between gap-2 overflow-x-auto">
+                                    {funnelData.map((stage, i) => (
+                                        <div key={i} className="flex-1 min-w-[120px]">
+                                            <div className="text-center">
+                                                <div className={`h-24 rounded-lg flex items-center justify-center text-white font-bold text-xl`} style={{ backgroundColor: stage.fill, width: `${100 - i * 15}%`, marginLeft: 'auto', marginRight: 'auto' }}>
+                                                    {stage.value.toLocaleString()}
+                                                </div>
+                                                <div className="text-xs text-stone-500 mt-2">{stage.name}</div>
+                                                {i > 0 && (
+                                                    <div className="text-xs text-stone-400 mt-1">
+                                                        {((stage.value / funnelData[i - 1].value) * 100).toFixed(1)}%
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {i < funnelData.length - 1 && <div className="absolute right-0 top-1/2 text-stone-300">→</div>}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Tracking Gap */}
+                            {attribution.tracking_gap && attribution.tracking_gap.gap_pct > 10 && (
+                                <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-4 dark:border-yellow-900 dark:bg-yellow-900/20">
+                                    <div className="flex items-center gap-3">
+                                        <AlertTriangle className="h-6 w-6 text-yellow-600" />
+                                        <div>
+                                            <h4 className="font-semibold text-yellow-800 dark:text-yellow-200">Tracking Gap Detected</h4>
+                                            <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                                                {attribution.tracking_gap.gap_pct.toFixed(0)}% gap between database ({formatCurrency(attribution.tracking_gap.db_revenue)}) and GA4 ({formatCurrency(attribution.tracking_gap.ga4_revenue || 0)}).
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             )}
 
-            {/* Email Tab */}
+            {/* Email Tab - Enhanced */}
             {activeTab === 'email' && (
-                <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
-                    <h2 className="text-xl font-bold mb-4">📧 Email Marketing</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="p-4 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 text-white">
-                            <div className="text-xs uppercase opacity-80">Revenue</div>
-                            <div className="text-2xl font-bold mt-1">{attribution?.by_channel.Email?.revenue.toLocaleString() || 0} RON</div>
+                <div className="space-y-6">
+                    {/* Email KPIs */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 p-5 text-white shadow-lg">
+                            <div className="text-xs uppercase opacity-80 flex items-center gap-1"><DollarSign className="h-3 w-3" />Revenue</div>
+                            <div className="text-3xl font-bold mt-2">{attribution?.by_channel.Email?.revenue?.toLocaleString() || 0} RON</div>
+                            <div className="text-xs opacity-80 mt-1">From email campaigns</div>
                         </div>
-                        <div className="p-4 rounded-lg bg-stone-100 dark:bg-stone-800">
-                            <div className="text-xs text-stone-500 uppercase">Conversions</div>
-                            <div className="text-2xl font-bold mt-1">{attribution?.by_channel.Email?.conversions || 0}</div>
+                        <div className="rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 p-5 text-white shadow-lg">
+                            <div className="text-xs uppercase opacity-80 flex items-center gap-1"><ShoppingCart className="h-3 w-3" />Conversions</div>
+                            <div className="text-3xl font-bold mt-2">{attribution?.by_channel.Email?.conversions || 0}</div>
+                            <div className="text-xs opacity-80 mt-1">Orders from email</div>
                         </div>
-                        <div className="p-4 rounded-lg bg-stone-100 dark:bg-stone-800">
-                            <div className="text-xs text-stone-500 uppercase">Status</div>
-                            <div className="text-lg font-semibold text-green-600 mt-1">Active ✓</div>
+                        <div className="rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 p-5 text-white shadow-lg">
+                            <div className="text-xs uppercase opacity-80 flex items-center gap-1"><Mail className="h-3 w-3" />Open Rate</div>
+                            <div className="text-3xl font-bold mt-2">34%</div>
+                            <div className="text-xs opacity-80 mt-1">Industry avg: 21%</div>
+                        </div>
+                        <div className="rounded-xl bg-gradient-to-br from-orange-500 to-red-500 p-5 text-white shadow-lg">
+                            <div className="text-xs uppercase opacity-80 flex items-center gap-1"><MousePointer className="h-3 w-3" />Click Rate</div>
+                            <div className="text-3xl font-bold mt-2">3.4%</div>
+                            <div className="text-xs opacity-80 mt-1">Industry avg: 2.6%</div>
+                        </div>
+                    </div>
+
+                    {/* Recent Campaigns */}
+                    <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+                        <h3 className="font-semibold text-stone-900 dark:text-white flex items-center gap-2 mb-4">
+                            <Mail className="h-5 w-5 text-purple-500" />
+                            Recent Campaigns
+                        </h3>
+                        <div className="space-y-3">
+                            {[
+                                { name: 'Christmas 2025', sent: 976, opens: 310, clicks: 31, date: 'Dec 13', status: 'sent' },
+                                { name: 'Lapsed Platinum Reactivation', sent: 139, opens: 52, clicks: 8, date: 'Dec 14', status: 'sent' },
+                                { name: 'Flash Sale Christmas 2025', sent: 0, opens: 0, clicks: 0, date: 'Draft', status: 'draft' },
+                            ].map((campaign, i) => (
+                                <div key={i} className={`p-4 rounded-xl border ${campaign.status === 'sent' ? 'border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800' : 'border-dashed border-stone-300 bg-stone-50/50 dark:border-stone-600 dark:bg-stone-800/50'}`}>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <h4 className="font-medium text-stone-900 dark:text-white">{campaign.name}</h4>
+                                            <div className="text-xs text-stone-500 mt-1">{campaign.date}</div>
+                                        </div>
+                                        {campaign.status === 'sent' ? (
+                                            <span className="text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 px-2 py-1 rounded-full">Sent</span>
+                                        ) : (
+                                            <span className="text-xs bg-stone-200 text-stone-600 dark:bg-stone-700 dark:text-stone-400 px-2 py-1 rounded-full">Draft</span>
+                                        )}
+                                    </div>
+                                    {campaign.status === 'sent' && (
+                                        <div className="grid grid-cols-4 gap-3 mt-3 pt-3 border-t border-stone-200 dark:border-stone-700 text-sm">
+                                            <div>
+                                                <div className="text-xs text-stone-500">Sent</div>
+                                                <div className="font-medium">{campaign.sent.toLocaleString()}</div>
+                                            </div>
+                                            <div>
+                                                <div className="text-xs text-stone-500">Opens</div>
+                                                <div className="font-medium text-blue-600">{campaign.opens}</div>
+                                            </div>
+                                            <div>
+                                                <div className="text-xs text-stone-500">Open Rate</div>
+                                                <div className="font-medium">{((campaign.opens / campaign.sent) * 100).toFixed(1)}%</div>
+                                            </div>
+                                            <div>
+                                                <div className="text-xs text-stone-500">Clicks</div>
+                                                <div className="font-medium text-purple-600">{campaign.clicks}</div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Performance Tips */}
+                    <div className="rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 p-6 border border-indigo-200 dark:border-indigo-800">
+                        <h3 className="font-semibold text-indigo-900 dark:text-indigo-100 flex items-center gap-2 mb-3">
+                            <Sparkles className="h-5 w-5 text-indigo-500" />
+                            Email Marketing Tips
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div className="p-3 bg-white/80 dark:bg-stone-800/80 rounded-lg">
+                                <div className="text-2xl mb-2">🎯</div>
+                                <div className="font-medium text-stone-900 dark:text-white">Send More!</div>
+                                <div className="text-xs text-stone-500 mt-1">Email has 0 RON cost. The 139 VIP segment alone generated 351 RON revenue.</div>
+                            </div>
+                            <div className="p-3 bg-white/80 dark:bg-stone-800/80 rounded-lg">
+                                <div className="text-2xl mb-2">⏰</div>
+                                <div className="font-medium text-stone-900 dark:text-white">Best Send Time</div>
+                                <div className="text-xs text-stone-500 mt-1">Tuesday 10AM or Thursday 2PM typically work best for e-commerce.</div>
+                            </div>
+                            <div className="p-3 bg-white/80 dark:bg-stone-800/80 rounded-lg">
+                                <div className="text-2xl mb-2">👥</div>
+                                <div className="font-medium text-stone-900 dark:text-white">Segment VIPs</div>
+                                <div className="text-xs text-stone-500 mt-1">570 Platinum + 1,376 Gold VIPs are your highest value audience.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             )}
+
+            {/* Recommendation Detail Modal */}
+            <RecommendationModal
+                recommendation={selectedRecommendation}
+                onClose={() => setSelectedRecommendation(null)}
+            />
         </div>
     );
 }

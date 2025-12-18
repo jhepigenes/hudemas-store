@@ -1,9 +1,14 @@
 {
-  "version": "v2025.12.18-9ddd0ef",
-  "lastUpdated": "2025-12-18T01:43:43.194Z",
-  "commit": "9ddd0ef",
-  "note": "feat: Add unified tab navigation UI (Phase 2) - Overview, Meta Ads, GA4, Email tabs",
+  "version": "v2025.12.18-d1e320d",
+  "lastUpdated": "2025-12-18T02:34:22.798Z",
+  "commit": "d1e320d",
+  "note": "feat: Make tabs functional with Meta Ads, GA4, Email content (Phase 3)",
   "history": [
+    {
+      "hash": "d1e320d",
+      "date": "2025-12-18T02:44:16+01:00",
+      "message": "feat: Make tabs functional with Meta Ads, GA4, Email content (Phase 3)"
+    },
     {
       "hash": "9ddd0ef",
       "date": "2025-12-18T02:36:57+01:00",
@@ -48,11 +53,6 @@
       "hash": "3f9417d",
       "date": "2025-12-15T09:36:07+01:00",
       "message": "feat: v7.0 - added changelog modal with git history (click version badge)"
-    },
-    {
-      "hash": "df73f53",
-      "date": "2025-12-15T09:28:06+01:00",
-      "message": "feat: v6.9 - orders GLS export now uses parsed address (Street/HouseNo/Building/Apt)"
     }
   ]
 }
