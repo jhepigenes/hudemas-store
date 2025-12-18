@@ -1,9 +1,14 @@
 {
-  "version": "v2025.12.18-95f57fe",
-  "lastUpdated": "2025-12-18T01:19:28.707Z",
-  "commit": "95f57fe",
-  "note": "feat: Add Correlation Insights (Phase 1) - Spend efficiency, best day, channel comparison",
+  "version": "v2025.12.18-2c0438e",
+  "lastUpdated": "2025-12-18T01:36:17.424Z",
+  "commit": "2c0438e",
+  "note": "fix: Add correlations to API error fallback",
   "history": [
+    {
+      "hash": "2c0438e",
+      "date": "2025-12-18T02:19:39+01:00",
+      "message": "fix: Add correlations to API error fallback"
+    },
     {
       "hash": "95f57fe",
       "date": "2025-12-18T01:32:16+01:00",
@@ -48,11 +53,6 @@
       "hash": "4051fb8",
       "date": "2025-12-15T09:22:55+01:00",
       "message": "feat: v6.8 - batch size selector, time estimate, manual runs bypass cron disabled"
-    },
-    {
-      "hash": "0af7951",
-      "date": "2025-12-15T09:03:42+01:00",
-      "message": "feat: v6.7 - enhanced customer modal (editable Name/Email/Phone), fixed stats criteria"
     }
   ]
 }

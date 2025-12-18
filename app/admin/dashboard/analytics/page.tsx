@@ -162,6 +162,7 @@ export default function PremiumAnalyticsPage() {
     const [expandedSection, setExpandedSection] = useState<string | null>('overview');
     const [aiAdvice, setAiAdvice] = useState<AIAdvice | null>(null);
     const [aiAdviceLoading, setAiAdviceLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState<'overview' | 'meta' | 'google' | 'ga4' | 'email'>('overview');
 
     const fetchData = useCallback(async () => {
         setLoading(true);
@@ -354,6 +355,34 @@ export default function PremiumAnalyticsPage() {
                         </button>
                     </div>
                 </div>
+            </div>
+
+            {/* Tab Navigation */}
+            <div className="flex flex-wrap gap-2 p-1 bg-stone-100 dark:bg-stone-800 rounded-xl">
+                {[
+                    { id: 'overview', label: '📊 Overview', enabled: true },
+                    { id: 'meta', label: '📱 Meta Ads', enabled: true },
+                    { id: 'google', label: '🔍 Google Ads', enabled: false, badge: 'Soon' },
+                    { id: 'ga4', label: '📈 GA4', enabled: true },
+                    { id: 'email', label: '📧 Email', enabled: true },
+                ].map((tab) => (
+                    <button
+                        key={tab.id}
+                        onClick={() => tab.enabled && setActiveTab(tab.id as typeof activeTab)}
+                        disabled={!tab.enabled}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition ${activeTab === tab.id
+                                ? 'bg-white dark:bg-stone-900 shadow text-stone-900 dark:text-white'
+                                : tab.enabled
+                                    ? 'text-stone-600 dark:text-stone-400 hover:bg-white/50 dark:hover:bg-stone-700'
+                                    : 'text-stone-400 cursor-not-allowed'
+                            }`}
+                    >
+                        {tab.label}
+                        {'badge' in tab && tab.badge && (
+                            <span className="ml-1.5 px-1.5 py-0.5 text-[10px] rounded bg-yellow-400 text-yellow-950">{tab.badge}</span>
+                        )}
+                    </button>
+                ))}
             </div>
 
             {/* Quick Stats Bar */}
@@ -663,9 +692,9 @@ export default function PremiumAnalyticsPage() {
                                             <div
                                                 key={i}
                                                 className={`p-3 rounded-lg backdrop-blur-sm border ${insight.color === 'green' ? 'bg-emerald-500/20 border-emerald-500/30' :
-                                                        insight.color === 'blue' ? 'bg-blue-500/20 border-blue-500/30' :
-                                                            insight.color === 'purple' ? 'bg-purple-500/20 border-purple-500/30' :
-                                                                'bg-orange-500/20 border-orange-500/30'
+                                                    insight.color === 'blue' ? 'bg-blue-500/20 border-blue-500/30' :
+                                                        insight.color === 'purple' ? 'bg-purple-500/20 border-purple-500/30' :
+                                                            'bg-orange-500/20 border-orange-500/30'
                                                     }`}
                                             >
                                                 <div className="flex items-center gap-2">
