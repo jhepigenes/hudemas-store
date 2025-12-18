@@ -56,11 +56,21 @@ export interface TrendPrediction {
     confidence: 'HIGH' | 'MEDIUM' | 'LOW';
 }
 
+export interface CorrelationInsight {
+    type: 'spend_revenue' | 'day_performance' | 'channel_comparison';
+    title: string;
+    value: string;
+    description: string;
+    icon: string;
+    color: 'green' | 'blue' | 'purple' | 'orange';
+}
+
 export interface AIAdviceResult {
     daily_digest: DailyDigest;
     anomalies: Anomaly[];
     budget_suggestions: BudgetSuggestion[];
     predictions: TrendPrediction[];
+    correlations: CorrelationInsight[];
     generated_at: string;
 }
 
@@ -395,22 +405,127 @@ function createPrediction(metric: string, historical: number[]): TrendPrediction
     };
 }
 
+// ============ Correlation Insights ============
+
+export function calculateCorrelations(
+    trends: DailyTrend[],
+    campaigns: Campaign[],
+    attribution: AnalyticsResult['attribution']
+): CorrelationInsight[] {
+    const insights: CorrelationInsight[] = [];
+
+    // 1. Spend → Revenue Efficiency
+    const totalSpend = campaigns.reduce((s, c) => s + c.spend, 0);
+    const totalPurchases = campaigns.reduce((s, c) => s + c.purchases, 0);
+    const estimatedRevenue = totalPurchases * AVG_ORDER_VALUE;
+
+    if (totalSpend > 0) {
+        const efficiency = estimatedRevenue / totalSpend;
+        insights.push({
+            type: 'spend_revenue',
+            title: 'Spend Efficiency',
+            value: `${efficiency.toFixed(1)}x`,
+            description: `Every 1 RON spent on Meta → ${efficiency.toFixed(1)} RON revenue`,
+            icon: '💰',
+            color: efficiency >= 3 ? 'green' : efficiency >= 1 ? 'blue' : 'orange',
+        });
+    }
+
+    // 2. Day of Week Performance
+    if (trends.length >= 7) {
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const dayPerformance: { [key: number]: { orders: number; count: number } } = {};
+
+        for (const trend of trends) {
+            const dayOfWeek = new Date(trend.date).getDay();
+            if (!dayPerformance[dayOfWeek]) {
+                dayPerformance[dayOfWeek] = { orders: 0, count: 0 };
+            }
+            dayPerformance[dayOfWeek].orders += trend.orders;
+            dayPerformance[dayOfWeek].count += 1;
+        }
+
+        let bestDay = 0;
+        let bestAvg = 0;
+        for (const [day, data] of Object.entries(dayPerformance)) {
+            const avg = data.orders / data.count;
+            if (avg > bestAvg) {
+                bestAvg = avg;
+                bestDay = parseInt(day);
+            }
+        }
+
+        const avgOverall = trends.reduce((s, t) => s + t.orders, 0) / trends.length;
+        const improvement = avgOverall > 0 ? ((bestAvg - avgOverall) / avgOverall * 100) : 0;
+
+        insights.push({
+            type: 'day_performance',
+            title: 'Best Day',
+            value: dayNames[bestDay],
+            description: `${dayNames[bestDay]}s have ${improvement > 0 ? '+' : ''}${improvement.toFixed(0)}% higher orders`,
+            icon: '📅',
+            color: 'purple',
+        });
+    }
+
+    // 3. Channel ROAS Comparison
+    if (attribution?.by_channel) {
+        const channels = Object.entries(attribution.by_channel)
+            .filter(([_, data]) => data.spend > 0 && data.roas !== Infinity)
+            .sort(([_, a], [__, b]) => (b.roas || 0) - (a.roas || 0));
+
+        if (channels.length > 0) {
+            const [topChannel, topData] = channels[0];
+            insights.push({
+                type: 'channel_comparison',
+                title: 'Top Channel',
+                value: topChannel,
+                description: `${topChannel} has ${topData.roas?.toFixed(1)}x ROAS, best performer`,
+                icon: '🏆',
+                color: 'green',
+            });
+        }
+    }
+
+    // 4. Meta vs Organic comparison (if available)
+    if (attribution?.by_channel) {
+        const metaPaid = attribution.by_channel['Meta Paid'];
+        const organic = attribution.by_channel['Organic'];
+
+        if (metaPaid && organic && organic.revenue > 0) {
+            const metaPct = metaPaid.revenue / (metaPaid.revenue + organic.revenue) * 100;
+            insights.push({
+                type: 'channel_comparison',
+                title: 'Paid vs Organic',
+                value: `${metaPct.toFixed(0)}% / ${(100 - metaPct).toFixed(0)}%`,
+                description: `Paid traffic: ${metaPct.toFixed(0)}%, Organic: ${(100 - metaPct).toFixed(0)}%`,
+                icon: '⚖️',
+                color: 'blue',
+            });
+        }
+    }
+
+    return insights;
+}
+
 // ============ Main Entry Point ============
 
 export function generateAIAdvice(analyticsResult: AnalyticsResult): AIAdviceResult {
-    const { campaigns, trends, recommendations } = analyticsResult;
+    const { campaigns, trends, recommendations, attribution } = analyticsResult;
 
     // Generate all insights
     const anomalies = detectAnomalies(trends, campaigns);
     const daily_digest = generateDailyDigest(recommendations, campaigns, anomalies);
     const budget_suggestions = optimizeBudget(campaigns);
     const predictions = predictTrends(trends);
+    const correlations = calculateCorrelations(trends, campaigns, attribution);
 
     return {
         daily_digest,
         anomalies,
         budget_suggestions,
         predictions,
+        correlations,
         generated_at: new Date().toISOString(),
     };
 }

@@ -104,11 +104,21 @@ interface TrendPrediction {
     confidence: 'HIGH' | 'MEDIUM' | 'LOW';
 }
 
+interface CorrelationInsight {
+    type: 'spend_revenue' | 'day_performance' | 'channel_comparison';
+    title: string;
+    value: string;
+    description: string;
+    icon: string;
+    color: 'green' | 'blue' | 'purple' | 'orange';
+}
+
 interface AIAdvice {
     daily_digest: DailyDigest;
     anomalies: Anomaly[];
     budget_suggestions: BudgetSuggestion[];
     predictions: TrendPrediction[];
+    correlations: CorrelationInsight[];
     generated_at: string;
 }
 
@@ -511,14 +521,14 @@ export default function PremiumAnalyticsPage() {
                                 <div
                                     key={i}
                                     className={`p-4 rounded-xl backdrop-blur-sm border transition hover:scale-[1.02] ${i === 0 ? 'bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border-amber-500/30' :
-                                            i === 1 ? 'bg-gradient-to-r from-slate-400/20 to-gray-500/20 border-slate-400/30' :
-                                                'bg-gradient-to-r from-orange-600/20 to-amber-700/20 border-orange-600/30'
+                                        i === 1 ? 'bg-gradient-to-r from-slate-400/20 to-gray-500/20 border-slate-400/30' :
+                                            'bg-gradient-to-r from-orange-600/20 to-amber-700/20 border-orange-600/30'
                                         }`}
                                 >
                                     <div className="flex items-start gap-3">
                                         <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${i === 0 ? 'bg-amber-500 text-amber-950' :
-                                                i === 1 ? 'bg-slate-400 text-slate-950' :
-                                                    'bg-orange-600 text-orange-950'
+                                            i === 1 ? 'bg-slate-400 text-slate-950' :
+                                                'bg-orange-600 text-orange-950'
                                             }`}>
                                             {action.priority}
                                         </div>
@@ -553,16 +563,16 @@ export default function PremiumAnalyticsPage() {
                                             <div
                                                 key={i}
                                                 className={`p-3 rounded-lg border ${anomaly.severity === 'HIGH' ? 'bg-red-500/20 border-red-500/30' :
-                                                        anomaly.severity === 'MEDIUM' ? 'bg-yellow-500/20 border-yellow-500/30' :
-                                                            'bg-blue-500/20 border-blue-500/30'
+                                                    anomaly.severity === 'MEDIUM' ? 'bg-yellow-500/20 border-yellow-500/30' :
+                                                        'bg-blue-500/20 border-blue-500/30'
                                                     }`}
                                             >
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-lg">{anomaly.icon}</span>
                                                     <span className="font-medium">{anomaly.metric}</span>
                                                     <span className={`text-xs px-2 py-0.5 rounded-full ${anomaly.severity === 'HIGH' ? 'bg-red-500 text-white' :
-                                                            anomaly.severity === 'MEDIUM' ? 'bg-yellow-500 text-black' :
-                                                                'bg-blue-500 text-white'
+                                                        anomaly.severity === 'MEDIUM' ? 'bg-yellow-500 text-black' :
+                                                            'bg-blue-500 text-white'
                                                         }`}>
                                                         {anomaly.deviation_pct}% deviation
                                                     </span>
@@ -629,12 +639,41 @@ export default function PremiumAnalyticsPage() {
                                                     )}
                                                     {Math.abs(prediction.change_pct)}%
                                                     <span className={`ml-1 px-1.5 py-0.5 rounded text-[10px] ${prediction.confidence === 'HIGH' ? 'bg-green-500/30 text-green-300' :
-                                                            prediction.confidence === 'MEDIUM' ? 'bg-yellow-500/30 text-yellow-300' :
-                                                                'bg-red-500/30 text-red-300'
+                                                        prediction.confidence === 'MEDIUM' ? 'bg-yellow-500/30 text-yellow-300' :
+                                                            'bg-red-500/30 text-red-300'
                                                         }`}>
                                                         {prediction.confidence}
                                                     </span>
                                                 </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Correlation Insights */}
+                            {aiAdvice.correlations && aiAdvice.correlations.length > 0 && (
+                                <div className="mt-4">
+                                    <h3 className="flex items-center gap-2 text-sm font-semibold text-purple-200 uppercase tracking-wider mb-3">
+                                        <Activity className="h-4 w-4" />
+                                        Key Insights
+                                    </h3>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {aiAdvice.correlations.map((insight, i) => (
+                                            <div
+                                                key={i}
+                                                className={`p-3 rounded-lg backdrop-blur-sm border ${insight.color === 'green' ? 'bg-emerald-500/20 border-emerald-500/30' :
+                                                        insight.color === 'blue' ? 'bg-blue-500/20 border-blue-500/30' :
+                                                            insight.color === 'purple' ? 'bg-purple-500/20 border-purple-500/30' :
+                                                                'bg-orange-500/20 border-orange-500/30'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-lg">{insight.icon}</span>
+                                                    <span className="text-xs text-white/70">{insight.title}</span>
+                                                </div>
+                                                <div className="text-lg font-bold mt-1">{insight.value}</div>
+                                                <p className="text-xs text-white/60 mt-1">{insight.description}</p>
                                             </div>
                                         ))}
                                     </div>
