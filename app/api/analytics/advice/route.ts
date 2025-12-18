@@ -42,6 +42,7 @@ export async function GET(request: Request) {
                 anomalies: [],
                 budget_suggestions: [],
                 predictions: [],
+                correlations: [],
                 generated_at: new Date().toISOString(),
             },
         }, { status: 500 });

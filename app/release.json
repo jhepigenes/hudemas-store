@@ -1,9 +1,14 @@
 {
-  "version": "v2025.12.18-72c0882",
-  "lastUpdated": "2025-12-18T00:31:40.308Z",
-  "commit": "72c0882",
-  "note": "feat: Add AI Advice Engine (Phase 5) - Daily Digest, Anomaly Detection, Budget Optimizer, Trend Predictions",
+  "version": "v2025.12.18-95f57fe",
+  "lastUpdated": "2025-12-18T01:19:28.707Z",
+  "commit": "95f57fe",
+  "note": "feat: Add Correlation Insights (Phase 1) - Spend efficiency, best day, channel comparison",
   "history": [
+    {
+      "hash": "95f57fe",
+      "date": "2025-12-18T01:32:16+01:00",
+      "message": "feat: Add Correlation Insights (Phase 1) - Spend efficiency, best day, channel comparison"
+    },
     {
       "hash": "72c0882",
       "date": "2025-12-18T00:54:26+01:00",
@@ -48,11 +53,6 @@
       "hash": "0af7951",
       "date": "2025-12-15T09:03:42+01:00",
       "message": "feat: v6.7 - enhanced customer modal (editable Name/Email/Phone), fixed stats criteria"
-    },
-    {
-      "hash": "d92fc5e",
-      "date": "2025-12-15T09:01:39+01:00",
-      "message": "fix: v6.6 - fixed customer stats (country no longer required for complete profile)"
     }
   ]
 }
