@@ -20,11 +20,20 @@ export async function GET(request: Request) {
         // Send email digest
         const emailSent = await sendEmailDigest(result);
 
+        // Count delivery issues for monitoring
+        const criticalIssues = result.delivery_issues?.filter(i => i.severity === 'CRITICAL').length || 0;
+        const warningIssues = result.delivery_issues?.filter(i => i.severity === 'WARNING').length || 0;
+
         return NextResponse.json({
             success: true,
             message: 'Analytics run completed',
             timestamp: new Date().toISOString(),
             summary: result.summary,
+            delivery_issues: {
+                critical: criticalIssues,
+                warning: warningIssues,
+                total: result.delivery_issues?.length || 0,
+            },
             emailSent,
         });
     } catch (err) {

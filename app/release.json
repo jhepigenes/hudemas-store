@@ -1,9 +1,14 @@
 {
-  "version": "v2025.12.18-d1e320d",
-  "lastUpdated": "2025-12-18T02:34:22.798Z",
-  "commit": "d1e320d",
-  "note": "feat: Make tabs functional with Meta Ads, GA4, Email content (Phase 3)",
+  "version": "v2025.12.19-7ac0a20",
+  "lastUpdated": "2025-12-19T00:12:43.740Z",
+  "commit": "7ac0a20",
+  "note": "feat: Enhanced dashboard tabs with charts, recommendation popups\n\n- Added RecommendationModal.tsx with full details, data points, why it matters\n- Enhanced Meta Ads tab: 6 KPI cards, CPA bar chart, spend pie chart\n- Enhanced GA4 tab: channel cards, revenue chart, traffic pie, funnel\n- Enhanced Email tab: 4 KPIs, campaign list, marketing tips\n- Made recommendations clickable with hover effects",
   "history": [
+    {
+      "hash": "7ac0a20",
+      "date": "2025-12-18T03:34:48+01:00",
+      "message": "feat: Enhanced dashboard tabs with charts, recommendation popups"
+    },
     {
       "hash": "d1e320d",
       "date": "2025-12-18T02:44:16+01:00",
@@ -48,11 +53,6 @@
       "hash": "0f4eb76",
       "date": "2025-12-15T11:51:59+01:00",
       "message": "v8.4: Fix GLS export - Street never empty, proper ISO country codes"
-    },
-    {
-      "hash": "3f9417d",
-      "date": "2025-12-15T09:36:07+01:00",
-      "message": "feat: v7.0 - added changelog modal with git history (click version badge)"
     }
   ]
 }

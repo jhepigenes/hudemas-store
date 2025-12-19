@@ -45,6 +45,7 @@ export async function GET() {
                 campaigns: [],
                 trends: [],
                 recommendations: [],
+                delivery_issues: [],
                 run_at: null,
                 status: 'no_data',
             });
@@ -56,6 +57,7 @@ export async function GET() {
             campaigns: data.campaigns || [],
             trends: data.trends || [],
             recommendations: data.recommendations || [],
+            delivery_issues: data.delivery_issues || [],
             run_at: data.run_at,
             status: 'ok',
         });

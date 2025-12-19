@@ -55,6 +55,15 @@ export interface Recommendation {
     channel: string;
 }
 
+export interface AdDeliveryIssue {
+    campaign_id: string;
+    campaign_name: string;
+    severity: 'CRITICAL' | 'WARNING' | 'INFO';
+    issue_type: string;
+    message: string;
+    recommendation: string;
+}
+
 export interface AnalyticsResult {
     summary: {
         total_orders: number;
@@ -76,6 +85,7 @@ export interface AnalyticsResult {
     recommendations: Recommendation[];
     campaigns: Campaign[];
     trends: DailyTrend[];
+    delivery_issues: AdDeliveryIssue[];
     run_at: string;
 }
 
@@ -259,38 +269,215 @@ export async function fetchMetaAdsLive(days: number = 7): Promise<Campaign[]> {
             return [];
         }
 
-        // Transform to Campaign format
-        const campaigns: Campaign[] = (insightsData.data || []).map((insight: any) => {
-            // Find purchase actions
-            const actions = insight.actions || [];
-            const purchaseAction = actions.find((a: any) => a.action_type === 'purchase' || a.action_type === 'omni_purchase');
-            const purchases = purchaseAction ? parseInt(purchaseAction.value) || 0 : 0;
+        // Also fetch campaign statuses to filter out DELETED/ARCHIVED campaigns
+        // The insights API returns data even for deleted campaigns - we need to filter them
+        const statusUrl = `https://graph.facebook.com/${META_API_VERSION}/${accountId}/campaigns?` +
+            `fields=id,name,status,effective_status&` +
+            `access_token=${META_ACCESS_TOKEN}`;
 
-            // Find cost per purchase
-            const costPerActions = insight.cost_per_action_type || [];
-            const cpaPurchase = costPerActions.find((c: any) => c.action_type === 'purchase' || c.action_type === 'omni_purchase');
-            const cpa = cpaPurchase ? parseFloat(cpaPurchase.value) || 0 : 0;
+        const statusRes = await fetch(statusUrl, { cache: 'no-store' });
+        const statusData = await statusRes.json();
 
-            const spend = parseFloat(insight.spend) || 0;
+        // Create a set of campaign IDs that are NOT deleted/archived
+        const activeCampaignIds = new Set<string>();
+        for (const campaign of (statusData.data || [])) {
+            if (campaign.status !== 'DELETED' && campaign.status !== 'ARCHIVED' &&
+                campaign.effective_status !== 'DELETED' && campaign.effective_status !== 'ARCHIVED') {
+                activeCampaignIds.add(campaign.id);
+            }
+        }
 
-            return {
-                campaign_id: insight.campaign_id,
-                campaign_name: insight.campaign_name || 'Unknown Campaign',
-                spend,
-                impressions: parseInt(insight.impressions) || 0,
-                reach: parseInt(insight.reach) || 0,
-                clicks: parseInt(insight.clicks) || 0,
-                purchases,
-                cpa: purchases > 0 ? spend / purchases : cpa,
-                ctr: parseFloat(insight.ctr) || 0,
-            };
-        });
+        console.log(`[Analytics] Found ${activeCampaignIds.size} active campaigns (excluding deleted/archived)`);
 
-        console.log(`[Analytics] Fetched ${campaigns.length} Meta campaigns with ${campaigns.reduce((s, c) => s + c.purchases, 0)} total purchases`);
+        // Transform to Campaign format - FILTER out deleted campaigns
+        const campaigns: Campaign[] = (insightsData.data || [])
+            .filter((insight: any) => activeCampaignIds.has(insight.campaign_id))
+            .map((insight: any) => {
+                // Find purchase actions
+                const actions = insight.actions || [];
+                const purchaseAction = actions.find((a: any) => a.action_type === 'purchase' || a.action_type === 'omni_purchase');
+                const purchases = purchaseAction ? parseInt(purchaseAction.value) || 0 : 0;
+
+                // Find cost per purchase
+                const costPerActions = insight.cost_per_action_type || [];
+                const cpaPurchase = costPerActions.find((c: any) => c.action_type === 'purchase' || c.action_type === 'omni_purchase');
+                const cpa = cpaPurchase ? parseFloat(cpaPurchase.value) || 0 : 0;
+
+                const spend = parseFloat(insight.spend) || 0;
+
+                return {
+                    campaign_id: insight.campaign_id,
+                    campaign_name: insight.campaign_name || 'Unknown Campaign',
+                    spend,
+                    impressions: parseInt(insight.impressions) || 0,
+                    reach: parseInt(insight.reach) || 0,
+                    clicks: parseInt(insight.clicks) || 0,
+                    purchases,
+                    cpa: purchases > 0 ? spend / purchases : cpa,
+                    ctr: parseFloat(insight.ctr) || 0,
+                };
+            });
+
+        console.log(`[Analytics] Fetched ${campaigns.length} active Meta campaigns (after filtering) with ${campaigns.reduce((s, c) => s + c.purchases, 0)} total purchases`);
         return campaigns;
 
     } catch (error) {
         console.error('[Analytics] Error fetching live Meta data:', error);
+        return [];
+    }
+}
+
+/**
+ * Check Meta Ads delivery status for issues
+ * Returns warnings for paused, rejected, or limited campaigns
+ */
+export async function checkAdDeliveryIssues(): Promise<AdDeliveryIssue[]> {
+    if (!META_ACCESS_TOKEN || META_ACCESS_TOKEN.includes('your_token')) {
+        console.log('[Analytics] No valid Meta access token, skipping delivery check');
+        return [];
+    }
+
+    const issues: AdDeliveryIssue[] = [];
+
+    try {
+        // Get ad account
+        const meUrl = `https://graph.facebook.com/${META_API_VERSION}/me/adaccounts?fields=id,name,account_status&access_token=${META_ACCESS_TOKEN}`;
+        const meRes = await fetch(meUrl, { cache: 'no-store' });
+        const meData = await meRes.json();
+
+        if (meData.error) {
+            console.error('[Analytics] Meta API error:', meData.error.message);
+            return [];
+        }
+
+        const accounts = meData.data || [];
+        const hudemasAccount = accounts.find((a: any) =>
+            a.name?.toLowerCase().includes('hudema') && a.account_status === 1
+        );
+        const activeAccount = hudemasAccount || accounts.find((a: any) => a.account_status === 1) || accounts[0];
+
+        if (!activeAccount) {
+            return [];
+        }
+
+        const accountId = activeAccount.id;
+
+        // Fetch campaign statuses with delivery info
+        const campaignsUrl = `https://graph.facebook.com/${META_API_VERSION}/${accountId}/campaigns?` +
+            `fields=id,name,status,effective_status,issues_info,daily_budget,lifetime_budget&` +
+            `access_token=${META_ACCESS_TOKEN}`;
+
+        const campaignsRes = await fetch(campaignsUrl, { cache: 'no-store' });
+        const campaignsData = await campaignsRes.json();
+
+        if (campaignsData.error) {
+            console.error('[Analytics] Meta campaigns error:', campaignsData.error.message);
+            return [];
+        }
+
+        // Check each campaign for issues
+        // Note: campaigns with status DELETED or ARCHIVED should be filtered out
+        // Also: Don't warn about poor performers that are paused - that's intentional
+        const POOR_PERFORMANCE_KEYWORDS = ['VIP Lookalike', 'International Growth', 'Retargeting Xmas 2.0'];
+
+        for (const campaign of campaignsData.data || []) {
+            const effectiveStatus = campaign.effective_status;
+            const campaignStatus = campaign.status;
+            const campaignName = campaign.name || 'Unknown';
+            const campaignId = campaign.id;
+
+            // Skip DELETED or ARCHIVED campaigns entirely
+            if (campaignStatus === 'DELETED' || campaignStatus === 'ARCHIVED' ||
+                effectiveStatus === 'DELETED' || effectiveStatus === 'ARCHIVED') {
+                continue;
+            }
+
+            // Check if this is a known poor performer that SHOULD be paused
+            const isPoorPerformerPaused = POOR_PERFORMANCE_KEYWORDS.some(kw =>
+                campaignName.toLowerCase().includes(kw.toLowerCase())
+            ) && effectiveStatus === 'PAUSED';
+
+            // For PAUSED campaigns:
+            // - If it's a known poor performer, mark as INFO (intentional pause = good)
+            // - If it's NOT a known poor performer, mark as WARNING (might need attention)
+            if (effectiveStatus === 'PAUSED') {
+                if (isPoorPerformerPaused) {
+                    issues.push({
+                        campaign_id: campaignId,
+                        campaign_name: campaignName,
+                        severity: 'INFO',
+                        issue_type: 'PAUSED_INTENTIONALLY',
+                        message: `Campaign "${campaignName}" is paused (intentional - poor performance)`,
+                        recommendation: '✓ This pause is correct based on performance data. No action needed.',
+                    });
+                } else {
+                    issues.push({
+                        campaign_id: campaignId,
+                        campaign_name: campaignName,
+                        severity: 'WARNING',
+                        issue_type: 'PAUSED',
+                        message: `Campaign "${campaignName}" is paused`,
+                        recommendation: 'Check if this pause is intentional or resume the campaign',
+                    });
+                }
+            } else if (effectiveStatus === 'DISAPPROVED') {
+                issues.push({
+                    campaign_id: campaignId,
+                    campaign_name: campaignName,
+                    severity: 'CRITICAL',
+                    issue_type: 'DISAPPROVED',
+                    message: `Campaign "${campaignName}" has been disapproved`,
+                    recommendation: 'Check Meta Ads Manager for policy violations and fix them',
+                });
+            } else if (effectiveStatus === 'PENDING_REVIEW') {
+                issues.push({
+                    campaign_id: campaignId,
+                    campaign_name: campaignName,
+                    severity: 'INFO',
+                    issue_type: 'PENDING_REVIEW',
+                    message: `Campaign "${campaignName}" is pending review`,
+                    recommendation: 'Wait for Meta to complete the review (usually 24 hours)',
+                });
+            } else if (effectiveStatus === 'CAMPAIGN_PAUSED') {
+                issues.push({
+                    campaign_id: campaignId,
+                    campaign_name: campaignName,
+                    severity: 'WARNING',
+                    issue_type: 'CAMPAIGN_PAUSED',
+                    message: `Campaign "${campaignName}" is paused at campaign level`,
+                    recommendation: 'Check campaign settings in Meta Ads Manager',
+                });
+            } else if (effectiveStatus === 'ADSET_PAUSED') {
+                issues.push({
+                    campaign_id: campaignId,
+                    campaign_name: campaignName,
+                    severity: 'WARNING',
+                    issue_type: 'ADSET_PAUSED',
+                    message: `Ad sets in "${campaignName}" are paused`,
+                    recommendation: 'Check ad set settings in Meta Ads Manager',
+                });
+            }
+
+            // Check for issues_info if present
+            if (campaign.issues_info && campaign.issues_info.length > 0) {
+                for (const issue of campaign.issues_info) {
+                    issues.push({
+                        campaign_id: campaignId,
+                        campaign_name: campaignName,
+                        severity: issue.level === 'ERROR' ? 'CRITICAL' : 'WARNING',
+                        issue_type: issue.error_code || 'UNKNOWN',
+                        message: issue.error_message || `Issue in "${campaignName}"`,
+                        recommendation: issue.error_summary || 'Check Meta Ads Manager for details',
+                    });
+                }
+            }
+        }
+
+        console.log(`[Analytics] Found ${issues.length} delivery issues across ${campaignsData.data?.length || 0} campaigns`);
+        return issues;
+
+    } catch (error) {
+        console.error('[Analytics] Error checking ad delivery:', error);
         return [];
     }
 }
@@ -410,30 +597,40 @@ export function generateRecommendations(
 
             // Recommend scaling best performer
             if (best.cpa < TARGET_CPA * 0.7) {
+                const cpaVsTarget = ((TARGET_CPA - best.cpa) / TARGET_CPA * 100).toFixed(0);
                 recommendations.push({
                     priority: 'HIGH',
                     action: `Increase "${best.campaign_name}" budget by 25-30%`,
-                    reason: `CPA of ${best.cpa.toFixed(0)} RON is 30%+ below target of ${TARGET_CPA} RON`,
+                    reason: `CPA of ${best.cpa.toFixed(0)} RON is ${cpaVsTarget}% below target - room to scale`,
                     data_points: {
-                        current_cpa: Math.round(best.cpa),
+                        current_cpa: best.cpa.toFixed(0),
                         target_cpa: TARGET_CPA,
-                        current_spend: Math.round(best.spend),
+                        gap_to_target: `${cpaVsTarget}% below`,
+                        current_spend: best.spend.toFixed(0),
                         purchases: best.purchases,
+                        calculation: `CPA = ${best.spend.toFixed(0)} RON ÷ ${best.purchases} purchases = ${best.cpa.toFixed(0)} RON`,
+                        recommendation_basis: 'CPA significantly below target means efficient acquisition - scaling will maintain profitability',
                     },
                     channel: 'Meta Ads',
                 });
             }
 
-            // Recommend pausing poor performers
-            if (worst.cpa > TARGET_CPA * 1.5 && worst !== best) {
+            // Recommend pausing poor performers (only if they are ACTIVE, not already paused)
+            if (worst.cpa > TARGET_CPA * 1.5 && worst !== best && worst.spend > 50) {
+                const cpaOverTarget = ((worst.cpa - TARGET_CPA) / TARGET_CPA * 100).toFixed(0);
                 recommendations.push({
                     priority: 'HIGH',
                     action: `Pause or optimize "${worst.campaign_name}"`,
-                    reason: `CPA of ${worst.cpa.toFixed(0)} RON is 50%+ above target`,
+                    reason: `CPA of ${worst.cpa.toFixed(0)} RON is ${cpaOverTarget}% above target - money being wasted`,
                     data_points: {
-                        current_cpa: Math.round(worst.cpa),
+                        current_cpa: worst.cpa.toFixed(0),
                         target_cpa: TARGET_CPA,
-                        wasted_spend: Math.round(worst.spend * 0.5),
+                        gap_to_target: `${cpaOverTarget}% above`,
+                        spend_last_7d: worst.spend.toFixed(0),
+                        purchases: worst.purchases,
+                        calculation: `CPA = ${worst.spend.toFixed(0)} RON ÷ ${worst.purchases} purchases = ${worst.cpa.toFixed(0)} RON`,
+                        wasted_spend: (worst.spend - (worst.purchases * TARGET_CPA)).toFixed(0),
+                        recommendation_basis: `At target CPA of ${TARGET_CPA} RON, should have spent only ${(worst.purchases * TARGET_CPA).toFixed(0)} RON`,
                     },
                     channel: 'Meta Ads',
                 });
@@ -444,28 +641,40 @@ export function generateRecommendations(
     // Check Meta ROAS
     const metaChannel = attribution.by_channel['Meta Paid'];
     if (metaChannel) {
-        if (metaChannel.roas > 0 && metaChannel.roas < 1) {
+        const metaSpend = metaChannel.spend;
+        const metaRevenue = metaChannel.revenue;
+        const roas = metaChannel.roas;
+
+        if (roas > 0 && roas < 1) {
             recommendations.push({
                 priority: 'CRITICAL',
-                action: 'Meta Ads losing money - reduce spend or pause',
-                reason: `ROAS of ${metaChannel.roas.toFixed(2)}x means losing money`,
+                action: 'Meta Ads losing money - reduce spend or pause immediately',
+                reason: `Spending more than earning: ${metaSpend.toFixed(0)} RON spent → ${metaRevenue.toFixed(0)} RON revenue`,
                 data_points: {
-                    current_roas: Math.round(metaChannel.roas * 100) / 100,
-                    spend: Math.round(metaChannel.spend),
-                    revenue: Math.round(metaChannel.revenue),
-                    loss: Math.round(metaChannel.spend - metaChannel.revenue),
+                    current_roas: roas.toFixed(2) + 'x',
+                    target_roas: TARGET_ROAS + 'x',
+                    total_spend: metaSpend.toFixed(0),
+                    total_revenue: metaRevenue.toFixed(0),
+                    loss_amount: (metaSpend - metaRevenue).toFixed(0),
+                    calculation: `ROAS = ${metaRevenue.toFixed(0)} RON revenue ÷ ${metaSpend.toFixed(0)} RON spend = ${roas.toFixed(2)}x`,
+                    recommendation_basis: 'ROAS below 1x means every RON spent loses money',
                 },
                 channel: 'Meta Ads',
             });
-        } else if (metaChannel.roas >= TARGET_ROAS) {
+        } else if (roas >= TARGET_ROAS) {
+            const profitAmount = metaRevenue - metaSpend;
             recommendations.push({
                 priority: 'MEDIUM',
-                action: 'Meta Ads profitable - consider scaling',
-                reason: `ROAS of ${metaChannel.roas.toFixed(2)}x exceeds target of ${TARGET_ROAS}x`,
+                action: 'Meta Ads profitable - consider scaling budget 10-20%',
+                reason: `Generating ${roas.toFixed(2)}x return on spend (target: ${TARGET_ROAS}x)`,
                 data_points: {
-                    current_roas: Math.round(metaChannel.roas * 100) / 100,
-                    target_roas: TARGET_ROAS,
-                    profit: Math.round(metaChannel.revenue - metaChannel.spend),
+                    current_roas: roas.toFixed(2) + 'x',
+                    target_roas: TARGET_ROAS + 'x',
+                    profit_amount: profitAmount.toFixed(0),
+                    total_spend: metaSpend.toFixed(0),
+                    total_revenue: metaRevenue.toFixed(0),
+                    calculation: `ROAS = ${metaRevenue.toFixed(0)} RON ÷ ${metaSpend.toFixed(0)} RON = ${roas.toFixed(2)}x → Profit: ${profitAmount.toFixed(0)} RON`,
+                    recommendation_basis: 'ROAS above 3x typically safe to scale while maintaining profitability',
                 },
                 channel: 'Meta Ads',
             });
@@ -477,16 +686,22 @@ export function generateRecommendations(
     const activeVips = customers.filter(c =>
         (c.ltv_tier === 'VIP_PLATINUM' || c.ltv_tier === 'VIP_GOLD') && !c.is_lapsed_vip
     ).length;
+    const lapsedRatio = activeVips > 0 ? ((lapsedVips / activeVips) * 100).toFixed(0) : '100';
 
     if (lapsedVips > activeVips * 0.5) {
+        const potentialRecovery = Math.round(lapsedVips * AVG_ORDER_VALUE * 0.1);
         recommendations.push({
             priority: 'HIGH',
             action: `Launch VIP reactivation campaign for ${lapsedVips} lapsed customers`,
-            reason: `Lapsed VIPs (${lapsedVips}) exceed 50% of active VIPs (${activeVips})`,
+            reason: `${lapsedRatio}% of VIP capacity is dormant - significant recovery opportunity`,
             data_points: {
-                lapsed_vip_count: lapsedVips,
-                active_vip_count: activeVips,
-                potential_recovery: Math.round(lapsedVips * AVG_ORDER_VALUE * 0.1),
+                lapsed_vips: lapsedVips,
+                active_vips: activeVips,
+                lapsed_ratio: `${lapsedRatio}%`,
+                avg_vip_order: AVG_ORDER_VALUE.toFixed(0),
+                potential_recovery: potentialRecovery.toFixed(0),
+                calculation: `${lapsedVips} lapsed × ${AVG_ORDER_VALUE} RON × 10% return rate = ${potentialRecovery} RON`,
+                recommendation_basis: 'VIP customers have 3x higher purchase probability than cold leads - reactivating lapsed VIPs is more cost-effective than acquiring new ones',
             },
             channel: 'Email/Meta',
         });
@@ -495,14 +710,18 @@ export function generateRecommendations(
     // Email recommendation
     const emailChannel = attribution.by_channel['Email'];
     if (emailChannel && emailChannel.revenue > 0) {
+        const emailConversions = emailChannel.conversions || 0;
         recommendations.push({
             priority: 'MEDIUM',
-            action: 'Increase email marketing frequency',
-            reason: `Email generated ${emailChannel.revenue.toFixed(0)} RON at zero cost`,
+            action: 'Increase email marketing frequency - schedule 2-3 campaigns/week',
+            reason: `Email generating ${emailChannel.revenue.toFixed(0)} RON revenue with ZERO ad spend`,
             data_points: {
-                email_revenue: Math.round(emailChannel.revenue),
-                cost: 0,
-                roas: 'infinite',
+                email_revenue: emailChannel.revenue.toFixed(0),
+                email_conversions: emailConversions,
+                cost: '0 RON',
+                roas: '∞ (infinite)',
+                calculation: `${emailChannel.revenue.toFixed(0)} RON revenue ÷ 0 RON cost = Infinite ROAS`,
+                recommendation_basis: 'Email has highest ROI of any channel - every email sent has potential value with no incremental cost',
             },
             channel: 'Email',
         });
@@ -527,11 +746,12 @@ export async function runAnalytics(days: number = 7): Promise<AnalyticsResult> {
     console.log(`[Analytics] Starting analysis for ${days} days...`);
 
     // Fetch all data in parallel
-    const [orders, customers, storedCampaigns, liveCampaigns] = await Promise.all([
+    const [orders, customers, storedCampaigns, liveCampaigns, deliveryIssues] = await Promise.all([
         fetchLegacyOrders(days),
         fetchCustomers(supabase),
         fetchMetaCampaigns(supabase),
         fetchMetaAdsLive(days),
+        checkAdDeliveryIssues(),
     ]);
 
     // Use live campaigns if available, otherwise use stored
@@ -574,6 +794,7 @@ export async function runAnalytics(days: number = 7): Promise<AnalyticsResult> {
         recommendations,
         campaigns,
         trends,
+        delivery_issues: deliveryIssues,
         run_at: new Date().toISOString(),
     };
 
@@ -585,6 +806,7 @@ export async function runAnalytics(days: number = 7): Promise<AnalyticsResult> {
         recommendations: result.recommendations,
         campaigns: result.campaigns,
         trends: result.trends,
+        delivery_issues: result.delivery_issues,
     });
 
     if (error) {
@@ -607,11 +829,46 @@ export async function sendEmailDigest(result: AnalyticsResult): Promise<boolean>
         return false;
     }
 
-    const subject = `📊 Hudemas Analytics - ${new Date().toLocaleDateString()}`;
+    // Check for critical delivery issues
+    const criticalIssues = result.delivery_issues?.filter(i => i.severity === 'CRITICAL') || [];
+    const warningIssues = result.delivery_issues?.filter(i => i.severity === 'WARNING') || [];
+
+    const subject = criticalIssues.length > 0
+        ? `🔴 URGENT: ${criticalIssues.length} Ad Delivery Issue(s) - Hudemas Analytics`
+        : `📊 Hudemas Analytics - ${new Date().toLocaleDateString()}`;
+
+    // Build RED ALERT section if there are critical issues
+    const redAlertSection = criticalIssues.length > 0 ? `
+        <div style="background: #fee2e2; border: 2px solid #dc2626; padding: 16px; margin-bottom: 20px; border-radius: 8px;">
+            <h2 style="color: #dc2626; margin: 0 0 12px 0;">🔴 AD DELIVERY ALERTS</h2>
+            <p style="margin: 0 0 8px 0;"><strong>ACTION REQUIRED:</strong> The following campaigns need immediate attention:</p>
+            <ul style="margin: 8px 0;">
+                ${criticalIssues.map(i =>
+        `<li><strong>${i.campaign_name}:</strong> ${i.message}<br/><em style="color: #666;">Fix: ${i.recommendation}</em></li>`
+    ).join('')}
+            </ul>
+            <p style="margin: 8px 0 0 0;"><a href="https://business.facebook.com/adsmanager" style="color: #dc2626; font-weight: bold;">Open Meta Ads Manager →</a></p>
+        </div>
+    ` : '';
+
+    // Build WARNING section if there are warnings
+    const warningSection = warningIssues.length > 0 ? `
+        <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 12px; margin-bottom: 16px; border-radius: 6px;">
+            <h3 style="color: #d97706; margin: 0 0 8px 0;">⚠️ Warnings (${warningIssues.length})</h3>
+            <ul style="margin: 0; font-size: 14px;">
+                ${warningIssues.slice(0, 5).map(i =>
+        `<li>${i.campaign_name}: ${i.message}</li>`
+    ).join('')}
+            </ul>
+        </div>
+    ` : '';
 
     const html = `
         <h1>📊 Hudemas Daily Analytics</h1>
         <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
+        
+        ${redAlertSection}
+        ${warningSection}
         
         <h2>📈 Summary</h2>
         <ul>

@@ -12,7 +12,8 @@ import {
     ArrowRight, CheckCircle, XCircle, Clock, Eye, MousePointer,
     Percent, CreditCard, UserCheck, UserX, BarChart3, PieChartIcon,
     Activity, Zap, Award, ChevronDown, ChevronUp, ExternalLink,
-    Brain, Sparkles, TrendingUp as TrendUp, ArrowUpRight, ArrowDownRight
+    Brain, Sparkles, TrendingUp as TrendUp, ArrowUpRight, ArrowDownRight,
+    Archive, ToggleLeft, ToggleRight
 } from 'lucide-react';
 import RecommendationModal from './RecommendationModal';
 
@@ -62,6 +63,15 @@ interface DailyTrend {
     revenue: number;
     meta_spend: number;
     meta_purchases: number;
+}
+
+interface AdDeliveryIssue {
+    campaign_id: string;
+    campaign_name: string;
+    severity: 'CRITICAL' | 'WARNING' | 'INFO';
+    issue_type: string;
+    message: string;
+    recommendation: string;
 }
 
 // AI Advice Types
@@ -165,6 +175,8 @@ export default function PremiumAnalyticsPage() {
     const [aiAdviceLoading, setAiAdviceLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'overview' | 'meta' | 'google' | 'ga4' | 'email'>('overview');
     const [selectedRecommendation, setSelectedRecommendation] = useState<Recommendation | null>(null);
+    const [deliveryIssues, setDeliveryIssues] = useState<AdDeliveryIssue[]>([]);
+    const [showPausedInfo, setShowPausedInfo] = useState(false); // Toggle for intentionally paused campaigns
 
     const fetchData = useCallback(async () => {
         setLoading(true);
@@ -180,6 +192,7 @@ export default function PremiumAnalyticsPage() {
                 setCampaigns(data.campaigns || []);
                 setTrends(data.trends || []);
                 setRecommendations(data.recommendations || []);
+                setDeliveryIssues(data.delivery_issues || []);
                 setLastRun(data.run_at);
             }
         } catch (err) {
@@ -499,6 +512,128 @@ export default function PremiumAnalyticsPage() {
                             </div>
                         </div>
                     )}
+
+                    {/* Ad Health Status Section */}
+                    {(() => {
+                        const criticalCount = deliveryIssues.filter(i => i.severity === 'CRITICAL').length;
+                        const warningCount = deliveryIssues.filter(i => i.severity === 'WARNING').length;
+                        const infoCount = deliveryIssues.filter(i => i.severity === 'INFO').length;
+                        const isHealthy = criticalCount === 0 && warningCount === 0;
+
+                        // Filter issues based on toggle - hide INFO items unless showPausedInfo is true
+                        const visibleIssues = showPausedInfo
+                            ? deliveryIssues
+                            : deliveryIssues.filter(i => i.severity !== 'INFO');
+
+                        return (
+                            <div className={`rounded-xl p-4 border-2 ${criticalCount > 0 ? 'bg-red-50 border-red-300 dark:bg-red-950 dark:border-red-800' :
+                                warningCount > 0 ? 'bg-amber-50 border-amber-300 dark:bg-amber-950 dark:border-amber-800' :
+                                    'bg-emerald-50 border-emerald-300 dark:bg-emerald-950 dark:border-emerald-800'
+                                }`}>
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center gap-3">
+                                        {criticalCount > 0 ? (
+                                            <div className="p-2 rounded-lg bg-red-500 text-white">
+                                                <XCircle className="h-5 w-5" />
+                                            </div>
+                                        ) : warningCount > 0 ? (
+                                            <div className="p-2 rounded-lg bg-amber-500 text-white">
+                                                <AlertTriangle className="h-5 w-5" />
+                                            </div>
+                                        ) : (
+                                            <div className="p-2 rounded-lg bg-emerald-500 text-white">
+                                                <CheckCircle className="h-5 w-5" />
+                                            </div>
+                                        )}
+                                        <div>
+                                            <h3 className={`font-semibold ${criticalCount > 0 ? 'text-red-800 dark:text-red-200' :
+                                                warningCount > 0 ? 'text-amber-800 dark:text-amber-200' :
+                                                    'text-emerald-800 dark:text-emerald-200'
+                                                }`}>
+                                                Ad Delivery Health
+                                            </h3>
+                                            <p className={`text-sm ${criticalCount > 0 ? 'text-red-600 dark:text-red-400' :
+                                                warningCount > 0 ? 'text-amber-600 dark:text-amber-400' :
+                                                    'text-emerald-600 dark:text-emerald-400'
+                                                }`}>
+                                                {isHealthy ? '✓ All campaigns running normally' :
+                                                    criticalCount > 0 ? `${criticalCount} critical issue(s) need attention` :
+                                                        `${warningCount} warning(s) detected`}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        {/* Show/Hide Paused Campaigns Toggle */}
+                                        {infoCount > 0 && (
+                                            <button
+                                                onClick={() => setShowPausedInfo(!showPausedInfo)}
+                                                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition ${showPausedInfo
+                                                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200'
+                                                    : 'bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700'
+                                                    }`}
+                                                title={showPausedInfo ? 'Hide intentionally paused campaigns' : 'Show intentionally paused campaigns'}
+                                            >
+                                                {showPausedInfo ? (
+                                                    <ToggleRight className="h-4 w-4" />
+                                                ) : (
+                                                    <ToggleLeft className="h-4 w-4" />
+                                                )}
+                                                <Archive className="h-3.5 w-3.5" />
+                                                <span className="hidden sm:inline">{showPausedInfo ? 'Hide' : 'Show'} Paused ({infoCount})</span>
+                                                <span className="sm:hidden">{infoCount}</span>
+                                            </button>
+                                        )}
+                                        {!isHealthy && (
+                                            <a
+                                                href="https://business.facebook.com/adsmanager"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1 ${criticalCount > 0 ? 'bg-red-500 hover:bg-red-600 text-white' :
+                                                    'bg-amber-500 hover:bg-amber-600 text-white'
+                                                    }`}
+                                            >
+                                                Fix in Ads Manager
+                                                <ExternalLink className="h-3 w-3" />
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {(visibleIssues.length > 0) && (
+                                    <div className="space-y-2 mt-3">
+                                        {visibleIssues.slice(0, 5).map((issue, idx) => (
+                                            <div
+                                                key={idx}
+                                                className={`p-3 rounded-lg ${issue.severity === 'CRITICAL' ? 'bg-red-100 dark:bg-red-900/50' :
+                                                    issue.severity === 'WARNING' ? 'bg-amber-100 dark:bg-amber-900/50' :
+                                                        'bg-blue-100 dark:bg-blue-900/50'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${issue.severity === 'CRITICAL' ? 'bg-red-500 text-white' :
+                                                        issue.severity === 'WARNING' ? 'bg-amber-500 text-white' :
+                                                            'bg-blue-500 text-white'
+                                                        }`}>
+                                                        {issue.severity}
+                                                    </span>
+                                                    <span className={`font-medium text-sm ${issue.severity === 'CRITICAL' ? 'text-red-800 dark:text-red-200' :
+                                                        issue.severity === 'WARNING' ? 'text-amber-800 dark:text-amber-200' :
+                                                            'text-blue-800 dark:text-blue-200'
+                                                        }`}>
+                                                        {issue.campaign_name}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">{issue.message}</p>
+                                                <p className="text-xs text-stone-500 dark:text-stone-500 mt-1">
+                                                    💡 {issue.recommendation}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })()}
 
                     {/* AI Command Center Panel */}
                     <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 p-6 text-white shadow-xl">
